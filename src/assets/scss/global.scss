@@ -1,0 +1,29 @@
+@import './animate.scss';
+
+.page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bar-padding { padding-bottom: 24px; }
+
+.block-el { display: block; }
+
+.full-width { width: 100%; }
+
+.fixed-bottom {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.absolute-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+}

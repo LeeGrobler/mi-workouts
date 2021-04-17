@@ -1,0 +1,14 @@
+{
+  "recaptcha": {
+    "url": "https://www.google.com/recaptcha/api/siteverify",
+    "key": "6LfPBYMaAAAAAEXaWkYYmqg5i9HnsXV9M2pcYNpC"
+  },
+  "mailgun": {
+    "url": "mg.crastino.com",
+    "key": "key-619042956f934dcd6173bf3464ad65f7"
+  },
+  "app": {
+    "name": "MiWorkouts",
+    "support_email": "hello@mi-workouts.com"
+  }
+}
