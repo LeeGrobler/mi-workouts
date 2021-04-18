@@ -1,8 +1,10 @@
 <template>
   <div class="comp-root">
-    <v-btn v-if="$vuetify.breakpoint.smAndDown" color="primary" class="nav-btn" :class="{ fixed }" dark fab small @click="drawer = !drawer">
-      <v-icon>{{ mini ? 'mdi-format-list-bulleted' : 'mdi-dots-vertical' }}</v-icon>
-    </v-btn>
+
+    <v-app-bar color="primary" flat dense dark :fixed="fixed">
+      <v-app-bar-nav-icon v-if="$vuetify.breakpoint.smAndDown" @click="drawer = !drawer" />
+      <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
+    </v-app-bar>
 
     <v-navigation-drawer id="default-drawer" v-model="drawer" :mini-variant.sync="mini" mini-variant-width="80" width="260" app v-click-outside="clickedOutside">
       <div class="px-2">
@@ -40,6 +42,7 @@
 
       <div class="pt-12" />
     </v-navigation-drawer>
+
   </div>
 </template>
 
@@ -109,14 +112,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .nav-btn {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 1;
-
-    &.fixed { position: fixed; }
-  }
+  .comp-root { width: 100%; }
 
   #default-drawer {
     .v-list-item { margin-bottom: 8px; }

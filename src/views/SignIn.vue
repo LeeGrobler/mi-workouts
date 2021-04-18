@@ -1,13 +1,10 @@
 <template>
-  <div class="page-root py-8" :class="{ 'bar-padding': !online }">
-    <app-drawer />
-
-    <page-header text="Sign In" />
+  <div class="page-root" :class="{ 'bar-padding': !online }">
     
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
-          <login-form class="mt-8">
+          <login-form>
             <p slot="headline" class="white--text text-h6 font-weight-regular ma-0">Access your workouts from any device.</p>
           </login-form>
         </v-col>
@@ -20,15 +17,16 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import AppDrawer from '@/components/Layout/AppDrawer';
-  import PageHeader from '@/components/Layout/PageHeader';
+  import PageActions from '@/mixins/page-actions';
   import LoginForm from '@/components/SignIn/LoginForm';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
     name: 'LoginPage',
 
-    components: { AppDrawer, PageHeader, LoginForm, ConnectivityBar },
+    mixins: [PageActions],
+
+    components: { LoginForm, ConnectivityBar },
 
     async mounted() {
       await this.$recaptchaLoaded();

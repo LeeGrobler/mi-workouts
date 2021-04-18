@@ -1,6 +1,5 @@
 <template>
   <div>
-    <app-drawer :fixed="true" />
     <tsAndCs />
     <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
   </div>
@@ -8,14 +7,13 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import AppDrawer from '@/components/Layout/AppDrawer';
   import TsAndCs from '@/components/Legal/TsAndCs';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
     name: 'TsAndCsPage',
 
-    components: { AppDrawer, TsAndCs, ConnectivityBar },
+    components: { TsAndCs, ConnectivityBar },
 
     async mounted() {
       await this.$recaptchaLoaded();

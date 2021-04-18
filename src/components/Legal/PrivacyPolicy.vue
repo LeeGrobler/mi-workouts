@@ -1,12 +1,6 @@
 <template>
   <v-card tile>
-    <v-toolbar color="white" elevation="1" class="rounded-0">
-      <v-toolbar-title class="pl-10">Privacy Policy</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <slot></slot>
-    </v-toolbar>
-
-    <v-card-text class="mt-5">
+    <v-card-text>
       <p>Last updated: April 17, 2021</p>
       <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
       <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the <a href="https://www.privacypolicies.com/privacy-policy-generator/" target="_blank">Privacy Policy Generator</a>.</p>

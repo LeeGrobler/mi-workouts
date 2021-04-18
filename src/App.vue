@@ -4,6 +4,7 @@
 
     <loader v-if="!tests" />
     <v-main v-else>
+      <app-drawer :fixed="$route.path.indexOf('legal/') > -1" />
       <router-view />
       <app-footer />
     </v-main>
@@ -18,6 +19,7 @@
   import redirect from '@/mixins/status-redirect';
   import Dialogue from '@/components/Layout/Dialogue';
   import Loader from '@/components/Layout/Loader';
+  import AppDrawer from '@/components/Layout/AppDrawer';
   import AppFooter from '@/components/Layout/AppFooter';
   import Alert from '@/components/Layout/Alert';
 
@@ -26,7 +28,7 @@
 
     mixins: [redirect],
 
-    components: { Dialogue, Loader, AppFooter, Alert },
+    components: { Dialogue, Loader, AppDrawer, AppFooter, Alert },
 
     async mounted() {
       this.monitorConnection();
@@ -51,7 +53,7 @@
       async checkFbResult() {
         try {
           const { user } = await this.checkFbRedirectResult();
-          if(user) this.alert({ color: 'success', timeout: 10000, text: 'Login successful' });
+          if(user) this.alert({ color: 'success', timeout: 10000, text: 'Sign in successful' });
         } catch(err) {
           this.alert({ color: 'error', timeout: 10000, text: err.message });
         }

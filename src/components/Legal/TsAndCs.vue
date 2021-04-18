@@ -1,13 +1,6 @@
 <template>
   <v-card tile>
-    <v-toolbar color="white" elevation="1" class="rounded-0">
-      <v-toolbar-title class="pl-10">Terms And Conditions</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <slot></slot>
-    </v-toolbar>
-
-    <v-card-text class="mt-5">
-      <!-- <h2>Terms and Conditions</h2> -->
+    <v-card-text>
       <p>Welcome to MiWorkouts!</p>
       <p>These terms and conditions outline the rules and regulations for the use of MiWorkouts, located at https://mi-workouts.com/.</p>
       <p>

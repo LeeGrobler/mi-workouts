@@ -5,7 +5,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+
+  // &.justify-top { justify-content: start; }
 }
 
 .bar-padding { padding-bottom: 24px; }
