@@ -20,7 +20,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import redirect from '@/mixins/status-redirect';
   import AppDrawer from '@/components/Layout/AppDrawer';
   import PageHeader from '@/components/Layout/PageHeader';
   import LoginForm from '@/components/SignIn/LoginForm';
@@ -28,8 +27,6 @@
 
   export default {
     name: 'LoginPage',
-
-    // mixins: [redirect],
 
     components: { AppDrawer, PageHeader, LoginForm, ConnectivityBar },
 

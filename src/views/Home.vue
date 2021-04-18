@@ -2,15 +2,10 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <app-drawer />
 
-    <!-- <div class="white--text">
-      mini: {{ mini }}
-      <br />
-      drawer: {{ drawer }}
-      <br />
-      <br />
-      <router-link to="/logout" class="white--text">Logout</router-link>
+    <div class="white--text">
       <test />
-    </div> -->
+      <router-link to="/logout" class="white--text">Logout</router-link>
+    </div>
 
     <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
   </div>
@@ -18,15 +13,12 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import redirect from '@/mixins/status-redirect';
   import Test from '@/components/Home/Test';
   import AppDrawer from '@/components/Layout/AppDrawer';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
     name: 'HomePage',
-
-    // mixins: [redirect],
 
     components: { Test, AppDrawer, ConnectivityBar },
 

@@ -8,15 +8,12 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import redirect from '@/mixins/status-redirect';
   import AppDrawer from '@/components/Layout/AppDrawer';
   import PrivacyPolicy from '@/components/Legal/PrivacyPolicy';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
     name: 'TsAndCsPage',
-
-    // mixins: [redirect],
 
     components: { AppDrawer, PrivacyPolicy, ConnectivityBar },
 

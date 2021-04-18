@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "mi-workouts-uat-3b892"
+    "default": "mi-workouts-uat-3b892",
+    "prod": "mi-workouts"
   }
 }

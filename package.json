@@ -4,7 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+
+    "func-serve-uat": "node ./functions/devops.js --cmd=serve --env=uat",
+    "func-serve-prod": "node ./functions/devops.js --cmd=serve --env=prod",
+    "func-deploy-uat": "node ./functions/devops.js --cmd=deploy --env=uat",
+    "func-deploy-prod": "node ./functions/devops.js --cmd=deploy --env=prod"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -27,6 +32,8 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "execa": "^5.0.0",
+    "listr": "^0.14.3",
     "node-sass": "^4.14.1",
     "sass": "^1.32.0",
     "sass-loader": "^7.1.0",

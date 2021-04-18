@@ -4,7 +4,23 @@ const _ = require('lodash');
 const moment = require('moment');
 const { verifyCaptcha, createContact, getSupportAddresses, compileHtml, sendEmail } = require('./service');
 
-admin.initializeApp({ credential: admin.credential.cert(require('./mi-workouts-uat-3b892-firebase-adminsdk-bvhon-e1ce7380a7.json')) });
+admin.initializeApp({ credential: admin.credential.cert(require('./certs/prod.json')) });
+// admin.initializeApp({ credential: admin.credential.cert(require('./certs/uat.json')) });
+
+/*
+    WORKING WITH ENVS:
+    - by default, commands will run against UAT (mi-workouts-uat-3b892)
+    - to specify project against which to run a command, add "--project=alias" to the command
+    - to permanently set the project against which to run a command (so you don't have to use --project flag) run "firebase use alias"
+    - available aliases can be found in /.firebaserc
+    - recommendation: when starting development, run "firebase use alias" then when deploying deploy current project without flag,
+      before deploying other project with flag
+
+    - currently there's no way to automatically switch between prod and uat cert and runtimeconfig on serve/deploy, so you'll have to
+      do that yourself.
+      TODO: finish the devops.js script so that it does automatically switch the files (the npm script should be triggered in /package.json
+      and not in /functions/package.json)
+*/
 
 exports.contact = functions.region('europe-west2').https.onCall(async ({ name, email, message, token }, { auth }) => {
   if(name && email && message && token) {
