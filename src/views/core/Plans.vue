@@ -24,7 +24,7 @@
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
-    name: 'ExercisePage',
+    name: 'PlansPage',
 
     mixins: [PageActions],
 

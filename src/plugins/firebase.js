@@ -27,6 +27,8 @@ const func = {
 
 const db = firebase.firestore();
 db.enablePersistence();
-const Tests = db.collection('test');
+const Exercises = db.collection('exercises');
+// const Tests = db.collection('test');
 
-export { firebase, analytics, auth, func, Tests };
+export { firebase, analytics, auth, func, Exercises };
+// export { firebase, analytics, auth, func, Tests };

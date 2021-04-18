@@ -23,7 +23,7 @@
   import { mapMutations } from 'vuex';
 
   export default {
-    name: 'AlertComponent',
+    name: 'Alert',
 
     data: () => ({ handleOnClose: true }),
 

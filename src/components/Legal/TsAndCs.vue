@@ -144,7 +144,7 @@
 
 <script>
   export default {
-    name: 'TsAndCsComponent',
+    name: 'TsAndCs',
   }
 </script>
 

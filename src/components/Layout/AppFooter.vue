@@ -27,7 +27,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'AppFooterComponent',
+    name: 'AppFooter',
 
     data: function() {
       return {

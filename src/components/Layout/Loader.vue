@@ -15,10 +15,8 @@
 </template>
 
 <script>
-  import PageHeader from '@/components/Layout/PageHeader';
-
   export default {
-    components: { PageHeader },
+    name: 'Loader',
   }
 </script>
 

@@ -15,7 +15,7 @@
   import validators from '@/config/validators';
 
   export default {
-    name: 'ContactFormComponent',
+    name: 'ContactForm',
 
     props: {
       dark: { type: Boolean, default: true }

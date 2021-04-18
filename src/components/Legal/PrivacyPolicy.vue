@@ -193,7 +193,7 @@
 
 <script>
   export default {
-    name: 'TsAndCsComponent',
+    name: 'PrivacyPolicy',
   }
 </script>
 

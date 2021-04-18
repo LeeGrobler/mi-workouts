@@ -11,7 +11,7 @@
   import { mapGetters } from 'vuex';
   
   export default {
-    name: 'ConnectivityBarComponent',
+    name: 'ConnectivityBar',
 
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),

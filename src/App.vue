@@ -2,7 +2,8 @@
   <v-app>
     <dialogue />
 
-    <loader v-if="!tests" />
+    <!-- <loader v-if="!tests" /> -->
+    <loader v-if="!exercises" />
     <v-main v-else>
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" />
       <router-view />
@@ -39,7 +40,8 @@
     computed: {
       ...mapGetters({
         online: 'general/getOnline',
-        tests: 'test/getTests',
+        exercises: 'exercise/getExercises',
+        // tests: 'test/getTests',
       }),
     },
 

@@ -5,12 +5,13 @@ import Vuex from 'vuex';
 import ui from './modules/ui';
 import user from './modules/user';
 import general from './modules/general';
-import test from './modules/test';
+import exercise from './modules/exercise';
+// import test from './modules/test';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   namespaced: true,
   strict: window.ENV !== "production",
-  modules: { ui, user, general, test },
+  modules: { ui, user, general, exercise },
 });

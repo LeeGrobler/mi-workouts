@@ -46,7 +46,7 @@
   import { mapGetters, mapMutations } from 'vuex';
 
   export default {
-    name: 'DialogueComponent',
+    name: 'Dialogue',
 
     data() {
       return {

@@ -11,7 +11,7 @@
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
-    name: 'TsAndCsPage',
+    name: 'PrivacyPolicyPage',
 
     components: { PrivacyPolicy, ConnectivityBar },
 

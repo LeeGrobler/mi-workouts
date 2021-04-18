@@ -1,9 +1,12 @@
 <template>
-  <v-container v-if="user.isAnonymous">
+  <v-container v-if="show">
     <v-row>
       <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
 
-        <v-btn block color="secondary" dark to="/sign-in">Sign in now</v-btn>
+        <v-btn block color="secondary" dark to="/sign-in">
+          <v-icon left>mdi-login-variant</v-icon>
+          Sign in now
+        </v-btn>
 
       </v-col>
     </v-row>
@@ -14,13 +17,15 @@
   import { mapGetters } from 'vuex';
 
   export default {
+    name: 'LoginNowBtn',
+
     computed: {
       ...mapGetters({ user: 'user/getUser' }),
 
-      // user() {
-      //   return { isAnonymous: false };
-      // }
-    }
+      show() {
+        return this.user?.isAnonymous;
+      },
+    },
   }
 </script>
 

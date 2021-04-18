@@ -2,17 +2,8 @@
   <div class="page-root justify-top" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <!-- <v-container>
-      <v-row>
-        <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
-
-          <v-btn v-if="user.isAnonymous" block  color="primary" dark to="/sign-in">Sign in now</v-btn>
-
-        </v-col>
-      </v-row>
-    </v-container> -->
-
-    <!-- <test /> -->
+    <index />
+    
     <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
   </div>
 </template>
@@ -21,14 +12,15 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
+  import Index from '@/components/Exercise/Index';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
-    name: 'ExercisePage',
+    name: 'ExercisesPage',
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ConnectivityBar },
+    components: { LoginNowBtn, Index, ConnectivityBar },
 
     async mounted() {
       await this.$recaptchaLoaded();
@@ -48,7 +40,7 @@
     },
 
     metaInfo() {
-      return { ...this.pageMeta, titleTemplate: '%s | Home' };
+      return { ...this.pageMeta, titleTemplate: '%s | Exersises' };
     },
   }
 </script>

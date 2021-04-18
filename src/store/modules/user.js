@@ -23,9 +23,7 @@ const mutations = {
 };
 
 const actions = {
-  // once proper logged in (i.e. not anon auth), after redirecting back from google, this is
-  // called to confirm login succeeded. been unable to test what happens if login doesn't succeed.
-  checkFbRedirectResult({ commit, dispatch }) {
+  checkFbRedirectResult({ commit, dispatch }) { // once proper logged in (i.e. not anon auth), after redirecting back from google, this is called to confirm login succeeded.
     return new Promise(async (resolve, reject) => {
       try {
         const { user } = await auth().getRedirectResult();
@@ -47,17 +45,17 @@ const actions = {
         ];
 
         if([errors[0]].includes(err1.code)) {
-          const tests = await dispatch('test/fetchUserTests', auth().currentUser.uid, { root: true });
+          const exercises = await dispatch('exercise/fetchUserExercises', auth().currentUser.uid, { root: true });
 
           try { // TODO: this /fetch... & /update... will have to be applied to all possible user data            
-            tests.forEach(v => dispatch('test/deleteTest', v.id, { root: true }));
+            exercises.forEach(v => dispatch('exercise/deleteExercise', v.id, { root: true }));
             const { user } = await auth().signInWithCredential(err1.credential);
             dispatch('initAuthWatch');
-            tests.forEach(v => dispatch('test/createTest', { number: v.number, user: user.uid }, { root: true }));
+            exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: user.uid }, { root: true }));
             return resolve({ user: !!user });
           } catch (err2) {
             console.log('auth/credential-already-in-use:', err2);
-            tests.forEach(v => dispatch('test/createTest', { number: v.number, user: v.user }, { root: true }));
+            exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: v.user }, { root: true }));
             return reject(err1);
           }
         }
@@ -122,7 +120,7 @@ const actions = {
             });
 
             analytics.setUserProperties({ user_id: user.uid });
-            dispatch('test/fetchTests', null, { root: true });
+            dispatch('exercise/fetchExercises', null, { root: true });
           }
         });
             
@@ -143,7 +141,7 @@ const actions = {
 
         analytics.logEvent('logout');
         await dispatch('unsubscribeFromSnapshots');
-        await dispatch('test/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('exercise/unsubscribeFromSnapshots', null, { root: true });
         await auth().signOut();
         commit('setUser', null);
 

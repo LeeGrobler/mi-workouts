@@ -51,7 +51,7 @@
   import List from '@/components/Layout/AppDrawer/List';
 
   export default {
-    name: 'AppDrawerComponent',
+    name: 'AppDrawer',
 
     components: { List },
 

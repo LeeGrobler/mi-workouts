@@ -28,7 +28,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'LoginFormComponent',
+    name: 'LoginForm',
 
     data: () => ({
       loading: '',
