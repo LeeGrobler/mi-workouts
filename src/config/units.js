@@ -1,8 +1,8 @@
 export default [{
   category: 'Weight',
   items: [
-    { name: 'Gram', symbol: 'g' },
     { name: 'Kilogram', symbol: 'kg' },
+    { name: 'Gram', symbol: 'g' },
   ]
 }, {
   category: 'Time',

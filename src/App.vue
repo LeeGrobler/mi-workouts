@@ -35,6 +35,9 @@
       this.monitorConnection();
       await this.checkFbResult();
       this.initAuthWatch();
+
+      this.scrollDownALittle(1000);
+      this.$watch('$route', () => this.scrollDownALittle(250));
     },
 
     computed: {
@@ -60,6 +63,11 @@
           this.alert({ color: 'error', timeout: 10000, text: err.message });
         }
       },
+
+      scrollDownALittle(ms) {
+        console.log('scrolling down:', ms);
+        setTimeout(() => window.scroll({ top: 48,  left: 0,  behavior: 'smooth' }), ms);
+      }
     },
   };
 </script>

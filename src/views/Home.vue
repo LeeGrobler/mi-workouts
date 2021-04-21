@@ -17,7 +17,7 @@
   export default {
     name: 'HomePage',
 
-    mixins: [PageActions],
+    // mixins: [PageActions],
 
     // components: { Test, LoginNowBtn, ConnectivityBar },
     components: { LoginNowBtn, ConnectivityBar },
@@ -25,7 +25,7 @@
     async mounted() {
       console.log('page loaded');
 
-      await this.$recaptchaLoaded(); // TODO: this should be removed from every page (except contact) and put into the /page mixin
+      await this.$recaptchaLoaded();
       this.$recaptchaInstance.hideBadge();
     },
 
@@ -70,7 +70,7 @@
   // Photo by Erik Mclean on Unsplash | https://unsplash.com/@introspectivedsgn?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
 
   .page-root {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/image/bg-mobile-3.jpg') no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-mobile-3.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 

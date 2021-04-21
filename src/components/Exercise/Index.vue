@@ -1,12 +1,11 @@
 <template>
   <div class="comp-root">
-    <upsert-exercise />
-    <list-exercises v-if="!upserting" />
+    <upsert-exercise key="up-ex" :getUpserting="upserting" :exercise="exercise" @edit="stopEditing" @setUpserting="upserting = arguments[0]" />
+    <list-exercises key="li-ex" v-if="!upserting" @edit="startEdit" />
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import ListExercises from '@/components/Exercise/ListExercises';
   import UpsertExercise from '@/components/Exercise/UpsertExercise';
 
@@ -15,8 +14,20 @@
 
     components: { ListExercises, UpsertExercise },
 
-    computed: {
-      ...mapGetters({ upserting: 'exercise/getUpserting' }),
+    data: () => ({
+      upserting: false,
+      exercise: null,
+    }),
+
+    methods: {
+      startEdit(ex) {
+        this.upserting = true;
+        this.exercise = ex;
+      },
+      stopEditing() {
+        this.upserting = false;
+        this.exercise = null;
+      },
     },
   }
 </script>

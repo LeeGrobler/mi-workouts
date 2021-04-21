@@ -6,9 +6,9 @@
 
     <v-tooltip v-for="(btn, i) in buttons" :key="i" bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" class="btn ml-2" color="black" @click="btn.callback" outlined fab small>
-          <v-icon>{{ btn.icon }}</v-icon>
-        </v-btn>
+        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" class="btn ml-2" color="black" @click="btn.callback" outlined fab :small="role === 'page'"
+          :x-small="role === 'section'"
+        ><v-icon>{{ btn.icon }}</v-icon></v-btn>
       </template>
       <span>{{ btn.text }}</span>
     </v-tooltip>

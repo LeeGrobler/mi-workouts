@@ -4,7 +4,6 @@ const defaultState = () => {
   return {
     snaps: {},
     exercises: null,
-    upserting: false,
   };
 };
 
@@ -13,7 +12,6 @@ const state = defaultState();
 const getters = {
   getSnaps: state => state.snaps,
   getExercises: state => state.exercises,
-  getUpserting: state => state.upserting,
 };
 
 const mutations = {
@@ -23,14 +21,9 @@ const mutations = {
     ...payload
   },
   setExercises: (state, payload) => state.exercises = payload,
-  setUpserting: (state, payload) => state.upserting = payload,
 };
 
 const actions = {
-  setUpserting({ commit }, payload) {
-    commit('setUpserting', payload);
-  },
-
   fetchUserExercises({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -55,8 +48,12 @@ const actions = {
 
           const exerciseSnapshot = Exercises.where('user', '==', rootGetters['user/getUser'].uid).onSnapshot(snaps => {
             console.log('getting exercises');
-            const exercises = snaps.docs.map(v => ({ id: v.id, ...v.data() }));
-            commit('setExercises', exercises);
+            const exercises = snaps.docs.map(v => ({
+              id: v.id,
+              ...v.data(),
+              loading: false,
+            }));
+            commit('setExercises', exercises.sort((a, b) => a.name > b.name ? 1 : -1));
           }, err => {
             console.log('fetchExercises.onSnapshot err:', err);
           });
@@ -74,18 +71,22 @@ const actions = {
     });
   },
 
-  upsertExercise({ getters, rootGetters }, payload) { // TODO: editing has to happen in here also
+  upsertExercise({ getters, rootGetters }, payload) {
     return new Promise((resolve, reject) => {
       try {
         const exercise = getters.getExercises.find(v => v.name === payload.name);
-        if(!!exercise && exercise.id !== payload.id) {
+        if((exercise && !payload.id) || (exercise && payload.id && payload.id !== exercise.id)) {
           return reject({ message: `${payload.name} already exists` });
         }
 
-        console.log('adding:', payload);
+        if(!!payload.id) {
+          analytics.logEvent('update_exercise');
+          Exercises.doc(payload.id).update(_.omit(payload, ['id']));
+        } else {
+          analytics.logEvent('create_exercise');
+          Exercises.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
+        }
 
-        analytics.logEvent('create_exercise');
-        Exercises.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
         return resolve();
       } catch (err) {
         console.log('upsertExercise err:', err);

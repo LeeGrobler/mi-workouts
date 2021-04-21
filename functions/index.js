@@ -18,8 +18,6 @@ admin.initializeApp({ credential: admin.credential.cert(require('./certs/prod.js
 
     - currently there's no way to automatically switch between prod and uat cert and runtimeconfig on serve/deploy, so you'll have to
       do that yourself.
-      TODO: finish the devops.js script so that it does automatically switch the files (the npm script should be triggered in /package.json
-      and not in /functions/package.json)
 */
 
 exports.contact = functions.region('europe-west2').https.onCall(async ({ name, email, message, token }, { auth }) => {
@@ -56,7 +54,6 @@ exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async 
   }
 });
 
-// TODO: figure out how to deploy this monster
 // exports.dailyTasks = functions.region('europe-west2').pubsub
 // .schedule('every 24 hours 00:00').timeZone('Africa/Johannesburg')
 // .onRun(async () => {

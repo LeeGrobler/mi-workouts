@@ -26,7 +26,7 @@
   export default {
     name: 'NotFoundPage',
 
-    mixins: [PageActions],
+    // mixins: [PageActions],
 
     components: { ConnectivityBar },
 

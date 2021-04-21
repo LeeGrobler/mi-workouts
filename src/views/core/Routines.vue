@@ -26,7 +26,7 @@
   export default {
     name: 'RoutinesPage',
 
-    mixins: [PageActions],
+    // mixins: [PageActions],
 
     components: { LoginNowBtn, ConnectivityBar },
 
@@ -57,7 +57,7 @@
   @import "@/assets/scss/global.scss";
 
   .page-root {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/image/bg-mobile-6.jpg') no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/image/bg-mobile-6.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 

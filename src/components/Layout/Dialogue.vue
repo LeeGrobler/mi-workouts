@@ -17,7 +17,7 @@
       <v-card-actions class="px-3">
         <v-spacer />
         <template v-for="(action, i) in refinedActions">
-          <v-btn :color="action.color || 'primary'" :depressed="action.flat" @click="fireAction(action.callback, action.keepOpen)" :key="i" :disabled="action.disabled">{{ action.text }}</v-btn>
+          <v-btn :color="action.color" :depressed="action.flat" @click="fireAction(action.callback, action.keepOpen)" :key="i" :disabled="action.disabled">{{ action.text }}</v-btn>
         </template>
       </v-card-actions>
     </v-card>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  // this.dialouge({
+  // this.dialogue({
   //   closeOnShadowClick: false, // optional
   //   color: 'success', // optional; success, info, warning, error
   //   title: 'Test Dialogue',
