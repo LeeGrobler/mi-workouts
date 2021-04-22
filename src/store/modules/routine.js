@@ -1,9 +1,9 @@
-const { Exercises, analytics } = require('@/plugins/firebase');
+const { Routines, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => {
   return {
     snaps: {},
-    exercises: null,
+    routines: null,
   };
 };
 
@@ -11,7 +11,7 @@ const state = defaultState();
 
 const getters = {
   getSnaps: state => state.snaps,
-  getExercises: state => state.exercises,
+  getRoutines: state => state.routines,
 };
 
 const mutations = {
@@ -20,89 +20,89 @@ const mutations = {
     ...state.snaps,
     ...payload
   },
-  setExercises: (state, payload) => state.exercises = payload,
+  setRoutines: (state, payload) => state.routines = payload,
 };
 
 const actions = {
-  fetchUserExercises({}, payload) {
+  fetchUserRoutines({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        Exercises.where('user', '==', payload).get().then(res => {
-          console.log('exercises got');
-          const exercises = res.docs.map(v => ({ id: v.id, ...v.data() }));
-          return resolve(exercises);
+        Routines.where('user', '==', payload).get().then(res => {
+          console.log('routines got');
+          const routines = res.docs.map(v => ({ id: v.id, ...v.data() }));
+          return resolve(routines);
         });
       } catch(err) {
-        console.log('fetchUserExercises err:', err);
+        console.log('fetchUserRoutines err:', err);
         return reject(err);
       }
     });
   },
 
-  fetchExercises({ getters, commit, dispatch, rootGetters }) {
+  fetchRoutines({ getters, commit, dispatch, rootGetters }) {
     return new Promise(async (resolve, reject) => {
       try {
         if(!!rootGetters['user/getUser']) {
-          analytics.logEvent('fetch_exercises'); // TODO: you'll have to add analytics for any future data crudding
-          if(getters.getSnaps.exercise) dispatch('unsubscribeFromSnapshot', 'exercise');
+          analytics.logEvent('fetch_routines'); // TODO: you'll have to add analytics for any future data crudding
+          if(getters.getSnaps.routine) dispatch('unsubscribeFromSnapshot', 'routine');
 
-          const exerciseSnapshot = Exercises.where('user', '==', rootGetters['user/getUser'].uid).onSnapshot(snaps => {
-            console.log('getting exercises');
-            const exercises = snaps.docs.map(v => ({
+          const routineSnapshot = Routines.where('user', '==', rootGetters['user/getUser'].uid).onSnapshot(snaps => {
+            console.log('getting routines');
+            const routines = snaps.docs.map(v => ({
               id: v.id,
               ...v.data(),
               loading: false,
             }));
-            commit('setExercises', exercises.sort((a, b) => a.name > b.name ? 1 : -1));
+            commit('setRoutines', routines.sort((a, b) => a.name > b.name ? 1 : -1));
           }, err => {
-            console.log('fetchExercises.onSnapshot err:', err);
+            console.log('fetchRoutines.onSnapshot err:', err);
           });
 
-          commit('addSnaps', { exercise: exerciseSnapshot });
+          commit('addSnaps', { routine: routineSnapshot });
           return resolve();
         }
 
-        commit('setExercises', []);
+        commit('setRoutines', []);
         return resolve();
       } catch(err) {
-        console.log('fetchExercises err:', err);
+        console.log('fetchRoutines err:', err);
         return reject(err);
       }
     });
   },
 
-  upsertExercise({ getters, rootGetters }, payload) {
-    return new Promise(async (resolve, reject) => {
+  upsertRoutine({ getters, rootGetters }, payload) {
+    return new Promise((resolve, reject) => {
       try {
-        const exercise = getters.getExercises.find(v => v.name === payload.name);
-        if((exercise && !payload.id) || (exercise && payload.id && payload.id !== exercise.id)) {
+        const routine = getters.getRoutines.find(v => v.name === payload.name);
+        if((routine && !payload.id) || (routine && payload.id && payload.id !== routine.id)) {
           return reject({ message: `${payload.name} already exists` });
         }
 
         if(!!payload.id) {
-          analytics.logEvent('update_exercise');
-          await Exercises.doc(payload.id).update(_.omit(payload, ['id']));
-          return resolve();
+          analytics.logEvent('update_routine');
+          Routines.doc(payload.id).update(_.omit(payload, ['id']));
         } else {
-          analytics.logEvent('create_exercise');
-          const res = await Exercises.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
-          return resolve(res.id);
+          analytics.logEvent('create_routine');
+          Routines.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
         }
+
+        return resolve();
       } catch (err) {
-        console.log('upsertExercise err:', err);
+        console.log('upsertRoutine err:', err);
         return reject(err);
       }
     });
   },
 
-  deleteExercise({}, payload) {
+  deleteRoutine({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        analytics.logEvent('delete_exercise');
-        Exercises.doc(payload).delete();
+        analytics.logEvent('delete_routine');
+        Routines.doc(payload).delete();
         return resolve();
       } catch (err) {
-        console.log('deleteExercise err:', err);
+        console.log('deleteRoutine err:', err);
         return reject(err);
       }
     });

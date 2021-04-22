@@ -3,7 +3,7 @@
     <dialogue />
 
     <!-- <loader v-if="!tests" /> -->
-    <loader v-if="!exercises" />
+    <loader v-if="!exercises && !routines" />
     <v-main v-else>
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" />
       <router-view />
@@ -46,6 +46,7 @@
       ...mapGetters({
         online: 'general/getOnline',
         exercises: 'exercise/getExercises',
+        routines: 'routine/getRoutines',
         // tests: 'test/getTests',
       }),
     },

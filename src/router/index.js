@@ -61,7 +61,6 @@ router.beforeEach(async (to, from, next) => {
 
   analytics.logEvent('page_view', { type: 'internal' });
 
-  console.log('directing to', to.path);
   return next();
 });
 

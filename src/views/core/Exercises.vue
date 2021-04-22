@@ -27,7 +27,7 @@
     },
 
     metaInfo() {
-      return { ...this.pageMeta, titleTemplate: '%s | Exersises' };
+      return { ...this.pageMeta, titleTemplate: '%s | Exercises' };
     },
   }
 </script>

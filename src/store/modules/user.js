@@ -46,16 +46,20 @@ const actions = {
 
         if([errors[0]].includes(err1.code)) {
           const exercises = await dispatch('exercise/fetchUserExercises', auth().currentUser.uid, { root: true });
+          const routines = await dispatch('routine/fetchUserRoutines', auth().currentUser.uid, { root: true });
 
           try { // TODO: this /fetch... & /update... will have to be applied to all possible user data            
             exercises.forEach(v => dispatch('exercise/deleteExercise', v.id, { root: true }));
+            routines.forEach(v => dispatch('routine/deleteRoutine', v.id, { root: true }));
             const { user } = await auth().signInWithCredential(err1.credential);
             dispatch('initAuthWatch');
             exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: user.uid }, { root: true }));
+            routines.forEach(v => dispatch('routine/createRoutine', { number: v.number, user: user.uid }, { root: true }));
             return resolve({ user: !!user });
           } catch (err2) {
             console.log('auth/credential-already-in-use:', err2);
             exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: v.user }, { root: true }));
+            routines.forEach(v => dispatch('routine/createRoutine', { number: v.number, user: v.user }, { root: true }));
             return reject(err1);
           }
         }
@@ -121,6 +125,7 @@ const actions = {
 
             analytics.setUserProperties({ user_id: user.uid });
             dispatch('exercise/fetchExercises', null, { root: true });
+            dispatch('routine/fetchRoutines', null, { root: true });
           }
         });
             
@@ -142,6 +147,7 @@ const actions = {
         analytics.logEvent('logout');
         await dispatch('unsubscribeFromSnapshots');
         await dispatch('exercise/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('routine/unsubscribeFromSnapshots', null, { root: true });
         await auth().signOut();
         commit('setUser', null);
 
