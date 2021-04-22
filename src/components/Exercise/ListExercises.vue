@@ -1,54 +1,52 @@
 <template>
-  <v-container class="white--text">
-    <v-row>
-      <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4" class="py-0">
-        <v-list two-line class="py-0" color="transparent">
-          <template v-for="ex in exercises">
-            
-            <v-list-group :key="ex.id">
-              <template v-slot:activator>
-                <!-- avatar -->
-                <v-list-item-avatar class="my-0 mr-2">
-                  <v-progress-circular v-if="ex.loading" indeterminate color="primary" />
-                  <v-icon v-else class="secondary" dark>{{ getIcon(ex.unitType) }}</v-icon>
-                </v-list-item-avatar>
-                <!-- deets -->
-                <v-list-item-content class="py-3">
-                  <v-list-item-title class="white--text">{{ ex.name }}</v-list-item-title>
-                  <v-list-item-subtitle class="white--text">{{ getDetailsText(ex) }}</v-list-item-subtitle>
-                </v-list-item-content>
-              </template>
+  <v-list two-line class="py-0" color="transparent">
 
-              <!-- card -->
-              <v-list-item>
-                <v-list-item-content class="py-1">
-                  <v-list-item-title>
-
-                    <v-card flat>
-                      <iframe v-if="ex.link" :src="ex.link" frameborder="0" class="tutorial-frame" allowfullscreen></iframe>
-
-                      <v-card-text class="pa-2 pb-0 subtitle-2">{{ ex.name }}</v-card-text>
-                      <v-card-text v-if="ex.notes" class="pa-2 pb-0">
-                        <p v-if="ex.notes" class="wrap-text mb-0">{{ ex.notes }}</p>
-                      </v-card-text>
-
-                      <v-card-actions class="pa-2">
-                        <v-spacer></v-spacer>
-                        <v-btn text color="error" @click="remove(ex)">Delete</v-btn>
-                        <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                    
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-
+    <transition-group name="list">
+      <template v-for="ex in exercises">
+        
+        <v-list-group :key="ex.id">
+          <template v-slot:activator>
+            <!-- avatar -->
+            <v-list-item-avatar class="my-0 mr-2">
+              <v-progress-circular v-if="ex.loading" indeterminate color="primary" />
+              <v-icon v-else class="secondary" dark>{{ getIcon(ex.unitType) }}</v-icon>
+            </v-list-item-avatar>
+            <!-- deets -->
+            <v-list-item-content class="py-3">
+              <v-list-item-title class="white--text">{{ ex.name }}</v-list-item-title>
+              <v-list-item-subtitle class="white--text">{{ getDetailsText(ex) }}</v-list-item-subtitle>
+            </v-list-item-content>
           </template>
-        </v-list>
-      </v-col>
-    </v-row>
-  </v-container>
+
+          <!-- card -->
+          <v-list-item>
+            <v-list-item-content class="py-1">
+              <v-list-item-title>
+
+                <v-card flat>
+                  <iframe v-if="ex.link" :src="ex.link" frameborder="0" class="tutorial-frame" allowfullscreen></iframe>
+
+                  <v-card-text class="pa-2 pb-0 subtitle-2">{{ ex.name }}</v-card-text>
+                  <v-card-text v-if="ex.notes" class="pa-2 pb-0">
+                    <p v-if="ex.notes" class="wrap-text mb-0">{{ ex.notes }}</p>
+                  </v-card-text>
+
+                  <v-card-actions class="pa-2">
+                    <v-spacer></v-spacer>
+                    <v-btn text color="error" @click="remove(ex)">Delete</v-btn>
+                    <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn>
+                  </v-card-actions>
+                </v-card>
+                
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+
+      </template>
+    </transition-group>
+
+  </v-list>
 </template>
 
 <script>
@@ -118,7 +116,7 @@
 
     watch: {
       getExercises(n) {
-        if(!!n?.length) this.exercises = _.cloneDeep(n);
+        this.exercises = _.cloneDeep(n);
       },
     },
   }

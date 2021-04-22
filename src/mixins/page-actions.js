@@ -1,12 +1,15 @@
 export default {
-  // mounted() {
-  //   setTimeout(() => this.hideNav(), 250);
-  // },
+  mounted() {
+    this.toggleRecaptchaBadge();
+  },
 
   methods: {
-    hideNav() {
-      console.log('scrolling');
-      window.scroll({ top: 48,  left: 0,  behavior: 'smooth' });
+    async toggleRecaptchaBadge(show) {
+      await this.$recaptchaLoaded();
+      if(this.$route.meta.recaptchaBadge) {
+        return this.$recaptchaInstance.showBadge();
+      }
+      this.$recaptchaInstance.hideBadge();
     },
   }
 }

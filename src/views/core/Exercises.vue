@@ -4,7 +4,7 @@
 
     <index />
     
-    <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
+    <connectivity-bar />
   </div>
 </template>
 
@@ -18,25 +18,12 @@
   export default {
     name: 'ExercisesPage',
 
-    // mixins: [PageActions],
+    mixins: [PageActions],
 
     components: { LoginNowBtn, Index, ConnectivityBar },
 
-    async mounted() {
-      await this.$recaptchaLoaded();
-      this.$recaptchaInstance.hideBadge();
-    },
-
     computed: {
-      ...mapGetters({
-        user: 'user/getUser',
-        online: 'general/getOnline' ,
-        footer: 'ui/getFooterPos'
-      }),
-
-      position() {
-        return this.footer.top < window.innerHeight ? 'absolute' : 'fixed';
-      },
+      ...mapGetters({ online: 'general/getOnline' }),
     },
 
     metaInfo() {
@@ -51,12 +38,18 @@
   .page-root {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/image/bg-mobile-4.jpg') no-repeat center center fixed;
     background-size: cover;
+    padding-bottom: 48px;
+
+    &.bar-padding { padding-bottom: 72px; }
   }
 
   @media only screen and (min-width: 960px) {
     .page-root {
       background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../../assets/image/bg-desktop-4.jpg') no-repeat center center fixed;
       background-size: cover;
+      padding-bottom: 48px;
+
+      &.bar-padding { padding-bottom: 72px; }
     }
   }
 </style>

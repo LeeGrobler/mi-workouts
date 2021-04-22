@@ -3,7 +3,7 @@
     <login-now-btn />
 
     <!-- <test /> -->
-    <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
+    <connectivity-bar />
   </div>
 </template>
 
@@ -17,28 +17,13 @@
   export default {
     name: 'HomePage',
 
-    // mixins: [PageActions],
+    mixins: [PageActions],
 
     // components: { Test, LoginNowBtn, ConnectivityBar },
     components: { LoginNowBtn, ConnectivityBar },
 
-    async mounted() {
-      console.log('page loaded');
-
-      await this.$recaptchaLoaded();
-      this.$recaptchaInstance.hideBadge();
-    },
-
     computed: {
-      ...mapGetters({
-        user: 'user/getUser',
-        online: 'general/getOnline' ,
-        footer: 'ui/getFooterPos'
-      }),
-
-      position() {
-        return this.footer.top < window.innerHeight ? 'absolute' : 'fixed';
-      },
+      ...mapGetters({ online: 'general/getOnline' }),
     },
 
     metaInfo() {

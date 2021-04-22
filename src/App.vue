@@ -7,6 +7,7 @@
     <v-main v-else>
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" />
       <router-view />
+      <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />
     </v-main>
 
@@ -21,6 +22,7 @@
   import Dialogue from '@/components/Layout/Dialogue';
   import Loader from '@/components/Layout/Loader';
   import AppDrawer from '@/components/Layout/AppDrawer';
+  import WorkoutBar from '@/components/Layout/WorkoutBar';
   import AppFooter from '@/components/Layout/AppFooter';
   import Alert from '@/components/Layout/Alert';
 
@@ -29,14 +31,14 @@
 
     mixins: [redirect],
 
-    components: { Dialogue, Loader, AppDrawer, AppFooter, Alert },
+    components: { Dialogue, Loader, AppDrawer, WorkoutBar, AppFooter, Alert },
 
     async mounted() {
       this.monitorConnection();
       await this.checkFbResult();
       this.initAuthWatch();
 
-      this.scrollDownALittle(1000);
+      this.scrollDownALittle(750);
       this.$watch('$route', () => this.scrollDownALittle(250));
     },
 
@@ -65,9 +67,8 @@
       },
 
       scrollDownALittle(ms) {
-        console.log('scrolling down:', ms);
         setTimeout(() => window.scroll({ top: 48,  left: 0,  behavior: 'smooth' }), ms);
-      }
+      },
     },
   };
 </script>

@@ -1,13 +1,11 @@
 @import './animate.scss';
 
+// TODO: i reckon get rid of this file - it currently only serves to scatter your styling rules
+
 .page-root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  // align-items: flex-start;
-  // justify-content: flex-start;
-
-  // &.justify-top { justify-content: start; }
 }
 
 .bar-padding { padding-bottom: 24px; }

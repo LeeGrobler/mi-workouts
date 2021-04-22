@@ -14,7 +14,7 @@
       </v-row>
     </v-container>
 
-    <connectivity-bar v-if="footer" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" />
+    <connectivity-bar />
   </div>
 </template>
 
@@ -26,24 +26,12 @@
   export default {
     name: 'NotFoundPage',
 
-    // mixins: [PageActions],
+    mixins: [PageActions],
 
     components: { ConnectivityBar },
 
-    async mounted() {
-      await this.$recaptchaLoaded();
-      this.$recaptchaInstance.hideBadge();
-    },
-
     computed: {
-      ...mapGetters({
-        online: 'general/getOnline' ,
-        footer: 'ui/getFooterPos'
-      }),
-
-      position() {
-        return this.footer.top < window.innerHeight ? 'absolute' : 'fixed';
-      },
+      ...mapGetters({ online: 'general/getOnline' }),
     },
 
     metaInfo() {

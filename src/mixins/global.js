@@ -11,9 +11,11 @@ export default Vue.mixin({
       revealAlert: 'ui/showAlert',
       revealDialogue: 'ui/showDialogue',
     }),
+
     alert(cfg) {
       this.revealAlert(cfg);
     },
+
     dialogue(cfg) {
       this.revealDialogue(cfg);
     },
