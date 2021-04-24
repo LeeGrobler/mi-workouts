@@ -1,4 +1,4 @@
-const { Routines, analytics } = require('@/plugins/firebase');
+const { db, Routines, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => {
   return {
@@ -53,7 +53,7 @@ const actions = {
               ...v.data(),
               loading: false,
             }));
-            commit('setRoutines', routines.sort((a, b) => a.name > b.name ? 1 : -1));
+            commit('setRoutines', routines.sort((a, b) => a.order > b.order ? 1 : -1));
           }, err => {
             console.log('fetchRoutines.onSnapshot err:', err);
           });
@@ -81,15 +81,41 @@ const actions = {
 
         if(!!payload.id) {
           analytics.logEvent('update_routine');
-          Routines.doc(payload.id).update(_.omit(payload, ['id']));
+          Routines.doc(payload.id).update(_.pick(payload, ['name', 'exercises', 'notes', 'user', 'favorite', 'order']));
         } else {
           analytics.logEvent('create_routine');
-          Routines.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
+
+          let order = 0;
+          if(getters.getRoutines?.length > 0) {
+            order = _.cloneDeep(getters.getRoutines).sort((a, b) => a.order < b.order ? 1 : -1)[0].order + 1;
+          }
+
+          Routines.add({
+            ...payload,
+            user: payload.user || rootGetters['user/getUser']?.uid,
+            favorite: getters.getRoutines.length < 1,
+            order
+          });
         }
 
         return resolve();
       } catch (err) {
         console.log('upsertRoutine err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  batchReorder({}, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const batch = db.batch();
+        payload.forEach(v => batch.update(Routines.doc(v.id), { order: v.order }));
+        await batch.commit();
+        
+        return resolve();
+      } catch (err) {
+        console.log('batchReorder err:', err);
         return reject(err);
       }
     });

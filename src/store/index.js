@@ -7,7 +7,6 @@ import user from './modules/user';
 import general from './modules/general';
 import exercise from './modules/exercise';
 import routine from './modules/routine';
-// import test from './modules/test';
 
 Vue.use(Vuex);
 

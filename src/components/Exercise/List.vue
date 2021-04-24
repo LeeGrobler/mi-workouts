@@ -12,7 +12,7 @@
             <v-icon v-else class="secondary" dark>{{ getIcon(ex.unitType) }}</v-icon>
           </v-list-item-avatar>
           <!-- deets -->
-          <v-list-item-content class="py-3">
+          <v-list-item-content class="py-0">
             <v-list-item-title class="white--text">{{ ex.name }}</v-list-item-title>
             <v-list-item-subtitle class="white--text">{{ getDetailsText(ex) }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -54,7 +54,6 @@
     name: 'ListExercises',
 
     props: {
-      listExercises: { type: Array, required: false },
       hideFilter: { type: Boolean, required: false, default: false },
     },
 
@@ -64,7 +63,7 @@
     }),
 
     mounted() {
-      this.exercises = this.listExercises || _.cloneDeep(this.getExercises);
+      this.exercises = _.cloneDeep(this.getExercises);
     },
 
     computed: {
@@ -133,11 +132,7 @@
 
     watch: {
       getExercises(n) {
-        if(this.listExercises.length < 1) this.exercises = _.cloneDeep(n);
-      },
-
-      listExercises(n) {
-        if(this.getExercises.length < 1) this.exercises = n;
+        this.exercises = _.cloneDeep(n);
       },
     },
   }
@@ -146,10 +141,13 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/animate.scss";
 
-  ::v-deep .v-list-item { padding: 0px; }
+  ::v-deep .v-list-item {
+    padding: 4px 0;
+    min-height: 0;
+  }
+
   ::v-deep .v-list-group__header__append-icon i { color: #fff; }
   ::v-deep .v-list-item__action--stack { flex-direction: unset; }
-  ::v-deep .v-list--two-line .v-list-item, .v-list-item--two-line { min-height: unset; }
   ::v-deep .v-application--is-ltr .v-card__actions > .v-btn.v-btn + .v-btn { margin-left: 0; }
 
   ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon {

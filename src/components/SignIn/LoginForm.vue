@@ -72,9 +72,10 @@
         this.dialogue({
           title: 'MiWorkouts Sign In',
           text: `
-            By signing into MiWorkouts, your Excersises, Routines and Plans become accessible on any device so
-            if you get a new phone, or would like to create a plan on your pc, to use on your cell phone, you
-            can simply sign in on the other device and instantly access everything you created on the first device.
+            By signing into MiWorkouts, your Excersises and Routines become accessible on any device so
+            if you get a new phone, or would like to create a plan on your pc, to use on your cell phone,
+            you can simply sign in on the other device and instantly access everything you created on the
+            first device.
           `,
           actions: [{
             color: 'success',

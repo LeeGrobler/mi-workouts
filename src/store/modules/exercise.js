@@ -95,9 +95,17 @@ const actions = {
     });
   },
 
-  deleteExercise({}, payload) {
+  deleteExercise({ dispatch, rootGetters }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
+        rootGetters['routine/getRoutines'].forEach(v1 => {
+          if(v1.exercises.find(v2 => v2 === payload)) {
+            const rt = _.cloneDeep(v1);
+            rt.exercises = rt.exercises.filter(v2 => v2 !== payload);
+            dispatch('routine/upsertRoutine', rt, { root: true });
+          }
+        });
+
         analytics.logEvent('delete_exercise');
         Exercises.doc(payload).delete();
         return resolve();

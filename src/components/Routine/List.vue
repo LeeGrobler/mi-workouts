@@ -1,54 +1,44 @@
 <template>
-  <v-list class="list-root mt-3 py-0"  color="transparent">
+  <v-expansion-panels class="mt-3" flat dark accordion>
+    <v-expansion-panel v-for="rt in routines" :key="rt.id" class="transparent">
+      <v-expansion-panel-header class="py-1 px-0">
+        <div>
+          <v-icon class="drag-icon" color="white">mdi-drag-vertical</v-icon>
+          {{ rt.name }}
+        </div>
 
-    <transition-group name="list">
-      <v-list-group v-for="rt in routines" :key="rt.id">
-        <template v-slot:activator>
-          <!-- deets -->
-          <v-list-item-content class="py-0">
-            <v-list-item-title class="white--text">{{ rt.name }}</v-list-item-title>
-            <v-list-item-subtitle class="white--text">{{ getDetailsText(rt) }}</v-list-item-subtitle>
-          </v-list-item-content>
-          <!-- actions -->
-          <v-list-item-action class="my-6px">
-            <v-btn x-small icon @click="remove(rt)">
-              <v-icon color="error">mdi-delete</v-icon>
-            </v-btn>
-            <v-btn x-small icon @click="$emit('edit', rt)">
-              <v-icon color="success">mdi-pencil</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </template>
+        <div class="text-right">
+          <v-btn x-small icon @click.stop="favorite(rt)">
+            <v-icon :color="rt.favorite ? '#FFD700' : ''">{{ rt.favorite ? 'mdi-star' : 'mdi-star-outline' }}</v-icon>
+          </v-btn>
+          <v-btn x-small icon @click.stop="remove(rt)">
+            <v-icon color="error">mdi-delete</v-icon>
+          </v-btn>
+          <v-btn x-small icon @click.stop="$emit('edit', rt)">
+            <v-icon color="success">mdi-pencil</v-icon>
+          </v-btn>
+        </div>
+      </v-expansion-panel-header>
 
-        <!-- card -->
-        <v-list-item class="expanded-item">
-          <v-list-item-content class="pa-0">
-            <v-list-item-title>
-              <v-divider color="white" />
-
-              <v-card color="transparent">
-                <v-card-text class="px-0 pt-1 pb-2 white--text">{{ rt.notes }}</v-card-text>
-                <exercise-list :hide-filter="true" :list-exercises="getExercisesFromId(rt.exercises)" />
-              </v-card>
-              
-              <v-divider color="white" :class="{ 'mt-3': rt.exercises.length > 0 }" />
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-group>
-    </transition-group>
-
-  </v-list>
+      <v-expansion-panel-content class="py-1 px-0">
+        <v-card color="transparent">
+          <v-card-text v-if="rt.notes" class="pt-1 pb-0 white--text">{{ rt.notes }}</v-card-text>
+          <exercise-list :list-exercises="getExercisesFromId(rt.exercises)" @reorderExercises="reorderExercises(rt, arguments[0])" />
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script>
+  import Draggable from 'vuedraggable'
   import { mapGetters, mapActions } from 'vuex';
-  import ExerciseList from '@/components/Exercise/List';
+  import ExerciseList from '@/components/Routine/ExerciseList';
 
   export default {
     name: 'ListRoutines',
 
-    components: { ExerciseList },
+    components: { Draggable, ExerciseList },
 
     data: () => ({
       routines: [],
@@ -67,26 +57,22 @@
 
     methods: {
       ...mapActions({
-        setEdit: 'routine/setEdit',
-        delete: 'routine/deleteRoutine'
+        delete: 'routine/deleteRoutine',
+        batchReorder: 'routine/batchReorder',
+        upsertRoutine: 'routine/upsertRoutine',
       }),
 
-      getIcon(category) {
-        switch(category) {
-          case 'Weight': return 'mdi-weight-kilogram';
-          case 'Time': return 'mdi-timer-outline';
-          case 'Distance': return 'mdi-run-fast';
-          case 'Calories': return 'mdi-fire';
+      async favorite(ex) {
+        ex.loading = true;
+
+        try {
+          ex.favorite = !ex.favorite;
+          await this.upsertRoutine(ex);
+        } catch(err) {
+          this.alert({ color: 'error', timeout: 10000, text: err.message });
         }
-      },
 
-      getDetailsText(v) {
-        let str = v.sets ? v.sets + ' x ' : '';
-        str += v.reps ? v.reps + ' @ ' : '';
-        str += v.amount ? v.amount + ' ' : '';
-        str += v.amount && v.unit ? v.unit : '';
-
-        return str.trim();        
+        ex.loading = true;
       },
 
       remove(ex) {
@@ -114,6 +100,32 @@
       getExercisesFromId(exs) {
         return exs.map(v => _.cloneDeep(this.exercises.find(v2 => v2.id === v)));
       },
+
+      async reorder(el) {
+        el.moved.loading = true;
+
+        try {
+          this.routines.forEach((v, i) => v.order = i);
+          this.batchReorder(this.routines);
+        } catch(err) {
+          this.alert({ color: 'error', timeout: 10000, text: err.message });
+        }
+
+        el.moved.loading = true;
+      },
+
+      async reorderExercises(rt, exs) {
+        rt.loading = true;
+
+        try {
+          rt.exercises = exs;
+          await this.upsertRoutine(rt);
+        } catch(err) {
+          this.alert({ color: 'error', timeout: 10000, text: err.message });
+        }
+
+        rt.loading = true;
+      },
     },
 
     watch: {
@@ -127,24 +139,11 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/animate.scss";
 
-  ::v-deep .v-list-item {
+  ::v-deep .v-expansion-panel--active > .v-expansion-panel-header,
+  ::v-deep .v-expansion-panel-header { min-height: 32px; }
+
+  ::v-deep .v-expansion-panel-content__wrap {
     padding: 0;
-    min-height: 0;
-  }
-
-  ::v-deep .v-list-group__header__append-icon i { color: #fff; }
-  ::v-deep .v-list-item__action--stack { flex-direction: unset; }
-  ::v-deep .v-application--is-ltr .v-card__actions > .v-btn.v-btn + .v-btn { margin-left: 0; }
-
-  ::v-deep .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon {
-    margin-left: 0;
-    min-width: unset;
-  }
-
-  .expanded-item { min-height: unset; }
-
-  .my-6px {
-    margin-top: 6px !important;
-    margin-bottom: 6px !important;
+    padding-right: 5px;
   }
 </style>

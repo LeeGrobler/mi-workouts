@@ -2,7 +2,6 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <!-- <test /> -->
     <connectivity-bar />
   </div>
 </template>
@@ -10,7 +9,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
-  // import Test from '@/components/Home/Test';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
@@ -19,7 +17,6 @@
 
     mixins: [PageActions],
 
-    // components: { Test, LoginNowBtn, ConnectivityBar },
     components: { LoginNowBtn, ConnectivityBar },
 
     computed: {
@@ -35,6 +32,7 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
   
+  // TODO: include image credit in footer
   // Photo by cottonbro from Pexels | https://www.pexels.com/photo/man-in-white-crew-neck-t-shirt-holding-black-and-white-round-frame-4761344/
   // Photo by Mister Mister from Pexels | https://www.pexels.com/photo/man-sitting-on-flat-bench-3490348/
   // Photo by Unkonwn from Pexels | https://www.pexels.com/photo/active-adult-biceps-body-416809/
