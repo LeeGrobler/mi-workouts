@@ -2,6 +2,16 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
+    <v-container class="upsert-root white--text">
+      <v-row>
+        <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
+
+          <routines :faves-only="true" />
+          
+        </v-col>
+      </v-row>
+    </v-container>
+
     <connectivity-bar />
   </div>
 </template>
@@ -10,6 +20,7 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
+  import Routines from '@/components/Routine/List';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -17,7 +28,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ConnectivityBar },
+    components: { LoginNowBtn, Routines, ConnectivityBar },
 
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),

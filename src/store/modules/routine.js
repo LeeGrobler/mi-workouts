@@ -52,6 +52,7 @@ const actions = {
               id: v.id,
               ...v.data(),
               loading: false,
+              expanded: false,
             }));
             commit('setRoutines', routines.sort((a, b) => a.order > b.order ? 1 : -1));
           }, err => {
