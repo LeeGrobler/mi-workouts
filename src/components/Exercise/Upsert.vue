@@ -172,7 +172,6 @@
 
         try {
           let obj = this.exercise || this.form;
-          obj = _.pick(obj, ['id', 'name', 'sets', 'reps', 'unitType', 'amount', 'unit', 'link', 'notes']);
           obj.name = _.startCase(obj.name);
           obj.unit = typeof obj.unit === 'object' ? obj.unit.symbol : obj.unit;
 

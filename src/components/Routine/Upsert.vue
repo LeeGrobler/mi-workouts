@@ -53,7 +53,10 @@
     },
 
     computed: {
-      ...mapGetters({ getExercises: 'exercise/getExercises' }),
+      ...mapGetters({
+        routines: 'routine/getRoutines',
+        getExercises: 'exercise/getExercises',
+      }),
 
       // form props
 
@@ -99,13 +102,20 @@
       
       async submit() {
         if(!this.$refs.form.validate()) return;
+        this.loading = true;
 
         try {
           let obj = this.routine || this.form;
-          obj = _.pick(obj, ['id', 'name', 'exercises', 'notes']);
           obj.name = _.startCase(obj.name);
+          obj.favorite = !!this.routine ? obj.favorite : this.routines.length < 1;
+          
+          if(!this.routine) {
+            obj.order = 0;
+            if(this.routines?.length > 0) {
+              obj.order = _.cloneDeep(this.routines).sort((a, b) => a.order < b.order ? 1 : -1)[0].order + 1;
+            }
+          }
 
-          this.loading = true;
           const routine = await this.upsertRoutine(obj);
           if(this.callback) this.callback(routine);
 

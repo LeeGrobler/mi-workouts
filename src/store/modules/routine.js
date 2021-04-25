@@ -80,26 +80,11 @@ const actions = {
           return reject({ message: `${payload.name} already exists` });
         }
 
-        if(!!payload.id) {
-          analytics.logEvent('update_routine');
-          Routines.doc(payload.id).update(_.pick(payload, ['name', 'exercises', 'notes', 'user', 'favorite', 'order']));
-        } else {
-          analytics.logEvent('create_routine');
-
-          let order = 0;
-          if(getters.getRoutines?.length > 0) {
-            order = _.cloneDeep(getters.getRoutines).sort((a, b) => a.order < b.order ? 1 : -1)[0].order + 1;
-          }
-
-          Routines.add({
-            ...payload,
-            user: payload.user || rootGetters['user/getUser']?.uid,
-            favorite: getters.getRoutines.length < 1,
-            order
-          });
-        }
-
-        return resolve();
+        const user = payload.user || rootGetters['user/getUser']?.uid;
+        analytics.logEvent(`${!payload.id ? 'create' : 'update'}_routine`);
+        const ref = Routines.doc(payload?.id);
+        ref.set({ ..._.pick(payload, ['name', 'exercises', 'notes', 'user', 'favorite', 'order']), user });
+        return resolve(ref?.id);
       } catch (err) {
         console.log('upsertRoutine err:', err);
         return reject(err);

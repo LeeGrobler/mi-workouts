@@ -79,15 +79,11 @@ const actions = {
           return reject({ message: `${payload.name} already exists` });
         }
 
-        if(!!payload.id) {
-          analytics.logEvent('update_exercise');
-          await Exercises.doc(payload.id).update(_.omit(payload, ['id']));
-          return resolve();
-        } else {
-          analytics.logEvent('create_exercise');
-          const res = await Exercises.add({ ...payload, user: payload.user || rootGetters['user/getUser']?.uid })
-          return resolve(res.id);
-        }
+        const user = payload.user || rootGetters['user/getUser']?.uid;
+        analytics.logEvent(`${!payload.id ? 'create' : 'update'}_exercise`);
+        const ref = Exercises.doc(payload?.id);
+        ref.set({ ..._.pick(payload, ['name', 'sets', 'reps', 'unitType', 'amount', 'unit', 'link', 'notes']), user });
+        return resolve(ref?.id);
       } catch (err) {
         console.log('upsertExercise err:', err);
         return reject(err);

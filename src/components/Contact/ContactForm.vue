@@ -26,9 +26,9 @@
       valid: false,
       loading: false,
       form: {
-        name: 'Lee',
-        email: 'seriouslee131@gmail.com',
-        message: 'Hi there!',
+        name: '',
+        email: '',
+        message: '',
       }
     }),
 

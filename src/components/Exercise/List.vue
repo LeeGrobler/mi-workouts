@@ -1,7 +1,7 @@
 <template>
   <v-list two-line class="py-0" color="transparent">
 
-    <v-text-field v-if="!hideFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="mt-3" />
+    <v-text-field v-if="showFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="mt-3" />
 
     <transition-group name="list">
       <v-list-group v-for="ex in filteredExercises" :key="ex.id">
@@ -53,10 +53,6 @@
   export default {
     name: 'ListExercises',
 
-    props: {
-      hideFilter: { type: Boolean, required: false, default: false },
-    },
-
     data: () => ({
       exercises: [],
       listFilter: '',
@@ -80,6 +76,10 @@
             v1[v2].toString().toLowerCase().indexOf(this.filter.toLowerCase()) > -1
           ).length > 0
         );
+      },
+
+      showFilter() {
+        return this.exercises?.length > 1;
       },
     },
 

@@ -5,6 +5,7 @@
         <transition name="slide-fade" mode="out-in">
 
           <upsert v-if="upserting && !upsertExercise" ref="upsert-routine" :routine="routine" @edit="stopEditing" @createExercise="upsertExercise = true" />
+          <!-- TODO: if you create an exercise from here and come back it wipes everything that the user already entered -->
           <upsert-exercise v-else-if="upserting && upsertExercise" @edit="upsertExercise = false" :callback="exerciseCallback" />
           <div v-else>
             <v-btn block color="primary" dark @click="upserting = !upserting">
