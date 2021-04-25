@@ -49,13 +49,11 @@
       favesOnly: { type: Boolean, required: false, default: false }
     },
 
-    data: () => ({ routines: [],
-    }),
+    data: () => ({ routines: [] }),
 
     mounted() {
       this.routines = _.cloneDeep(this.getRoutines);
-
-      if(this.favesOnly) this.routines.map(v => v.expanded = v.exercises.length > 0 ? !v.expanded : false);
+      if(this.favesOnly) this.routines?.map(v => v.expanded = v.exercises.length > 0 ? !v.expanded : false);
     },
 
     computed: {

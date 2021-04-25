@@ -7,7 +7,7 @@
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
 
           <routines :faves-only="true" />
-          
+
         </v-col>
       </v-row>
     </v-container>
@@ -32,10 +32,6 @@
 
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),
-    },
-
-    metaInfo() {
-      return { ...this.pageMeta, titleTemplate: '%s | Home' };
     },
   }
 </script>
