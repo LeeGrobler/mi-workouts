@@ -48,7 +48,7 @@ const actions = {
           const exercises = await dispatch('exercise/fetchUserExercises', auth().currentUser.uid, { root: true });
           const routines = await dispatch('routine/fetchUserRoutines', auth().currentUser.uid, { root: true });
 
-          try { // TODO: this /fetch... & /update... will have to be applied to all possible user data            
+          try {
             exercises.forEach(v => dispatch('exercise/deleteExercise', v.id, { root: true }));
             routines.forEach(v => dispatch('routine/deleteRoutine', v.id, { root: true }));
             const { user } = await auth().signInWithCredential(err1.credential);

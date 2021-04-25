@@ -43,7 +43,7 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         if(!!rootGetters['user/getUser']) {
-          analytics.logEvent('fetch_routines'); // TODO: you'll have to add analytics for any future data crudding
+          analytics.logEvent('fetch_routines');
           if(getters.getSnaps.routine) dispatch('unsubscribeFromSnapshot', 'routine');
 
           const routineSnapshot = Routines.where('user', '==', rootGetters['user/getUser'].uid).onSnapshot(snaps => {
