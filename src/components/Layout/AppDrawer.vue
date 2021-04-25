@@ -39,8 +39,6 @@
           </app-btn>
         </div> -->
       </template>
-
-      <div class="pt-12" />
     </v-navigation-drawer>
 
   </div>

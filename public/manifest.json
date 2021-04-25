@@ -1,7 +1,12 @@
 {
-  "name": "workout-planner-vue",
-  "short_name": "workout-planner-vue",
-  "theme_color": "#4DBA87",
+  "name": "MiWorkouts",
+  "short_name": "MiWorkouts",
+  "theme_color": "#1976d2",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "description": "A to the point app that keeps track of your workout plans.",
+  "lang": "en",
   "icons": [{
     "src:": "./img/icons/android-chrome-192x192.png",
     "sizes": "192x192",
@@ -76,8 +81,5 @@
     "src:": "./img/icons/safari-pinned-tab.svg",
     "type": "image/svg",
     "purpose": "maskable"
-  }],
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#000000"
+  }]
 }
