@@ -78,7 +78,7 @@
             first device.
           `,
           actions: [{
-            color: 'success',
+            color: 'primary',
             text: 'Awesome, thanks!'
           }],
         })

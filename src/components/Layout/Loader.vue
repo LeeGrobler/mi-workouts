@@ -21,6 +21,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   .comp-root {
     background: #000;
     width: 100%;

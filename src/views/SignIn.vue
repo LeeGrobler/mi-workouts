@@ -22,7 +22,7 @@
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
-    name: 'LoginPage',
+    name: 'SignInPage',
 
     mixins: [PageActions],
 

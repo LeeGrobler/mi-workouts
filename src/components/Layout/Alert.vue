@@ -65,6 +65,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+  
   ::v-deep .v-snack__wrapper { min-width: 304px; }
   ::v-deep .v-snack__content { display: flex; }
 

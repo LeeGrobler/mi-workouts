@@ -41,7 +41,7 @@
   import ExerciseList from '@/components/Routine/ExerciseList';
 
   export default {
-    name: 'ListRoutines',
+    name: 'RoutineList',
 
     components: { Draggable, ExerciseList },
 
@@ -161,7 +161,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "@/assets/scss/animate.scss";
+  @import "@/assets/scss/global.scss";
 
   .expand-panels .expand-panel {
     .panel-head {

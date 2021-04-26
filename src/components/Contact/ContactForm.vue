@@ -55,6 +55,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   ::v-deep .theme--light.v-btn.v-btn--disabled.v-btn--has-bg,
   ::v-deep .theme--dark.v-btn.v-btn--disabled.v-btn--has-bg {
     background-color: #777777b5 !important;

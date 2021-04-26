@@ -55,7 +55,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'ListExercises',
+    name: 'ExerciseList',
 
     data: () => ({
       exercises: [],
@@ -144,7 +144,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "@/assets/scss/animate.scss";
+  @import "@/assets/scss/global.scss";
 
   ::v-deep .v-list-item {
     padding: 4px 0;

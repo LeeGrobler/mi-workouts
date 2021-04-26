@@ -58,7 +58,7 @@
   import Heading from '@/components/Layout/Heading';
 
   export default {
-    name: 'UpsertExercise',
+    name: 'ExerciseUpsert',
 
     components: { Heading },
 
@@ -195,6 +195,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   ::v-deep .v-input__append-inner { display: none; }
   ::v-deep .theme--light.v-btn.v-btn--disabled.v-btn--has-bg,
   ::v-deep .theme--dark.v-btn.v-btn--disabled.v-btn--has-bg {

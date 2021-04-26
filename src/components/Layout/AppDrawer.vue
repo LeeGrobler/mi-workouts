@@ -110,6 +110,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   .comp-root { width: 100%; }
 
   #default-drawer {

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="visible" :persistent="!getDialogue.closeOnShadowClick">
+  <v-dialog v-model="visible" :persistent="!getDialogue.closeOnShadowClick" max-width="500">
     <v-card>
       <v-card-title class="headline pt-3 px-3" :class="getDialogue.color ? `${getDialogue.color} white--text` : ''">
         <v-icon v-if="getDialogue.color" class="mr-3" color="white">{{ getIcon(getDialogue.color) }}</v-icon>
@@ -102,5 +102,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   ::v-deep .v-dialog { margin: 5px; }
 </style>

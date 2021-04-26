@@ -2,15 +2,7 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <v-container class="upsert-root white--text">
-      <v-row>
-        <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
-
-          <routines :dashboard="true" />
-
-        </v-col>
-      </v-row>
-    </v-container>
+    <routines :dashboard="true" />
 
     <connectivity-bar />
   </div>

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import PrivacyPolicy from '@/components/Legal/PrivacyPolicy';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
@@ -29,4 +28,5 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
 </style>

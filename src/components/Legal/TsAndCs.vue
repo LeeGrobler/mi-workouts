@@ -149,5 +149,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   h2, h3 { margin: 0 0 10px 0; }
 </style>

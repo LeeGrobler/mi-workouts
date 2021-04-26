@@ -33,7 +33,7 @@
   import Heading from '@/components/Layout/Heading';
 
   export default {
-    name: 'UpsertRoutine',
+    name: 'RoutineUpsert',
 
     components: { Heading },
 
@@ -153,6 +153,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import "@/assets/scss/global.scss";
+
   ::v-deep .v-input__append-inner { display: none; }
   ::v-deep .mdi-plus::before { color: #fff; }
   ::v-deep .theme--light.v-btn.v-btn--disabled.v-btn--has-bg,

@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade" mode="out-in">
-    <v-tabs v-if="footer" v-model="tab" @change="redirect" :class="`${position}-bottom`" :style="styles" :show-arrows="false">
+    <v-tabs v-if="footer" v-model="tab" @change="redirect" :class="`${position}-bottom`" :style="styles" :show-arrows="false" centered>
       <v-tab v-for="link in links" :key="link.name">
         <v-icon left>{{ link.icon }}</v-icon> {{ link.name }}
       </v-tab>
@@ -12,6 +12,8 @@
   import { mapGetters } from 'vuex'
 
   export default {
+    name: 'WorkoutBar', // Aka QuickAccessBar
+
     computed: {
       ...mapGetters({
         online: 'general/getOnline',
