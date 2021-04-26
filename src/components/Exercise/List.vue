@@ -13,7 +13,11 @@
           </v-list-item-avatar>
           <!-- deets -->
           <v-list-item-content class="py-0">
-            <v-list-item-title class="white--text">{{ ex.name }}</v-list-item-title>
+            <v-list-item-title class="white--text">
+              {{ ex.name }}
+              <v-icon v-if="ex.link" x-small class="ml-1 white--text">mdi-video-outline</v-icon>
+              <v-icon v-if="ex.notes" x-small class="ml-1 white--text">mdi-message-bulleted</v-icon>
+            </v-list-item-title>
             <v-list-item-subtitle class="white--text">{{ getDetailsText(ex) }}</v-list-item-subtitle>
           </v-list-item-content>
         </template>
