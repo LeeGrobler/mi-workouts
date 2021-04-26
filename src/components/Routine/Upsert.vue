@@ -10,8 +10,8 @@
 
     <v-row> <!-- Exercises -->
       <v-col cols="12" class="py-0">
-        <v-autocomplete :disabled="loading" label="Exercises" v-model.trim="exercises" solo dense multiple chips small-chips append-outer-icon="mdi-plus" :items="getExercises"
-          @click:append-outer="$emit('createExercise')" item-text="name" item-value="id"
+        <v-select :disabled="loading" label="Exercises" v-model="exercises" solo dense multiple chips small-chips append-outer-icon="mdi-plus" :items="getExercises" item-value="id"
+          @click:append-outer="$emit('createExercise')" item-text="name"
         />
       </v-col>
     </v-row>
