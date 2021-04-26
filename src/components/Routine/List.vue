@@ -53,7 +53,6 @@
 
     mounted() {
       this.routines = _.cloneDeep(this.getRoutines);
-      if(this.favesOnly) this.routines?.map(v => v.expanded = v.exercises.length > 0 ? !v.expanded : false);
     },
 
     computed: {
