@@ -4,6 +4,10 @@
     <v-app-bar color="primary" flat dense dark :fixed="fixed">
       <v-app-bar-nav-icon v-if="$vuetify.breakpoint.smAndDown" @click="drawer = !drawer" />
       <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="scrollDownALittle(50)">
+        <v-icon>mdi-arrow-down</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer id="default-drawer" v-model="drawer" :mini-variant.sync="mini" mini-variant-width="80" width="260" app v-click-outside="clickedOutside">
@@ -54,7 +58,8 @@
     components: { List },
 
     props: {
-      fixed: { type: Boolean, default: false, required: false }
+      fixed: { type: Boolean, default: false, required: false },
+      scrollDownALittle: { type: Function, required: false }
     },
 
     mounted() {

@@ -53,13 +53,13 @@ const actions = {
             routines.forEach(v => dispatch('routine/deleteRoutine', v.id, { root: true }));
             const { user } = await auth().signInWithCredential(err1.credential);
             dispatch('initAuthWatch');
-            exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: user.uid }, { root: true }));
-            routines.forEach(v => dispatch('routine/createRoutine', { number: v.number, user: user.uid }, { root: true }));
+            exercises.forEach(v => dispatch('exercise/upsertExercise', { ..._.pick(v, ['name', 'sets', 'reps', 'unitType', 'amount', 'unit', 'link', 'notes']), user: user.uid }, { root: true }));
+            routines.forEach(v => dispatch('routine/upsertRoutine', { ..._.pick(v, ['name', 'notes', 'user', 'favorite', 'order']), exercises: [], user: user.uid }, { root: true }));
             return resolve({ user: !!user });
           } catch (err2) {
             console.log('auth/credential-already-in-use:', err2);
-            exercises.forEach(v => dispatch('exercise/createExercise', { number: v.number, user: v.user }, { root: true }));
-            routines.forEach(v => dispatch('routine/createRoutine', { number: v.number, user: v.user }, { root: true }));
+            exercises.forEach(v => dispatch('exercise/upsertExercise', { number: v.number, user: v.user }, { root: true }));
+            routines.forEach(v => dispatch('routine/upsertRoutine', { number: v.number, user: v.user }, { root: true }));
             return reject(err1);
           }
         }

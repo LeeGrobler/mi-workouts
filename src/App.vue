@@ -4,7 +4,7 @@
 
     <loader v-if="!exercises && !routines" />
     <v-main v-else>
-      <app-drawer :fixed="$route.path.indexOf('legal/') > -1" />
+      <app-drawer :fixed="$route.path.indexOf('legal/') > -1" :scrollDownALittle="scrollDownALittle" />
       <router-view />
       <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />

@@ -31,6 +31,7 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         commit('setProgress', payload);
+        return resolve();
       } catch(err) {
         console.log('storeProgress err:', err);
         return reject(err);
@@ -89,7 +90,7 @@ const actions = {
   upsertRoutine({ getters, rootGetters }, payload) {
     return new Promise((resolve, reject) => {
       try {
-        const routine = getters.getRoutines.find(v => v.name === payload.name);
+        const routine = getters.getRoutines?.find(v => v.name === payload.name);
         if((routine && !payload.id) || (routine && payload.id && payload.id !== routine.id)) {
           return reject({ message: `${payload.name} already exists` });
         }

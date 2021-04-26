@@ -74,7 +74,7 @@ const actions = {
   upsertExercise({ getters, rootGetters }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const exercise = getters.getExercises.find(v => v.name === payload.name);
+        const exercise = getters.getExercises?.find(v => v.name === payload.name);
         if((exercise && !payload.id) || (exercise && payload.id && payload.id !== exercise.id)) {
           return reject({ message: `${payload.name} already exists` });
         }
@@ -94,7 +94,7 @@ const actions = {
   deleteExercise({ dispatch, rootGetters }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        rootGetters['routine/getRoutines'].forEach(v1 => {
+        (rootGetters['routine/getRoutines'] || []).forEach(v1 => {
           if(v1.exercises.find(v2 => v2 === payload)) {
             const rt = _.cloneDeep(v1);
             rt.exercises = rt.exercises.filter(v2 => v2 !== payload);
