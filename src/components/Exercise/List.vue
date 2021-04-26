@@ -98,13 +98,14 @@
         }
       },
 
-      getDetailsText(v) {
-        let str = v.sets ? v.sets + ' x ' : '';
-        str += v.reps ? v.reps + ' @ ' : '';
-        str += v.amount ? v.amount + ' ' : '';
-        str += v.amount && v.unit ? v.unit : '';
-
-        return str.trim();        
+      getDetailsText(v) { // if you want to take a stab at simplifying this mess, please be my guest
+        if(v.sets && !v.reps && !v.amount) return v.sets;
+        if(!v.sets && v.reps && !v.amount) return v.reps;
+        if(!v.sets && !v.reps && v.amount) return `${v.amount} ${v.unit}`;
+        if(v.sets && v.reps && !v.amount) return `${v.sets} x ${v.reps}`;
+        if(!v.sets && v.reps && v.amount) return `${v.reps} @ ${v.amount} ${v.unit}`;
+        if(v.sets && !v.reps && v.amount) return `${v.sets} @ ${v.amount} ${v.unit}`;
+        if(v.sets && v.reps && v.amount) return `${v.sets} x ${v.reps} @ ${v.amount} ${v.unit}`;
       },
 
       remove(ex) {
