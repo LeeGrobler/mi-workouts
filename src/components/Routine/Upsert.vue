@@ -11,7 +11,7 @@
     <v-row> <!-- Exercises -->
       <v-col cols="12" class="py-0">
         <v-select :disabled="loading" label="Exercises" v-model="exercises" solo dense multiple chips small-chips append-outer-icon="mdi-plus" :items="getExercises" item-value="id"
-          @click:append-outer="$emit('createExercise')" item-text="name"
+          @click:append-outer="createExercise" item-text="name"
         />
       </v-col>
     </v-row>
@@ -52,9 +52,19 @@
       };
     },
 
+    mounted() {
+      if(this.progress) {
+        this.name = this.progress.name || '';
+        this.exercises = this.progress.exercises || [];
+        this.notes = this.progress.notes || '';
+      }
+      this.storeProgress(null);
+    },
+
     computed: {
       ...mapGetters({
         routines: 'routine/getRoutines',
+        progress: 'routine/getProgress',
         getExercises: 'exercise/getExercises',
       }),
 
@@ -86,7 +96,10 @@
     },
 
     methods: {
-      ...mapActions({ upsertRoutine: 'routine/upsertRoutine' }),
+      ...mapActions({
+        storeProgress: 'routine/storeProgress',
+        upsertRoutine: 'routine/upsertRoutine',
+      }),
 
       addExercise(id) {
         this.exercises.push(id);
@@ -98,6 +111,11 @@
           exercises: [],
           notes: '',
         };
+      },
+
+      createExercise() {
+        this.storeProgress(this.routine || this.form);
+        this.$emit('createExercise');
       },
       
       async submit() {

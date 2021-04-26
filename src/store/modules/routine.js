@@ -4,6 +4,7 @@ const defaultState = () => {
   return {
     snaps: {},
     routines: null,
+    progress: null,
   };
 };
 
@@ -12,6 +13,7 @@ const state = defaultState();
 const getters = {
   getSnaps: state => state.snaps,
   getRoutines: state => state.routines,
+  getProgress: state => state.progress,
 };
 
 const mutations = {
@@ -21,9 +23,21 @@ const mutations = {
     ...payload
   },
   setRoutines: (state, payload) => state.routines = payload,
+  setProgress: (state, payload) => state.progress = payload,
 };
 
 const actions = {
+  storeProgress({ commit }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        commit('setProgress', payload);
+      } catch(err) {
+        console.log('storeProgress err:', err);
+        return reject(err);
+      }
+    });
+  },
+
   fetchUserRoutines({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
