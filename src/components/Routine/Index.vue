@@ -5,15 +5,15 @@
         <transition name="slide-fade" mode="out-in">
 
           <upsert v-if="upserting && !upsertExercise" ref="upsert-routine" :routine="routine" @edit="stopEditing" @createExercise="upsertExercise = true" />
-          <!-- TODO: if you create an exercise from here and come back it wipes everything that the user already entered -->
-          <upsert-exercise v-else-if="upserting && upsertExercise" @edit="upsertExercise = false" :callback="exerciseCallback" />
+          <upsert-exercise v-else-if="upserting && upsertExercise" :callback="exerciseCallback" :exercise="exercise" @edit="stopExerciseUpsert" />
           <div v-else>
-            <v-btn block color="primary" dark @click="upserting = !upserting">
+            <heading v-if="dashboard" text="Routines" role="section" />
+            <v-btn v-else block color="primary" dark @click="upserting = !upserting">
               <v-icon left>mdi-plus</v-icon>
               Create Routine
             </v-btn>
 
-            <list @edit="startEdit" />
+            <list :faves-only="dashboard" @edit="startEdit" @editExercise="startExerciseEdit" />
           </div>
           
         </transition>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import Heading from '@/components/Layout/Heading';
   import List from '@/components/Routine/List';
   import Upsert from '@/components/Routine/Upsert';
   import UpsertExercise from '@/components/Exercise/Upsert';
@@ -30,18 +31,23 @@
   export default {
     name: 'RoutineIndex',
 
-    components: { List, Upsert, UpsertExercise },
+    components: { Heading, List, Upsert, UpsertExercise },
+
+    props: {
+      dashboard: { type: Boolean, required: false, default: false },
+    },
 
     data: () => ({
       upserting: false,
-      upsertExercise: false,
       routine: null,
+      upsertExercise: false,
+      exercise: null,
     }),
 
     methods: {
-      startEdit(ex) {
+      startEdit(rt) {
         this.upserting = true;
-        this.routine = ex;
+        this.routine = rt;
       },
 
       stopEditing() {
@@ -50,8 +56,25 @@
         this.routine = null;
       },
 
+      startExerciseEdit(ex) {
+        this.upserting = true;
+        this.exercise = ex;
+        this.upsertExercise = true;
+      },
+
+      stopExerciseUpsert() {
+        if(!this.exercise) return this.upsertExercise = false;
+        this.upserting = false;
+        this.exercise = null;
+        this.exerciseCallback = null;
+      },
+
       exerciseCallback(ex) {
-        setTimeout(() => this.$refs['upsert-routine'].addExercise(ex), 300);
+        setTimeout(() => {
+          if(!!this.$refs['upsert-routine']) {
+            this.$refs['upsert-routine'].addExercise(ex);
+          }
+        }, 300);
       },
     },
   }

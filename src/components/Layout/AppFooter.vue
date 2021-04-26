@@ -16,7 +16,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text py-1">
-        &#169; {{ new Date().getFullYear() }} | Workouts<br />
+        &#169; {{ new Date().getFullYear() }} | MiWorkouts<br />
         Made by <strong>SeriousLee</strong>
       </v-card-text>
     </v-card>

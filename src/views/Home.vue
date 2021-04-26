@@ -6,7 +6,7 @@
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
 
-          <routines :faves-only="true" />
+          <routines :dashboard="true" />
 
         </v-col>
       </v-row>
@@ -20,7 +20,7 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
-  import Routines from '@/components/Routine/List';
+  import Routines from '@/components/Routine/Index';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -39,7 +39,6 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
   
-  // TODO: include image credit in footer
   // Photo by cottonbro from Pexels | https://www.pexels.com/photo/man-in-white-crew-neck-t-shirt-holding-black-and-white-round-frame-4761344/
   // Photo by Mister Mister from Pexels | https://www.pexels.com/photo/man-sitting-on-flat-bench-3490348/
   // Photo by Unkonwn from Pexels | https://www.pexels.com/photo/active-adult-biceps-body-416809/

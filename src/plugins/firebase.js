@@ -26,7 +26,7 @@ const func = {
 };
 
 const db = firebase.firestore();
-db.enablePersistence(); // TODO: add a .catch here that potentially tells the user to close other MiWorkouts tabs or that offline persistence is not supported - https://firebase.google.com/docs/firestore/manage-data/enable-offline#configure_offline_persistence
+db.enablePersistence();
 const Exercises = db.collection('exercises');
 const Routines = db.collection('routines');
 

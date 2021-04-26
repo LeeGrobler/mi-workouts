@@ -27,7 +27,7 @@
         <div class="panel-body">
           <v-card color="transparent">
             <v-card-text v-if="rt.notes" class="pt-1 pb-0 white--text">{{ rt.notes }}</v-card-text>
-            <exercise-list :list-exercises="getExercisesFromId(rt.exercises)" @reorderExercises="reorderExercises(rt, arguments[0])" />
+            <exercise-list :list-exercises="getExercisesFromId(rt.exercises)" @reorderExercises="reorderExercises(rt, arguments[0])" @edit="$emit('editExercise', arguments[0])" />
           </v-card>
         </div>
       </div>

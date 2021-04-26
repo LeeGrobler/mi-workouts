@@ -1,7 +1,7 @@
 <template>
   <v-list two-line class="py-0" color="transparent">
 
-    <draggable v-model="exercises" handle=".ex-drag-icon" @change="reorder">
+    <draggable v-model="exercises" handle=".ex-drag-icon" @change="$emit('reorderExercises', exercises.map(v => v.id))">
       <transition-group name="list">
         <v-list-group v-for="ex in exercises" :key="ex.id">
           <template v-slot:activator>
@@ -34,8 +34,7 @@
                   <v-card-actions class="pa-2">
                     <v-spacer></v-spacer>
                     <v-btn text color="error" @click="remove(ex)">Delete</v-btn>
-                    <!-- TODO: find a way to bring editing back here - from what I can tell, you'll have to redirect to /exercises and automatically open the upsert form on the exercise -->
-                    <!-- <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn> -->
+                    <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn>
                   </v-card-actions>
                 </v-card>
                 
@@ -114,10 +113,6 @@
             text: 'Yes, Delete'
           }],
         });
-      },
-
-      async reorder() { // TODO: call this inline
-        this.$emit('reorderExercises', this.exercises.map(v => v.id));
       },
     },
 
