@@ -28,6 +28,10 @@
 
     components: { LoginForm, ConnectivityBar },
 
+    mounted() {
+      this.$route.meta.bg = '7';
+    },
+
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),
     },
@@ -42,13 +46,13 @@
   @import "@/assets/scss/global.scss";
 
   .page-root {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-mobile-1.jpg') no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-mobile-7.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 
   @media only screen and (min-width: 960px) {
     .page-root {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-desktop-1.jpg') no-repeat center center fixed;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-desktop-7.jpg') no-repeat center center fixed;
       background-size: cover;
     }
   }

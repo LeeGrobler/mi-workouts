@@ -30,6 +30,10 @@
 
     components: { LoginNowBtn, ContactForm, ConnectivityBar },
 
+    mounted() {
+      this.$route.meta.bg = '1';
+    },
+
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),
     },
@@ -44,13 +48,13 @@
   @import "@/assets/scss/global.scss";
 
   .page-root {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-mobile-2.jpg') no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-mobile-1.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 
   @media only screen and (min-width: 960px) {
     .page-root {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-desktop-2.jpg') no-repeat center center fixed;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/image/bg-desktop-1.jpg') no-repeat center center fixed;
       background-size: cover;
     }
   }

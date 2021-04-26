@@ -30,6 +30,10 @@
 
     components: { ConnectivityBar },
 
+    mounted() {
+      this.$route.meta.bg = '404';
+    },
+
     computed: {
       ...mapGetters({ online: 'general/getOnline' }),
     },

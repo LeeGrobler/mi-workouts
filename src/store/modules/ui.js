@@ -1,7 +1,8 @@
 import Vue from 'vue';
-// const fb = require('@/plugins/firebase');
+import credits from '@/config/imageCredits';
 
 const defaultState = () => ({
+  credits,
   alert: {},
   dialogue: {},
   footerPos: null,
@@ -16,6 +17,7 @@ const defaultState = () => ({
 const state = defaultState();
 
 const getters = {
+  getCredits: state => state.credits,
   getAlert: state => state.alert,
   getDialogue: state => state.dialogue,
   getFooterPos: state => state.footerPos,

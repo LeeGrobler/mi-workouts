@@ -1,0 +1,38 @@
+{
+  "1": {
+    "mobile": { "text": "Photo by cottonbro", "link": "https://www.pexels.com/photo/man-in-white-crew-neck-t-shirt-holding-black-and-white-round-frame-4761344/" },
+    "desktop": { "text": "Photo by Li Sun", "link": "https://www.pexels.com/photo/man-working-out-2294361/" }
+  },
+  "2": {
+    "mobile": { "text": "Photo by Mister Mister", "link": "https://www.pexels.com/photo/man-sitting-on-flat-bench-3490348/" },
+    "desktop": { "text": "Photo by Pixabay", "link": "https://www.pexels.com/photo/active-adult-athlete-body-416778/" }
+  },
+  "3": {
+    "mobile": { "text": "Photo by Pixabay", "link": "https://www.pexels.com/photo/active-adult-biceps-body-416809/" },
+    "desktop": { "text": "Photo by Victor Freitas", "link": "https://www.pexels.com/photo/man-about-to-lift-barbell-2261477/" }
+  },
+  "4": {
+    "mobile": { "text": "Photo by cottonbro", "link": "https://www.pexels.com/photo/woman-in-blue-sports-bra-and-black-leggings-doing-exercise-4753928/" },
+    "desktop": { "text": "Photo by Victor Freitas", "link": "https://www.pexels.com/photo/man-wearing-black-shorts-lifting-heavy-barbells-841135/"  }
+  },
+  "5": {
+    "mobile": { "text": "Photo by Eduardo Romero", "link": "https://www.pexels.com/photo/woman-lifting-two-dumbells-on-both-hands-in-front-of-mirror-1886487/" },
+    "desktop": { "text": "Photo by Binyamin Mellish", "link": "https://www.pexels.com/photo/man-in-black-shorts-carrying-adjustable-barbells-116077/" }
+  },
+  "6": {
+    "mobile": { "text": "Photo by Leon Ardho", "link": "https://www.pexels.com/photo/man-climbing-on-rope-2468339/" },
+    "desktop": { "text": "Photo by Ketut Subiyanto", "link": "https://www.pexels.com/photo/photo-of-man-doing-push-ups-using-yellow-kettlebell-4720236/" }
+  },
+  "7": {
+    "mobile": { "text": "Photo by Li Sun", "link": "https://www.pexels.com/photo/photo-of-woman-raising-dumbbells-2475878/" },
+    "desktop": { "text": "Photo by Victor Freitas", "link": "https://www.pexels.com/photo/person-wearing-black-shorts-and-blue-lace-up-low-top-sneaker-holding-black-barbell-841131/" }
+  },
+  "8": {
+    "mobile": { "text": "Photo by Leon Ardho", "link": "https://www.pexels.com/photo/photo-of-man-lifting-barbell-1552106/" },
+    "desktop": { "text": "Photo by Pixabay", "link": "https://www.pexels.com/photo/adult-athlete-body-bodybuilding-414029/" }
+  },
+  "404": {
+    "mobile": { "text": "Photo by Erik Mclean", "link": "https://unsplash.com/photos/bGWVhFY1gH0" },
+    "desktop": { "text": "Photo by Erik Mclean", "link": "https://unsplash.com/photos/sxiSod0tyYQ" }
+  }
+}

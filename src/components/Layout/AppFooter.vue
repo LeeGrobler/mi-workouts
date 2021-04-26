@@ -1,19 +1,24 @@
 <template>
   <v-footer ref="comp-root" dark padless>
     <v-card flat tile class="text-center full-width">
+      
+      <v-card-text class="section links white--text py-3">
+        <router-link v-for="link in links" :key="link.path" :to="link.path" class="white--text text-decoration-none block-el">{{ link.name }}</router-link>
+      </v-card-text>
+
+      <v-divider></v-divider>
+      
+      <v-card-text v-if="credit" class="section credit white--text py-3">
+        <a :href="credit.link" target="_blank" class="white--text text-decoration-none block-el">{{ credit.text }}</a>
+      </v-card-text>
+      
+      <v-divider></v-divider>
+
       <v-card-text class="py-1">
         <v-btn v-for="v in somo" :key="v.icon" class="mx-4 white--text" icon @click="v.callback">
           <v-icon size="24px">{{ v.icon }}</v-icon>
         </v-btn>
       </v-card-text>
-
-      <v-divider></v-divider>
-
-      <div class="links py-1">
-        <router-link v-for="link in links" :key="link.path" :to="link.path" class="white--text text-decoration-none block-el">{{ link.name }}</router-link>
-      </div>
-
-      <v-divider></v-divider>
 
       <v-card-text class="white--text py-1">
         &#169; {{ new Date().getFullYear() }} | MiWorkouts<br />
@@ -31,6 +36,7 @@
 
     data: function() {
       return {
+        credit: null,
         somo: [
           { icon: 'mdi-facebook', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
           { icon: 'mdi-twitter', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
@@ -45,6 +51,9 @@
     },
 
     mounted() {
+      this.setCredit();
+      this.$watch('$route.meta.bg', this.setCredit);
+
       this.handleScroll();
     },
 
@@ -56,6 +65,7 @@
       ...mapGetters({
         online: 'general/getOnline',
         user: 'user/getUser',
+        credits: 'ui/getCredits',
       }),
 
       links() {
@@ -75,6 +85,13 @@
     methods: {
       ...mapActions({ setFooterPos: 'ui/setFooterPos' }),
 
+      setCredit() {
+        this.credit = this.$route.meta.bg && this.$vuetify.breakpoint ? {
+          link: this.credits[this.$route.meta.bg][this.$vuetify.breakpoint.mobile ? 'mobile' : 'desktop'].link,
+          text: this.credits[this.$route.meta.bg][this.$vuetify.breakpoint.mobile ? 'mobile' : 'desktop'].text,
+        } : null;
+      },
+
       handleScroll() {
         this.setFooterPos(this.$refs['comp-root'].$el.getBoundingClientRect());
       },
@@ -84,4 +101,10 @@
 
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 </style>
