@@ -49,10 +49,14 @@
       favesOnly: { type: Boolean, required: false, default: false }
     },
 
-    data: () => ({ routines: [] }),
+    data: () => ({
+      routines: [],
+      watcher: null,
+    }),
 
     mounted() {
       this.routines = _.cloneDeep(this.getRoutines);
+      this.watcher = this.$watch('getRoutines', this.cloneRoutines);
     },
 
     computed: {
@@ -76,6 +80,10 @@
         batchReorder: 'routine/batchReorder',
         upsertRoutine: 'routine/upsertRoutine',
       }),
+
+      cloneRoutines(n) {
+        this.routines = _.cloneDeep(n);
+      },
 
       toggleExpanded(rt) {
         if(!rt.expanded) this.routines.forEach(v => v.expanded = false);
@@ -138,19 +146,15 @@
         rt.loading = true;
 
         try {
+          this.watcher();
           rt.exercises = exs;
           await this.upsertRoutine(rt);
+          setTimeout(() => this.watcher = this.$watch('getRoutines', this.cloneRoutines), 300);
         } catch(err) {
           this.alert({ color: 'error', timeout: 10000, text: err.message });
         }
 
         rt.loading = true;
-      },
-    },
-
-    watch: {
-      getRoutines(n) {
-        this.routines = _.cloneDeep(n);
       },
     },
   }
