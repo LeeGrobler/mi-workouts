@@ -187,6 +187,8 @@
       <ul>
         <li>By visiting this page on our website: <a href="https://mi-workouts.com/contact" rel="external nofollow noopener" target="_blank">https://mi-workouts.com/contact</a></li>
       </ul>
+      <h2 class="mt-4">Account & Data Deletion</h2>
+      <p>If, at any point, you don't want to use our service anymore, you can delete your account, along with any user-generated data, by loggin in, navigating to <a href="https://mi-workouts.com/account" rel="external nofollow noopener">https://mi-workouts.com/account</a>, and clicking Delete Account. Simply follow the prompts and all your data, along with your account will be deleted.</p>
     </v-card-text>
   </v-card>
 </template>
