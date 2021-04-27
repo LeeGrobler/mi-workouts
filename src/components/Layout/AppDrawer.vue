@@ -1,7 +1,7 @@
 <template>
   <div class="comp-root">
 
-    <v-app-bar color="primary" flat dense dark :fixed="fixed">
+    <v-app-bar color="primary" flat dense dark :fixed="fixed" :class="{ 'pull-right': !$vuetify.breakpoint.mobile && fixed, 'further': !$vuetify.breakpoint.mobile && !mini }">
       <v-app-bar-nav-icon v-if="$vuetify.breakpoint.smAndDown" @click="drawer = !drawer" />
       <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -118,6 +118,13 @@
   @import "@/assets/scss/global.scss";
 
   .comp-root { width: 100%; }
+
+  .pull-right {
+    left: unset !important;
+    width: calc(100% - 80px);
+
+    &.further { width: calc(100% - 260px); }
+  }
 
   #default-drawer {
     .v-list-item { margin-bottom: 8px; }
