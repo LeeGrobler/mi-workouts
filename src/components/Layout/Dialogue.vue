@@ -8,7 +8,7 @@
       
       <v-card-text class="px-3" :class="{ 'pt-5' : !!getDialogue.color }" v-html="getDialogue.text"></v-card-text>
 
-      <v-card-text v-if="!!getDialogue.confirmation">
+      <v-card-text v-if="!!getDialogue.confirmation" class="px-3">
         <v-text-field :rules="validators.required" v-model.trim="userSubmission" :label="getConfirmationLabel" outlined
           dense
         />

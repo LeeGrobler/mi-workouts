@@ -4,20 +4,18 @@ const _ = require('lodash');
 const moment = require('moment');
 const { verifyCaptcha, createContact, getSupportAddresses, compileHtml, sendEmail } = require('./service');
 
-admin.initializeApp({ credential: admin.credential.cert(require('./certs/prod.json')) });
-// admin.initializeApp({ credential: admin.credential.cert(require('./certs/uat.json')) });
+// NB: remember to update this according to which env you're deploying to!
+admin.initializeApp({ credential: admin.credential.cert(require('./certs/cert.json')) });
 
 /*
-    WORKING WITH ENVS:
-    - by default, commands will run against UAT (mi-workouts-uat-3b892)
-    - to specify project against which to run a command, add "--project=alias" to the command
-    - to permanently set the project against which to run a command (so you don't have to use --project flag) run "firebase use alias"
-    - available aliases can be found in /.firebaserc
-    - recommendation: when starting development, run "firebase use alias" then when deploying deploy current project without flag,
-      before deploying other project with flag
+  WORKING WITH ENVS:
+  - by default, commands will run against UAT (mi-workouts-uat-3b892)
+  - to specify project against which to run a command, add "--project=alias" to the command
+  - to permanently set the project against which to run a command (so you don't have to use --project flag) run "firebase use alias"
+  - available aliases can be found in /.firebaserc
+  - recommendation: when starting development, run "firebase use alias" then when deploying deploy current project without flag, before deploying other project with flag
 
-    - currently there's no way to automatically switch between prod and uat cert and runtimeconfig on serve/deploy, so you'll have to
-      do that yourself.
+  - currently there's no way to automatically switch between prod and uat cert and runtimeconfig on serve/deploy, so you'll have to do that yourself.
 */
 
 exports.contact = functions.region('europe-west2').https.onCall(async ({ name, email, message, token }, { auth }) => {
@@ -45,7 +43,7 @@ exports.contact = functions.region('europe-west2').https.onCall(async ({ name, e
   } else return { status: 'failed', message: 'Not all required parameters have been set. Please enter your Name, Email Address and Message, and try again. If the problem persists, please reload the page and try again.' };
 });
 
-exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async (token) => {
+exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async token => {
   try {
     if(token) return await verifyCaptcha(token);
     else return { status: 'failed', message: 'reCAPTCHA token not present.' };

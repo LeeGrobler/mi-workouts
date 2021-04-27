@@ -41,6 +41,7 @@
         setAlert: 'ui/setAlert',
         hideAlert: 'ui/hideAlert',
       }),
+
       getIcon(color) {
         return {
           'success': 'mdi-checkbox-marked-circle',
@@ -49,6 +50,7 @@
           'error': 'mdi-alert-decagram',
         }[color];
       },
+      
       handleCallback(callback) {
         this.handleOnClose = false;
         if(callback) callback();

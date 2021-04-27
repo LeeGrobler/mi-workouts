@@ -1,4 +1,4 @@
-const { Exercises, analytics } = require('@/plugins/firebase');
+const { db, Exercises, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => {
   return {
@@ -103,7 +103,7 @@ const actions = {
         });
 
         analytics.logEvent('delete_exercise');
-        Exercises.doc(payload).delete();
+        await Exercises.doc(payload).delete();
         return resolve();
       } catch (err) {
         console.log('deleteExercise err:', err);
@@ -112,6 +112,21 @@ const actions = {
     });
   },
   
+  batchDeleteAllExercises({ getters }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const batch = db.batch();
+        getters.getExercises.forEach(v => batch.delete(Exercises.doc(v.id)));
+        await batch.commit();
+        
+        return resolve();
+      } catch (err) {
+        console.log('batchDeleteAllExercises err:', err);
+        return reject(err);
+      }
+    });
+  },
+
   unsubscribeFromSnapshots({ getters, commit }) {
     return new Promise(async (resolve, reject) => {
       try {

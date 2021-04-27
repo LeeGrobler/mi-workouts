@@ -253,6 +253,28 @@ const actions = {
       }
     });
   },
+
+  deleteAccount({ commit, dispatch }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        analytics.logEvent('delete_account');
+
+        await dispatch('exercise/batchDeleteAllExercises', null, { root: true })
+        await dispatch('routine/batchDeleteAllRoutines', null, { root: true })
+        await dispatch('unsubscribeFromSnapshots');
+        await dispatch('exercise/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('routine/unsubscribeFromSnapshots', null, { root: true });
+        await auth().currentUser.delete();
+
+        commit('setUser', null);
+        return resolve();
+      } catch (err) {
+        // TODO: if(err.code === 'auth/requires-recent-login') -> handle it the same as in checkFbRedirectResult's second catch handler where you ask the user to reauth and then auto delete it when he gets back to the app
+        console.log('deleteAccount err:', err);
+        return reject(err);
+      }
+    });
+  },
 };
 
 export default {

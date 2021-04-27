@@ -5,6 +5,7 @@ import Home from '../views/Home.vue';
 import Exercises from '../views/core/Exercises.vue';
 import Routines from '../views/core/Routines.vue';
 import SignIn from '../views/SignIn.vue';
+import Account from '../views/Account.vue';
 import Contact from '../views/Contact.vue';
 import TsAndCs from '../views/legal/TsAndCs.vue';
 import PrivacyPolicy from '../views/legal/PrivacyPolicy.vue';
@@ -36,6 +37,7 @@ const routes = [
   { path: '/workouts/exercises', name: 'Exercises', icon: 'mdi-dumbbell',         component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
   { path: '/workouts/routines',  name: 'Routines',  icon: 'mdi-arm-flex-outline', component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
   { path: '/sign-in',            name: 'Sign In',   icon: 'mdi-login-variant',    component: SignIn,    meta: { auth: 'E', anon: 'Y', online: 'Y', navbar: 'T' } },
+  { path: '/account',            name: 'Account',   icon: 'mdi-account',          component: Account,   meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
   { path: '/contact',            name: 'Contact',   icon: 'mdi-email',            component: Contact,   meta: { auth: 'Y', anon: 'E', online: 'Y', navbar: 'B', recaptchaBadge: true } },
   { path: '/logout',             name: 'Logout',    icon: 'mdi-logout-variant',                         meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
 

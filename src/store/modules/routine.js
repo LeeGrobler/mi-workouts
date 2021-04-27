@@ -126,10 +126,25 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         analytics.logEvent('delete_routine');
-        Routines.doc(payload).delete();
+        await Routines.doc(payload).delete();
         return resolve();
       } catch (err) {
         console.log('deleteRoutine err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  batchDeleteAllRoutines({ getters }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const batch = db.batch();
+        getters.getRoutines.forEach(v => batch.delete(Routines.doc(v.id)));
+        await batch.commit();
+        
+        return resolve();
+      } catch (err) {
+        console.log('batchDeleteAllRoutines err:', err);
         return reject(err);
       }
     });

@@ -37,7 +37,6 @@
     computed: {
       ...mapGetters({
         user: 'user/getUser',
-        footer: 'ui/getFooterPos',
         online: 'general/getOnline',
       }),
     },
