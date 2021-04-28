@@ -4,16 +4,16 @@
       <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
         <transition name="slide-fade" mode="out-in">
 
-          <upsert v-if="upserting && !upsertExercise" ref="upsert-routine" :routine="routine" @edit="stopEditing" @createExercise="upsertExercise = true" />
-          <upsert-exercise v-else-if="upserting && upsertExercise" :callback="exerciseCallback" :exercise="exercise" @edit="stopExerciseUpsert" />
+          <upsert v-if="upserting" />
           <div v-else>
-            <heading v-if="dashboard" text="Routines" role="section" />
-            <v-btn v-else block color="primary" dark @click="upserting = !upserting">
+            <heading v-if="routines && routines.length > 0" text="Routines" role="section" />
+
+            <list class="mt-3" />
+
+            <v-btn block color="primary" dark to="/routines/create" class="mt-3">
               <v-icon left>mdi-plus</v-icon>
               Create Routine
             </v-btn>
-
-            <list :faves-only="dashboard" @edit="startEdit" @editExercise="startExerciseEdit" />
           </div>
           
         </transition>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
   import Heading from '@/components/Layout/Heading';
   import List from '@/components/Routine/List';
   import Upsert from '@/components/Routine/Upsert';
@@ -34,48 +35,11 @@
     components: { Heading, List, Upsert, UpsertExercise },
 
     props: {
-      dashboard: { type: Boolean, required: false, default: false },
+      upserting: { type: Boolean, required: false, default: false },
     },
 
-    data: () => ({
-      upserting: false,
-      routine: null,
-      upsertExercise: false,
-      exercise: null,
-    }),
-
-    methods: {
-      startEdit(rt) {
-        this.upserting = true;
-        this.routine = rt;
-      },
-
-      stopEditing() {
-        this.upserting = false;
-        this.upsertExercise = false;
-        this.routine = null;
-      },
-
-      startExerciseEdit(ex) {
-        this.upserting = true;
-        this.exercise = ex;
-        this.upsertExercise = true;
-      },
-
-      stopExerciseUpsert() {
-        if(!this.exercise) return this.upsertExercise = false;
-        this.upserting = false;
-        this.exercise = null;
-        this.exerciseCallback = null;
-      },
-
-      exerciseCallback(ex) {
-        setTimeout(() => {
-          if(!!this.$refs['upsert-routine']) {
-            this.$refs['upsert-routine'].addExercise(ex);
-          }
-        }, 300);
-      },
+    computed: {
+      ...mapGetters({ routines: 'routine/getRoutines' }),
     },
   }
 </script>

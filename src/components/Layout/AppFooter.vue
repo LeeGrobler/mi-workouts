@@ -40,7 +40,8 @@
         somo: [
           { icon: 'mdi-facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmi-workouts.com' },
           { icon: 'mdi-twitter', href: 'https://twitter.com/share?url=https%3A%2F%2Fmi-workouts.com' },
-          { icon: 'mdi-linkedin', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fmi-workouts.com' },
+          { icon: 'mdi-whatsapp', href: 'whatsapp://send?text=A to the point app that keeps track of your workout plans: https://mi-workouts.com' },
+          // { icon: 'mdi-linkedin', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fmi-workouts.com' },
           // { icon: 'mdi-pinterest', href: 'https://pinterest.com/pin/create/button/?description=A+to+the+point+app+that+keeps+track+of+your+workout+plans.&media=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Fmi-workouts.appspot.com%2Fo%2Fcovers%252Fcover-1.PNG%3Falt%3Dmedia%26token%3D68f17996-a847-4415-9473-5af2ca0fbad2&url=https%3A%2F%2Fmi-workouts.com' },
         ],
       };

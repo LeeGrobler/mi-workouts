@@ -1,7 +1,7 @@
 <template>
   <v-list two-line class="py-0" color="transparent">
 
-    <v-text-field v-if="showFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="mt-3" />
+    <v-text-field v-if="showFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="my-3" />
 
     <transition-group name="list">
       <v-list-group v-for="ex in filteredExercises" :key="ex.id">
@@ -38,7 +38,7 @@
                 <v-card-actions class="pa-2">
                   <v-spacer></v-spacer>
                   <v-btn text color="error" @click="remove(ex)">Delete</v-btn>
-                  <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn>
+                  <v-btn text color="success" :to="`/exercises/edit/${ex.id}`">Edit</v-btn>
                 </v-card-actions>
               </v-card>
               
@@ -75,7 +75,7 @@
       },
 
       filteredExercises() {
-        return this.exercises.filter(v1 => 
+        return this.exercises?.filter(v1 => 
           Object.keys(_.omit(v1, ['id', 'unitType', 'link'])).filter(v2 => 
             v1[v2].toString().toLowerCase().indexOf(this.filter.toLowerCase()) > -1
           ).length > 0

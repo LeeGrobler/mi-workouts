@@ -50,7 +50,6 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
-    margin-bottom: 25px;
     color: #333;
 
     &.role-subtitle {

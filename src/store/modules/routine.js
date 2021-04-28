@@ -28,15 +28,7 @@ const mutations = {
 
 const actions = {
   storeProgress({ commit }, payload) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        commit('setProgress', payload);
-        return resolve();
-      } catch(err) {
-        console.log('storeProgress err:', err);
-        return reject(err);
-      }
-    });
+    commit('setProgress', payload);
   },
 
   fetchUserRoutines({}, payload) {
@@ -96,7 +88,7 @@ const actions = {
         }
 
         const user = payload.user || rootGetters['user/getUser']?.uid;
-        analytics.logEvent(`${!payload.id ? 'create' : 'update'}_routine`);
+        analytics.logEvent(`${payload.id ? 'update' : 'create'}_routine`);
         const ref = Routines.doc(payload?.id);
         ref.set({ ..._.pick(payload, ['name', 'exercises', 'notes', 'user', 'favorite', 'order']), user });
         return resolve(ref?.id);

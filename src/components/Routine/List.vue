@@ -1,5 +1,5 @@
 <template>
-  <div class="expand-panels mt-3">
+  <div class="expand-panels">
     <draggable v-model="filteredRoutines" handle=".drag-icon" @change="reorder">
       <div class="expand-panel" v-for="rt in filteredRoutines" :key="rt.id" :class="{ 'active': rt.expanded }">
         <div class="panel-head" @click="rt.exercises.length > 0 ? toggleExpanded(rt) : null">
@@ -15,7 +15,7 @@
             <v-btn x-small icon @click.stop="remove(rt)">
               <v-icon color="error">mdi-delete</v-icon>
             </v-btn>
-            <v-btn x-small icon @click.stop="$emit('edit', rt)">
+            <v-btn x-small icon :to="`/routines/edit/${rt.id}`">
               <v-icon color="success">mdi-pencil</v-icon>
             </v-btn>
             <v-btn x-small icon>

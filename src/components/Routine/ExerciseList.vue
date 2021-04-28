@@ -38,7 +38,7 @@
                   <v-card-actions class="pa-2">
                     <v-spacer></v-spacer>
                     <v-btn text color="error" @click="remove(ex)">Delete</v-btn>
-                    <v-btn text color="success" @click="$emit('edit', ex)">Edit</v-btn>
+                    <v-btn text color="success" @click="edit(ex.id)">Edit</v-btn>
                   </v-card-actions>
                 </v-card>
                 
@@ -76,8 +76,14 @@
     methods: {
       ...mapActions({
         setEdit: 'exercise/setEdit',
-        delete: 'exercise/deleteExercise'
+        delete: 'exercise/deleteExercise',
+        setReturnTo: 'exercise/setReturnTo',
       }),
+
+      edit(id) {
+        this.setReturnTo('/routines');
+        return this.$router.push(`/exercises/edit/${id}`);
+      },
 
       getIcon(category) {
         switch(category) {

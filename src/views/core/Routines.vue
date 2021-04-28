@@ -2,7 +2,7 @@
   <div class="page-root justify-top" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <index />
+    <index :upserting="upserting" />
     
     <connectivity-bar />
   </div>
@@ -21,6 +21,10 @@
     mixins: [PageActions],
 
     components: { LoginNowBtn, Index, ConnectivityBar },
+
+    props: {
+      upserting: { type: Boolean, required: false, default: false },
+    },
 
     mounted() {
       this.$route.meta.bg = '4';

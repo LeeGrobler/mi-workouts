@@ -30,23 +30,24 @@ Vue.use(VueRouter);
   N = unauthed only; unanon only; offline only
 */
 
-
 const routes = [
   // drawer
-  { path: '/',                   name: 'Home',      icon: 'mdi-home',             component: Home,      meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T' } },
-  { path: '/workouts/exercises', name: 'Exercises', icon: 'mdi-dumbbell',         component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
-  { path: '/workouts/routines',  name: 'Routines',  icon: 'mdi-arm-flex-outline', component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
-  { path: '/sign-in',            name: 'Sign In',   icon: 'mdi-login-variant',    component: SignIn,    meta: { auth: 'E', anon: 'Y', online: 'Y', navbar: 'T' } },
-  { path: '/account',            name: 'Account',   icon: 'mdi-account',          component: Account,   meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
-  { path: '/contact',            name: 'Contact',   icon: 'mdi-email',            component: Contact,   meta: { auth: 'Y', anon: 'E', online: 'Y', navbar: 'B', recaptchaBadge: true } },
-  { path: '/logout',             name: 'Logout',    icon: 'mdi-logout-variant',                         meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
+  { path: '/',          name: 'Home',      icon: 'mdi-home',             component: Home,      meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T' } },
+  { path: '/exercises', name: 'Exercises', icon: 'mdi-dumbbell',         component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
+  { path: '/routines',  name: 'Routines',  icon: 'mdi-arm-flex-outline', component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', workoutsBar: true } },
+  { path: '/sign-in',   name: 'Sign In',   icon: 'mdi-login-variant',    component: SignIn,    meta: { auth: 'E', anon: 'Y', online: 'Y', navbar: 'T' } },
+  { path: '/account',   name: 'Account',   icon: 'mdi-account',          component: Account,   meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
+  { path: '/contact',   name: 'Contact',   icon: 'mdi-email',            component: Contact,   meta: { auth: 'Y', anon: 'E', online: 'Y', navbar: 'B', recaptchaBadge: true } },
+  { path: '/logout',    name: 'Logout',    icon: 'mdi-logout-variant',                         meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
 
   // footer
   { path: '/legal/terms-and-conditions', name: 'Terms And Conditions', icon: 'mdi-script-text-outline',    component: TsAndCs,       meta: { auth: 'E', anon: 'E', online: 'E', footer: 'Y' } },
   { path: '/legal/privacy-policy',       name: 'Privacy Policy',       icon: 'mdi-clipboard-text-outline', component: PrivacyPolicy, meta: { auth: 'E', anon: 'E', online: 'E', footer: 'Y' } },
 
   // other
-  { path: '/*', name: '404', component: NotFound, meta: { auth: 'E', anon: 'E', online: 'E' } },
+  { path: '/exercises/:action/:id?', name: 'CreateExercise', component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E' }, props: { upserting: true } },
+  { path: '/routines/:action/:id?',  name: 'CreateRoutine',  component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E' }, props: { upserting: true } },
+  { path: '/*',                      name: '404',            component: NotFound,  meta: { auth: 'E', anon: 'E', online: 'E' } },
 ];
 
 const router = new VueRouter({

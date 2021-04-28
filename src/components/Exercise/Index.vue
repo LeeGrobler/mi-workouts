@@ -4,14 +4,16 @@
       <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
         <transition name="slide-fade" mode="out-in">
 
-          <upsert v-if="upserting" :exercise="exercise" @edit="stopEditing" />
+          <upsert v-if="upserting" />
           <div v-else>
-            <v-btn block color="primary" dark @click="upserting = !upserting">
+            <heading v-if="exercises && exercises.length > 0" text="Exercises" role="section" />
+
+            <list class="mt-1" />
+
+            <v-btn block color="primary" dark to="/exercises/create" class="mt-3">
               <v-icon left>mdi-plus</v-icon>
               Create Exercise
             </v-btn>
-
-            <list @edit="startEdit" />
           </div>
           
         </transition>
@@ -21,28 +23,22 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+  import Heading from '@/components/Layout/Heading';
   import List from '@/components/Exercise/List';
   import Upsert from '@/components/Exercise/Upsert';
 
   export default {
     name: 'ExerciseIndex',
 
-    components: { List, Upsert },
+    components: { Heading, List, Upsert },
 
-    data: () => ({
-      upserting: false,
-      exercise: null,
-    }),
+    props: {
+      upserting: { type: Boolean, required: false, default: false },
+    },
 
-    methods: {
-      startEdit(ex) {
-        this.upserting = true;
-        this.exercise = ex;
-      },
-      stopEditing() {
-        this.upserting = false;
-        this.exercise = null;
-      },
+    computed: {
+      ...mapGetters({ exercises: 'exercise/getExercises' }),
     },
   }
 </script>

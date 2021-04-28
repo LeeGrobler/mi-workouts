@@ -2,7 +2,7 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <routines :dashboard="true" />
+    <!-- TODO: add links to exercises/routines here -->
 
     <connectivity-bar />
   </div>
@@ -12,7 +12,6 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
-  import Routines from '@/components/Routine/Index';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -20,14 +19,18 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, Routines, ConnectivityBar },
+    components: { LoginNowBtn, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '3';
     },
 
     computed: {
-      ...mapGetters({ online: 'general/getOnline' }),
+      ...mapGetters({
+        online: 'general/getOnline',
+        routines: 'routine/getRoutines',
+        exercises: 'exercise/getExercises',
+      }),
     },
   }
 </script>
