@@ -6,10 +6,8 @@
         <v-list-group v-for="ex in exercises" :key="ex.id">
           <template v-slot:activator>
             <!-- avatar -->
-            <v-list-item-avatar class="ma-0">
-              <v-progress-circular v-if="ex.loading" indeterminate color="primary" />
-              <v-icon v-else-if="exercises.length > 1" class="ex-drag-icon" color="white">mdi-drag-vertical</v-icon>
-              <v-icon v-else class="secondary" dark>{{ getIcon(ex.unitType) }}</v-icon>
+            <v-list-item-avatar v-if="exercises.length > 1" class="ma-0">
+              <v-icon class="ex-drag-icon" color="white">mdi-drag-vertical</v-icon>
             </v-list-item-avatar>
             <!-- deets -->
             <v-list-item-content class="py-0" :class="{ 'ml-2': exercises.length === 1 }">

@@ -2,7 +2,30 @@
   <div class="page-root" :class="{ 'bar-padding': !online }">
     <login-now-btn />
 
-    <!-- TODO: add links to exercises/routines here -->
+    <v-container class="white--text">
+      <v-row>
+        <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
+          <transition-group name="slide-fade" mode="out-in">
+
+            <v-btn key="createRtBtn" v-if="showExerciseBtn" block color="primary" dark to="/exercises/create" class="mt-3">
+              <v-icon left>mdi-plus</v-icon>
+              Create Your First Exercise
+            </v-btn>
+
+            <v-btn key="createExBtn" v-if="showRoutineBtn" block color="primary" dark to="/routines/create" class="mt-3">
+              <v-icon left>mdi-plus</v-icon>
+              Create Your First Routine
+            </v-btn>
+
+            <template v-else>
+              <heading key="rtListHeading" v-if="routines && routines.length > 0" text="Routines" role="section" />
+              <routines key="rtList" class="mt-3" />
+            </template>
+    
+          </transition-group>
+        </v-col>
+      </v-row>
+    </v-container>
 
     <connectivity-bar />
   </div>
@@ -12,6 +35,8 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
+  import Heading from '@/components/Layout/Heading';
+  import Routines from '@/components/Routine/List';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -19,7 +44,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ConnectivityBar },
+    components: { LoginNowBtn, Heading, Routines, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '3';
@@ -31,6 +56,13 @@
         routines: 'routine/getRoutines',
         exercises: 'exercise/getExercises',
       }),
+
+      showExerciseBtn() {
+        return this.routines?.length === 0 && this.exercises?.length === 0;
+      },
+      showRoutineBtn() {
+        return this.routines?.length === 0 && this.exercises?.length > 0;
+      },
     },
   }
 </script>
