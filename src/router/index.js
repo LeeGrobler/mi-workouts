@@ -46,7 +46,7 @@ const routes = [
   { path: '/legal/privacy-policy',       name: 'Privacy Policy',       icon: 'mdi-clipboard-text-outline', component: PrivacyPolicy, meta: { auth: 'E', anon: 'E', online: 'E', footer: 'Y' } },
 
   // other
-  { path: '/404', name: '404', component: NotFound, meta: { auth: 'E', anon: 'E', online: 'E' } },
+  { path: '/*', name: '404', component: NotFound, meta: { auth: 'E', anon: 'E', online: 'E' } },
 ];
 
 const router = new VueRouter({
@@ -56,7 +56,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if(!to.matched.length) return next('/404');
   if(to.name === 'Logout') return store.dispatch('user/logout');
 
   analytics.logEvent('page_view', { type: 'internal' });

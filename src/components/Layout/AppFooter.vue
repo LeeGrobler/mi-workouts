@@ -15,7 +15,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="py-1">
-        <v-btn v-for="v in somo" :key="v.icon" class="mx-4 white--text" icon @click="v.callback">
+        <v-btn v-for="v in somo" :key="v.icon" class="mx-4 white--text" icon :href="v.href" target="_blank">
           <v-icon size="24px">{{ v.icon }}</v-icon>
         </v-btn>
       </v-card-text>
@@ -38,10 +38,10 @@
       return {
         credit: null,
         somo: [
-          { icon: 'mdi-facebook', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
-          { icon: 'mdi-twitter', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
-          { icon: 'mdi-linkedin', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
-          { icon: 'mdi-instagram', callback: () => this.alert({ color: 'info', timeout: 10000, text: 'Coming soon!' }) },
+          { icon: 'mdi-facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmi-workouts.com' },
+          { icon: 'mdi-twitter', href: 'https://twitter.com/share?url=https%3A%2F%2Fmi-workouts.com' },
+          { icon: 'mdi-linkedin', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fmi-workouts.com' },
+          // { icon: 'mdi-pinterest', href: 'https://pinterest.com/pin/create/button/?description=A+to+the+point+app+that+keeps+track+of+your+workout+plans.&media=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Fmi-workouts.appspot.com%2Fo%2Fcovers%252Fcover-1.PNG%3Falt%3Dmedia%26token%3D68f17996-a847-4415-9473-5af2ca0fbad2&url=https%3A%2F%2Fmi-workouts.com' },
         ],
       };
     },
