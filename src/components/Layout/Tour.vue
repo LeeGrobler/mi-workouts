@@ -1,7 +1,7 @@
 <template>
   <v-tour name="tutorial" :steps="tourSteps" :class="{ hidden }">
     <template slot-scope="tour">
-      <transition name="fade">
+      <transition name="slide-fade" mode="out-in">
         <v-step v-if="tour.steps[tour.currentStep]" :key="tour.currentStep" :step="tour.steps[tour.currentStep]" :previous-step="tour.previousStep" :next-step="tour.nextStep"
           :stop="tour.stop" :skip="tour.skip" :is-first="tour.isFirst" :is-last="tour.isLast" :labels="tour.labels"
         >

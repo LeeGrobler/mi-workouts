@@ -6,7 +6,11 @@
     <loader v-if="!exercises && !routines" />
     <v-main v-else :class="{ 'no-pointer': $tours['tutorial'].isRunning }">
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" :scrollDownALittle="scrollDownALittle" />
-      <router-view />
+
+      <transition name="slide-fade" mode="out-in">
+        <router-view />
+      </transition>
+
       <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />
     </v-main>
@@ -77,7 +81,10 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
 
-  #app { overflow-y: hidden; }
+  #app {
+    overflow-y: hidden;
+    background: #000;
+  }
 
   .no-pointer { pointer-events: none; }
 </style>
