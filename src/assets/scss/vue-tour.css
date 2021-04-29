@@ -93,3 +93,5 @@ body.v-tour--active { pointer-events: none; }
 	background-color: hsla(0, 0%, 100%, .95);
 	color: #50596c;
 }
+
+.v-step__actions { display: flex; }

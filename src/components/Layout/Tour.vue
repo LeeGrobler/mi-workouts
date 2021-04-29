@@ -1,25 +1,24 @@
 <template>
-  <!-- <div class="overlay"> -->
-    <v-tour name="tutorial" :steps="tourSteps" :class="{ hidden }">
-      <template slot-scope="tour">
-        <transition name="fade">
-          <v-step v-if="tour.steps[tour.currentStep]" :key="tour.currentStep" :step="tour.steps[tour.currentStep]" :previous-step="tour.previousStep" :next-step="tour.nextStep"
-            :stop="tour.stop" :skip="tour.skip" :is-first="tour.isFirst" :is-last="tour.isLast" :labels="tour.labels"
-          >
-            <div slot="content" class="v-step__content" v-html="tour.steps[tour.currentStep].content"></div>
-            <div slot="actions" class="text-right">
-              <v-btn text color="warning" @click="endTour">{{ tour.currentStep === 5 ? 'End' : 'Skip' }} Tour</v-btn>
-              <v-btn v-if="tour.currentStep === 0" text color="primary" to="/exercises/create">Get Started</v-btn>
-              <v-btn v-if="tour.currentStep === 1" text color="primary" to="/exercises">Next</v-btn>
-              <v-btn v-if="tour.currentStep === 2" text color="primary" @click="tour.nextStep">Next</v-btn>
-              <v-btn v-if="tour.currentStep === 3" text color="primary" to="/routines">Next</v-btn>
-              <v-btn v-if="tour.currentStep === 4" text color="primary" @click="tour.nextStep">Next</v-btn>
-            </div>
-          </v-step>
-        </transition>
-      </template>
-    </v-tour>
-  <!-- </div> -->
+  <v-tour name="tutorial" :steps="tourSteps" :class="{ hidden }">
+    <template slot-scope="tour">
+      <transition name="fade">
+        <v-step v-if="tour.steps[tour.currentStep]" :key="tour.currentStep" :step="tour.steps[tour.currentStep]" :previous-step="tour.previousStep" :next-step="tour.nextStep"
+          :stop="tour.stop" :skip="tour.skip" :is-first="tour.isFirst" :is-last="tour.isLast" :labels="tour.labels"
+        >
+          <div slot="content" class="v-step__content" v-html="tour.steps[tour.currentStep].content"></div>
+          <div slot="actions" class="v-step__actions">
+            <v-btn text color="warning" @click="endTour">{{ tour.currentStep === 5 ? 'End' : 'Skip Tour' }}</v-btn>
+            <v-spacer />
+            <v-btn v-if="tour.currentStep === 0" text color="primary" to="/exercises/create">Get Started</v-btn>
+            <v-btn v-if="tour.currentStep === 1" text color="primary" to="/exercises">Next</v-btn>
+            <v-btn v-if="tour.currentStep === 2" text color="primary" @click="tour.nextStep">Next</v-btn>
+            <v-btn v-if="tour.currentStep === 3" text color="primary" to="/routines">Next</v-btn>
+            <v-btn v-if="tour.currentStep === 4" text color="primary" @click="tour.nextStep">Next</v-btn>
+          </div>
+        </v-step>
+      </transition>
+    </template>
+  </v-tour>
 </template>
 
 <script>
