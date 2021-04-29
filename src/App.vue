@@ -1,9 +1,10 @@
 <template>
   <v-app>
     <dialogue />
+    <tour />
 
     <loader v-if="!exercises && !routines" />
-    <v-main v-else>
+    <v-main v-else :class="{ 'no-pointer': $tours['tutorial'].isRunning }">
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" :scrollDownALittle="scrollDownALittle" />
       <router-view />
       <workout-bar v-if="$route.meta.workoutsBar" />
@@ -19,6 +20,7 @@
 
   import redirect from '@/mixins/status-redirect';
   import Dialogue from '@/components/Layout/Dialogue';
+  import Tour from '@/components/Layout/Tour';
   import Loader from '@/components/Layout/Loader';
   import AppDrawer from '@/components/Layout/AppDrawer';
   import WorkoutBar from '@/components/Layout/WorkoutBar';
@@ -30,7 +32,7 @@
 
     mixins: [redirect],
 
-    components: { Dialogue, Loader, AppDrawer, WorkoutBar, AppFooter, Alert },
+    components: { Dialogue, Tour, Loader, AppDrawer, WorkoutBar, AppFooter, Alert },
 
     async mounted() {
       this.monitorConnection();
@@ -76,4 +78,6 @@
   @import "@/assets/scss/global.scss";
 
   #app { overflow-y: hidden; }
+
+  .no-pointer { pointer-events: none; }
 </style>

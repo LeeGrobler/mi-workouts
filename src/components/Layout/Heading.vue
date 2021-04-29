@@ -1,14 +1,14 @@
 <template>
-  <div class="comp-root" :class="[{ 'dark': dark }, css.opacity]">
+  <div class="comp-root" :class="[css.opacity]">
 
     <h1 :class="css.fontSize">{{ text }}</h1>
     <div class="bar" />
 
     <v-tooltip v-for="(btn, i) in buttons" :key="i" bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" class="btn ml-2" color="black" @click="btn.callback" outlined fab :small="role === 'page'"
-          :x-small="role === 'section'"
-        ><v-icon>{{ btn.icon }}</v-icon></v-btn>
+        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" class="btn ml-2" @click="btn.callback" fab :small="role === 'page'" :x-small="role === 'section'"
+          outlined
+        ><v-icon color="white">{{ btn.icon }}</v-icon></v-btn>
       </template>
       <span>{{ btn.text }}</span>
     </v-tooltip>
@@ -23,7 +23,6 @@
     props: {
       text: { type: String, required: true },
       role: { type: String, default: 'page' },
-      dark: { type: Boolean, default: true },
       buttons: { type: Array, default: () => [] },
     },
 
@@ -46,40 +45,31 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
 
+  .theme--light.v-btn.v-btn--disabled .v-icon,
+  .theme--light.v-btn.v-btn--disabled .v-btn__loading { color: #fff !important; }
+
   .comp-root {
     display: flex;
     align-items: center;
     white-space: nowrap;
-    color: #333;
+    color: #fff;
 
     &.role-subtitle {
-      .bar { background-color: rgba(0, 0, 0, 0.6); }
-      .btn { border: 2px solid rgba(0, 0, 0, 0.6); }
-    }
-
-    &.dark {
-      color: #fff;
-
       .bar { background-color: #fff; }
-
-      .btn {
-        border: 2px solid #fff;
-
-        .v-icon { color: #fff; }
-      }
+      .btn { border: 2px solid #fff; }
     }
 
     .bar {
       height: 2px;
       width: 100%;
       margin-left: 10px;
-      background-color: #333;
+      background-color: #fff;
     }
 
     .btn {
-      border: 2px solid #333;
+      border: 2px solid #fff;
 
-      .v-icon { color: #333; }
+      .v-icon { color: #fff; }
     }
   }
 </style>

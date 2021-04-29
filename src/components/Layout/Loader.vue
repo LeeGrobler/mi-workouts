@@ -29,6 +29,7 @@
     height: 100vh;
     z-index: 3;
     position: absolute;
+    overflow: hidden;
   }
 
   .app-name {

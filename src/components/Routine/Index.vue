@@ -10,7 +10,7 @@
 
             <list class="mt-3" />
 
-            <v-btn block color="primary" dark to="/routines/create" class="mt-3">
+            <v-btn block color="primary" dark to="/routines/create" class="mt-3 v-step-5 v-step-6">
               <v-icon left>mdi-plus</v-icon>
               Create Routine
             </v-btn>
@@ -36,6 +36,10 @@
 
     props: {
       upserting: { type: Boolean, required: false, default: false },
+    },
+
+    mounted() {
+      this.$tours['tutorial'].nextStep();
     },
 
     computed: {

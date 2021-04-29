@@ -7,7 +7,7 @@
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
           <transition-group name="slide-fade" mode="out-in">
 
-            <v-btn key="createRtBtn" v-if="showExerciseBtn" block color="primary" dark to="/exercises/create" class="mt-3">
+            <v-btn key="createRtBtn" v-if="showExerciseBtn" block color="primary" dark to="/exercises/create" class="v-step-1 mt-3">
               <v-icon left>mdi-plus</v-icon>
               Create Your First Exercise
             </v-btn>
@@ -48,6 +48,12 @@
 
     mounted() {
       this.$route.meta.bg = '3';
+
+      this.$watch('routines', n => {
+        if(n?.length === 0 && !localStorage.getItem('tour-completed')) {
+          this.$tours['tutorial'].start();
+        }
+      });
     },
 
     computed: {

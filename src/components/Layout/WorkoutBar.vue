@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade" mode="out-in">
-    <v-tabs v-if="footer" v-model="tab" @change="redirect" :class="`${position}-bottom`" :style="styles" :show-arrows="false" centered>
+    <v-tabs v-if="footer" v-model="tab" @change="redirect" :class="`${position}-bottom`" class="v-step-4" :style="styles" :show-arrows="false" centered>
       <v-tab v-for="link in links" :key="link.name">
         <v-icon left>{{ link.icon }}</v-icon> {{ link.name }}
       </v-tab>

@@ -1,5 +1,5 @@
 <template>
-  <v-list two-line class="py-0" color="transparent">
+  <v-list two-line class="py-0 v-step-3" color="transparent">
 
     <v-text-field v-if="showFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="my-3" />
 
@@ -64,6 +64,7 @@
 
     mounted() {
       this.exercises = _.cloneDeep(this.getExercises);
+      this.$tours['tutorial'].nextStep();
     },
 
     computed: {

@@ -46,7 +46,9 @@
       </v-col>
     </v-row>
 
-    <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">{{ action === 'edit' ? 'Update' : 'Create' }}</v-btn>
+    <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary" class="v-step-2">
+      {{ action === 'edit' ? 'Update' : 'Create' }}
+    </v-btn>
     <v-btn :disabled="loading" :to="returnTo || '/exercises'" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
   </v-form>
 </template>
@@ -90,6 +92,8 @@
           this.form = _.cloneDeep(n.find(v => v.id === this.$route.params.id));
         });
       }
+
+      this.$tours['tutorial'].nextStep();
     },
 
     computed: {
