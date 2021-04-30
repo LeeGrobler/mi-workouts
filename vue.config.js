@@ -10,14 +10,9 @@ module.exports = {
   ],
   pwa: {
     workboxOptions: {
-      navigateFallback: 'index.html'
+      navigateFallback: 'index.html',
+			swSrc: 'service-worker.js',
+			exclude: [/_redirects/],
     }
   },
-  // css: {
-  //   loaderOptions: {
-  //     scss: {
-  //       data: `@import "~@/assets/scss/global.scss";`,
-  //     }
-  //   }
-  // }
 }
