@@ -52,24 +52,39 @@ exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async 
   }
 });
 
-// exports.dailyTasks = functions.region('europe-west2').pubsub
-// .schedule('every 24 hours 00:00').timeZone('Africa/Johannesburg')
-// .onRun(async () => {
-//   try {
-//     const { users } = await admin.auth().listUsers();
+/*
+  to run this locally:
+  - start the emulator, as per normal: firbase emulators:start --only functions
+  - in a new terminal, run ` firebase functions:shell `
+  - once it starts up, enter the function name you want to run, e.g. ` dailyTasks(); `
+*/
 
-//     await admin.auth().deleteUsers(users.reduce((s, v) => {
-//       if(v.providerData.length <= 0) {
-//         const lastRefresh = new moment(v.metadata.lastRefreshTime);
-//         const duration = moment.duration(new moment().diff(lastRefresh));
-//         if(duration.asDays() >= 30) s.push(v);
-//       }
-//       return s;
-//     }, []));
+exports.dailyTasks = functions
+.region('europe-west2')
+.pubsub
+.schedule('every day 00:00')
+.timeZone('Africa/Johannesburg')
+.onRun(async () => {
+  try {
+    functions.logger.log(`account deletion started: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
 
-//     return { status: 'success' };
-//   } catch (err) {
-//     console.log('dailyTasks err:', err);
-//     return { status: 'failed', message: err.message };
-//   }
-// });
+    const { users } = await admin.auth().listUsers();
+    const accounts = users.reduce((s, v) => {
+      if(v.providerData.length === 0) {
+        const lastRefresh = new moment(v.metadata.lastRefreshTime);
+        const duration = moment.duration(new moment().diff(lastRefresh));
+        if(duration.asDays() >= 30) s.push(v);
+      }
+      return s;
+    }, []);
+
+    functions.logger.log('deleting accounts:', accounts.map(v => v.uid));
+    await admin.auth().deleteUsers(accounts);
+
+    functions.logger.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+    return { status: 'success' };
+  } catch (err) {
+    functions.logger.log('dailyTasks err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
