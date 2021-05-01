@@ -11,7 +11,7 @@ module.exports = {
   pwa: {
     workboxOptions: {
       navigateFallback: 'index.html',
-			swSrc: 'service-worker.js',
+			// swSrc: 'service-worker.js',
 			exclude: [/_redirects/],
     }
   },
