@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const axios = require('axios');
+const _ = require('lodash');
+const moment = require('moment');
+const md5 = require('crypto-js/md5');
 const mailgun = require('mailgun-js')({
   apiKey: functions.config().mailgun.key,
   domain: functions.config().mailgun.url
@@ -24,7 +27,7 @@ module.exports = {
         if(!data.success) return reject({ message: 'Recaptcha response not valid' });
         return resolve(data);
       } catch(err) {
-        console.log('verifyCaptcha err:', err);
+        functions.logger.error('verifyCaptcha err:', err);
         return reject({ message: err.response ? err.response.data : err.message });
       }
     });
@@ -33,18 +36,62 @@ module.exports = {
   createContact: async params => {
     return new Promise(async (resolve, reject) => {
       try {
-        const data = {
+        const res = await admin.firestore().collection('contacts').doc(params.ref).set({
           ...params.email,
-          timestamp: admin.firestore.Timestamp.fromDate(params.timestamp.toDate()),
+          date_created: admin.firestore.Timestamp.fromDate(params.timestamp.toDate()),
           user: params.auth ? params.auth.uid : null,
           status: 'created'
-        };
-  
-        const res = await admin.firestore().collection('contacts').doc(params.ref).set(data);
+        });
+
         return resolve(res);
       } catch (err) {
-        console.log('createContact err:', err);
-        return reject({ message: err.message });
+        functions.logger.error('createContact err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  createPayment: async (params, auth) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await admin.firestore().collection('payments').add({
+          description: params.item_name,
+          amount: Number(params.amount),
+          status: 'created',
+          user: auth ? auth.uid : null,
+          date_created: admin.firestore.Timestamp.fromDate(new moment().toDate()),
+          date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate()),
+        });
+
+        return resolve(res);
+      } catch (err) {
+        functions.logger.error('createPayment err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  generatePaymentSignature: async params => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const passphrase = functions.config().payfast && functions.config().payfast.passphrase;
+
+        let output = '';
+        Object.keys(params).forEach(v => {
+          if(!!params[v]) output += `${v}=${encodeURIComponent(params[v].trim())}&`;
+          else console.log('nothing for', v, params[v]);
+        });
+
+        if(output.endsWith('&')) output = output.substring(0, output.length - 1);
+        if(passphrase) output += `&passphrase=${encodeURIComponent(functions.config().payfast.passphrase.trim())}`;
+        output = output.split('%20').join('+');
+
+        console.log('output:', output);
+
+        return resolve(md5(output).toString());
+      } catch (err) {
+        functions.logger.error('generatePaymentSignature err:', err);
+        return reject(err);
       }
     });
   },
@@ -55,7 +102,7 @@ module.exports = {
         const res = await admin.firestore().collection('support_contacts').where("active", "==", true).get();
         return resolve([...new Set([functions.config().app.support_email, ...res.docs.map(v => v.data().email)])]);
       } catch(err) {
-        console.log('getSupportAddresses err:', err);
+        functions.logger.error('getSupportAddresses err:', err);
         return reject(err);
       }
     });
@@ -75,7 +122,7 @@ module.exports = {
           return resolve({ subject, html });
         } else return reject({ message: 'Email template not found.' });
       } catch (err) {
-        console.log('compileHtml err:', err);
+        functions.logger.error('compileHtml err:', err);
         return reject({ message: err.message });
       }
     });

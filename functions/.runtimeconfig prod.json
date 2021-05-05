@@ -10,5 +10,8 @@
   "app": {
     "name": "MiWorkouts",
     "support_email": "hello@mi-workouts.com"
+  },
+  "payfast": {
+    "passphrase": "qGA5ihMNk85PFVFj8QMDWuezzNhS43b4"
   }
 }

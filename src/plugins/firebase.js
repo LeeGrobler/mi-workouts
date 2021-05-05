@@ -23,6 +23,7 @@ const auth = firebase.auth;
 const func = {
   contact: firebase.app().functions('europe-west2').httpsCallable('contact'),
   botcheck: firebase.app().functions('europe-west2').httpsCallable('validateRecaptcha'),
+  generatePayment: firebase.app().functions('europe-west2').httpsCallable('generatePayment'),
 };
 
 const db = firebase.firestore();

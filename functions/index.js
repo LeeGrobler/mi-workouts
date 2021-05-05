@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const _ = require('lodash');
 const moment = require('moment');
-const { verifyCaptcha, createContact, getSupportAddresses, compileHtml, sendEmail } = require('./service');
+const { verifyCaptcha, createContact, createPayment, getSupportAddresses, compileHtml, sendEmail, generatePaymentSignature } = require('./service');
 
 // NB: remember to update this according to which env you're deploying to!
 admin.initializeApp({ credential: admin.credential.cert(require('./certs/cert.json')) });
@@ -52,6 +52,25 @@ exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async 
   }
 });
 
+exports.generatePayment = functions.region('europe-west2').https.onCall(async (req, { auth }) => {
+  try {
+    await verifyCaptcha(req.token);
+
+    const payment = await createPayment(req, auth);
+    const payfastParams = _.pick(req, ['merchant_id', 'merchant_key', 'return_url', 'cancel_url', 'notify_url', 'name_first', 'name_last', 'email_address', 'm_payment_id', 'amount', 'item_name']);
+    payfastParams.m_payment_id = payment.id;
+
+    const hash = await generatePaymentSignature(payfastParams);
+    return {
+      status: 'success',
+      response: { m_payment_id: payment.id, hash }
+    };
+  } catch (err) {
+    functions.logger.error('generatePayment err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
+
 /*
   to run this locally:
   - start the emulator, as per normal: firbase emulators:start --only functions
@@ -84,7 +103,7 @@ exports.dailyTasks = functions
     functions.logger.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
     return { status: 'success' };
   } catch (err) {
-    functions.logger.log('dailyTasks err:', err);
+    functions.logger.error('dailyTasks err:', err);
     return { status: 'failed', message: err.message };
   }
 });

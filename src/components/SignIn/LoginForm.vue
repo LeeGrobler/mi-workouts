@@ -2,7 +2,7 @@
   <div class="comp-root text-center">
     <slot name="headline"></slot>
 
-    <div v-if="online" class="provider-btns my-8">
+    <div class="provider-btns my-8">
       <v-btn block :disabled="!!loading" :loading="loading === 'facebook'" x-large color="#3B5998" dark class="my-2" @click="facebookLogin">
         <v-icon left>mdi-facebook</v-icon>
         Facebook
@@ -37,7 +37,6 @@
     computed: {
       ...mapGetters({
         user: 'user/getUser',
-        online: 'general/getOnline',
       }),
     },
 
