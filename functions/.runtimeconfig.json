@@ -10,5 +10,8 @@
   "app": {
     "name": "MiWorkouts UAT",
     "support_email": "hello@mi-workouts-uat.com"
+  },
+  "payfast": {
+    "url": "https://sandbox.payfast.co.za"
   }
 }

@@ -7,6 +7,8 @@ import Routines from '../views/core/Routines.vue';
 import SignIn from '../views/SignIn.vue';
 import Account from '../views/Account.vue';
 import Contact from '../views/Contact.vue';
+import Donate from '../views/Donate.vue';
+import Payment from '../views/Payment.vue';
 import TsAndCs from '../views/legal/TsAndCs.vue';
 import PrivacyPolicy from '../views/legal/PrivacyPolicy.vue';
 import NotFound from '../views/NotFound';
@@ -28,6 +30,10 @@ Vue.use(VueRouter);
   Y = required
   E = either
   N = unauthed only; unanon only; offline only
+
+  ----
+
+  navbar: T = top; B = bottom; S = special (i.e. bottom button lol)
 */
 
 const routes = [
@@ -38,6 +44,7 @@ const routes = [
   { path: '/sign-in',   name: 'Sign In',   icon: 'mdi-login-variant',    component: SignIn,    meta: { auth: 'E', anon: 'Y', online: 'Y', navbar: 'T' } },
   { path: '/account',   name: 'Account',   icon: 'mdi-account',          component: Account,   meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
   { path: '/contact',   name: 'Contact',   icon: 'mdi-email',            component: Contact,   meta: { auth: 'Y', anon: 'E', online: 'Y', navbar: 'B', recaptchaBadge: true } },
+  { path: '/donate',    name: 'Donate',    icon: 'mdi-gift-outline',     component: Donate,    meta: { auth: 'Y', anon: 'E', online: 'Y', navbar: 'S', recaptchaBadge: true } },
   { path: '/logout',    name: 'Logout',    icon: 'mdi-logout-variant',                         meta: { auth: 'Y', anon: 'N', online: 'Y', navbar: 'B' } },
 
   // footer
@@ -47,6 +54,7 @@ const routes = [
   // other
   { path: '/exercises/:action/:id?', name: 'CreateExercise', component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E' }, props: { upserting: true } },
   { path: '/routines/:action/:id?',  name: 'CreateRoutine',  component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E' }, props: { upserting: true } },
+  { path: '/payment-complete',       name: 'Payment',        component: Payment,   meta: { auth: 'Y', anon: 'E', online: 'Y' } },
   { path: '/*',                      name: '404',            component: NotFound,  meta: { auth: 'E', anon: 'E', online: 'E' } },
 ];
 

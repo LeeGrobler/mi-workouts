@@ -23,11 +23,13 @@ const auth = firebase.auth;
 const func = {
   contact: firebase.app().functions('europe-west2').httpsCallable('contact'),
   botcheck: firebase.app().functions('europe-west2').httpsCallable('validateRecaptcha'),
+  generatePayment: firebase.app().functions('europe-west2').httpsCallable('generatePayment'),
 };
 
 const db = firebase.firestore();
 db.enablePersistence();
+const Payments = db.collection('payments');
 const Exercises = db.collection('exercises');
 const Routines = db.collection('routines');
 
-export { firebase, analytics, auth, func, db, Exercises, Routines };
+export { firebase, analytics, auth, func, db, Exercises, Routines, Payments };

@@ -53,6 +53,18 @@ const actions = {
     window.addEventListener('online', () => commit('setOnline', true));
     window.addEventListener('offline', () => commit('setOnline', false));
   },
+
+  generatePayment({}, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { data } = await fb.func.generatePayment(payload);
+        if(data.status === 'success') return resolve(data);
+        return reject(data);
+      } catch (err) {
+        return reject(err);
+      }
+    });
+  }
 };
 
 export default {

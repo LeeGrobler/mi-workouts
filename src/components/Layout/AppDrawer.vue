@@ -36,12 +36,12 @@
           <list :links="links.filter(v => v.meta.navbar === 'B')" :bottom="true" />
         </div>
 
-        <!-- <div class="pa-4 text-center">
-          <app-btn block class="text-none" color="secondary" href="https://store.vuetifyjs.com/products/vuetify-material-dashboard-pro">
-            <v-icon left>mdi-package-up</v-icon>
-            Upgrade to Pro
-          </app-btn>
-        </div> -->
+        <div v-if="special" class="px-4 pb-4 text-center">
+          <v-btn color="secondary" block :to="special.path">
+            <v-icon left>{{ special.icon }}</v-icon>
+            {{ special.name }}
+          </v-btn>
+        </div>
       </template>
     </v-navigation-drawer>
 
@@ -86,6 +86,11 @@
           (v.meta.online === 'E' || v.meta.online === (online ? 'Y' : 'N'))
         );
       },
+
+      special() {
+        return this.links.find(v => v.meta.navbar === 'S');
+      },
+
       drawer: {
         get() { return this.getDrawer; },
         set(v) {
@@ -95,6 +100,7 @@
           }
         },
       },
+
       mini: {
         get() { return this.getMini; },
         set(v) { this.setMini(v); },

@@ -2,9 +2,9 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const _ = require('lodash');
 const moment = require('moment');
-const { verifyCaptcha, createContact, getSupportAddresses, compileHtml, sendEmail } = require('./service');
+const axios = require('axios');
+const { verifyCaptcha, createContact, createPayment, getSupportAddresses, compileHtml, sendEmail, generatePaymentSignature, ipLookup, completePayment } = require('./service');
 
-// NB: remember to update this according to which env you're deploying to!
 admin.initializeApp({ credential: admin.credential.cert(require('./certs/cert.json')) });
 
 /*
@@ -43,12 +43,46 @@ exports.contact = functions.region('europe-west2').https.onCall(async ({ name, e
   } else return { status: 'failed', message: 'Not all required parameters have been set. Please enter your Name, Email Address and Message, and try again. If the problem persists, please reload the page and try again.' };
 });
 
-exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async token => {
+exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async data => {
   try {
-    if(token) return await verifyCaptcha(token);
+    if(data) return await verifyCaptcha(data);
     else return { status: 'failed', message: 'reCAPTCHA token not present.' };
   } catch (err) {
     return { status: 'failed', message: err.message };
+  }
+});
+
+exports.generatePayment = functions.region('europe-west2').https.onCall(async (data, { auth }) => {
+  try {
+    await verifyCaptcha(data.token);
+
+    const payment = await createPayment(data, auth);
+    const payfastParams = _.pick(data, ['merchant_id', 'merchant_key', 'return_url', 'cancel_url', 'notify_url', 'name_first', 'name_last', 'email_address', 'm_payment_id', 'amount', 'item_name']);
+    payfastParams.m_payment_id = payment.id;
+    payfastParams.return_url += `?id=${payment.id}`;
+
+    const { hash } = await generatePaymentSignature(payfastParams);
+    return {
+      status: 'success',
+      response: { m_payment_id: payment.id, hash }
+    };
+  } catch (err) {
+    functions.logger.error('generatePayment err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
+
+// http functions
+
+exports.processPayment = functions.region('europe-west2').https.onRequest(async (req, res) => {
+  try {
+    if(req.method.toUpperCase() !== 'POST') return res.status(400).json({ status: 'failed' });
+
+    const ret = await completePayment(req);
+    return res.status(ret.code).json({ status: ret.status, message: ret.message });
+  } catch (err) {
+    functions.logger.error('processPayment err:', err);
+    return res.status(500).json({ status: 'failed', message: `An error occurred: "${err.message}"` });
   }
 });
 
@@ -84,7 +118,7 @@ exports.dailyTasks = functions
     functions.logger.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
     return { status: 'success' };
   } catch (err) {
-    functions.logger.log('dailyTasks err:', err);
+    functions.logger.error('dailyTasks err:', err);
     return { status: 'failed', message: err.message };
   }
 });
