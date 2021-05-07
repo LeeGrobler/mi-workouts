@@ -5,11 +5,6 @@
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
-          <!-- <p class="white--text">Thank you for considering making a donation to MiWorkouts! Your contribution will help keep the lights on and grow the application.</p>
-          <p slot="headline" class="white--text text-h6 font-weight-regular ma-0">
-            Thank you for considering making a donation to MiWorkouts! Your contribution will help keep the lights on and grow the application.
-          </p> -->
-
           <donate-form>
             <p slot="headline" class="white--text text-h6 font-weight-regular ma-0">Help keep the lights on with a small contribution.</p>
           </donate-form>

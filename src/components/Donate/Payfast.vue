@@ -95,8 +95,8 @@
           const paymentData = {
             merchant_id: process.env.VUE_APP_PAYFAST_MERCHANT_ID,
             merchant_key: process.env.VUE_APP_PAYFAST_MERCHANT_KEY,
-            return_url: `${process.env.VUE_APP_BASE_URL}/payment-complete?status=success`,
-            cancel_url: `${process.env.VUE_APP_BASE_URL}/payment-complete?status=cancelled`,
+            return_url: `${process.env.VUE_APP_BASE_URL}/payment-complete`,
+            cancel_url: `${process.env.VUE_APP_BASE_URL}`,
             notify_url: process.env.VUE_APP_PAYFAST_PROCESS_PAYMENT_URL,
 
             name_first: this.user?.displayName?.split(' ')[0] || null,
@@ -111,10 +111,9 @@
           const token = await this.$recaptcha('generate_payment');
           const payment = await this.generatePayment({ ...paymentData, token });
 
-          console.log('hash:', Object.keys(payment.response).map(v => `${v}: ${payment.response[v]}`).join('\n'));
-
-          paymentData.m_payment_id = payment?.response?.m_payment_id;
-          paymentData.signature = payment?.response?.hash;
+          paymentData.m_payment_id = payment.response?.m_payment_id;
+          paymentData.signature = payment.response?.hash;
+          paymentData.return_url += `?id=${payment.response?.m_payment_id}`;
 
           const form = document.createElement('form');
           form.method = 'POST';
@@ -128,8 +127,6 @@
 
             form.appendChild(input);
           });
-
-          console.log('----\npaymentData:', Object.keys(paymentData).map(v => `${v}: ${paymentData[v]}`).join('\n'));
 
           document.body.appendChild(form);
           form.submit();
