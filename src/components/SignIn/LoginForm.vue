@@ -1,5 +1,5 @@
 <template>
-  <div class="comp-root text-center">
+  <div class="comp-root">
     <slot name="headline"></slot>
 
     <div class="provider-btns my-8">
@@ -19,8 +19,10 @@
       </v-btn> -->
     </div>
 
-    <router-link v-if="!!user" to="/" class="white--text text-body-1 font-weight-regular text-decoration-none block-el">Not Now</router-link>
-    <a href="#" @click.prevent="showAccountReasons" class="white--text text-body-1 font-weight-regular text-decoration-none block-el">Why Sign In?</a>
+    <div class="text-center">
+      <router-link v-if="!!user" to="/" class="white--text text-body-1 font-weight-regular text-decoration-none block-el">Not Now</router-link>
+      <a href="#" @click.prevent="showAccountReasons" class="white--text text-body-1 font-weight-regular text-decoration-none block-el">Why Sign In?</a>
+    </div>
   </div>
 </template>
 

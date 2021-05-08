@@ -18,12 +18,8 @@
         ref="otherTxt"
       />
 
-      <!-- Pay Now button - don't remove this yet -->
-      <!-- <v-btn v-if="!isNaN(paymentAmount)" :loading="loading" :disabled="!valid || loading" type="button" :href="`https://www.payfast.co.za/eng/process?cmd=_paynow&amp;receiver=11190328&amp;item_name=donation&amp;item_description=miworkouts+donation&amp;amount=${paymentAmount}&amp;return_url=https%3A%2F%2Fmi-workouts.com%2Fpayment-complete&amp;cancel_url=https%3A%2F%2Fmi-workouts.com%2Fpayment-complete`">
-        Pay Now
-      </v-btn> -->
-
-      <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button">Proceed</v-btn>
+      <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">Proceed</v-btn>
+      <v-btn :disabled="loading" @click="cancel" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
     </v-form>
   </transition>
 </template>
@@ -45,7 +41,7 @@
           v => !isNaN(v.split(',').join('')) || 'Invalid Amount.'
         ]
       },
-      started: true,
+      started: false,
       valid: false,
       form: {
         amount: 50,
@@ -72,6 +68,11 @@
       start() {
         this.$emit('hideOthers');
         this.started = true;
+      },
+
+      cancel() {
+        this.$emit('showOthers');
+        this.started = false;
       },
 
       setOtherCursor() {
