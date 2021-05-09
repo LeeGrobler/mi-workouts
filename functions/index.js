@@ -140,7 +140,9 @@ exports.dailyTasks = functions
 .timeZone('Africa/Johannesburg')
 .onRun(async () => {
   try {
-    console.log(`account deletion started: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+    console.log(`daily tasks started: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+
+    // delete unused anonymous accounts
 
     const { users } = await admin.auth().listUsers();
     const accounts = users.reduce((s, v) => {
@@ -155,7 +157,25 @@ exports.dailyTasks = functions
     console.log('deleting accounts:', accounts.map(v => v.uid));
     await admin.auth().deleteUsers(accounts);
 
-    console.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+    // delete straggler merge request and expire payments
+
+    const requestRef = admin.firestore().collection('merge_requests');
+    const requests = await requestRef.where('date_created', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).get();
+
+    const paymentRef = admin.firestore().collection('payments');
+    const payments = await paymentRef.where('date_updated', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).where('status', '==', 'created').get();
+
+    const batch = admin.firestore().batch();
+    requests.forEach(v => batch.delete(requestRef.doc(v.id)));
+    payments.forEach(v => batch.update(paymentRef.doc(v.id), {
+      status: 'expired',
+      date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate())
+    }));
+    await batch.commit();
+
+    // done
+
+    console.log(`daily tasks completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
     return { status: 'success' };
   } catch (err) {
     console.log('dailyTasks err:', err);

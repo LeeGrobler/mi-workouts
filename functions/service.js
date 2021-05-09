@@ -250,7 +250,15 @@ module.exports = {
         for(let i = 0; i < collections.length; i++) {
           const ref = admin.firestore().collection(collections[i]);
           const collection = await ref.where('user', '==', request.data().fromId).get();
-          collection.forEach(v => batch.update(ref.doc(v.id), { user }));
+          collection.forEach(v => {
+            const update = {
+              user,
+              date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate())
+            };
+
+            if(!v.data().date_updated) delete update.date_updated;
+            batch.update(ref.doc(v.id), update);
+          });
         }
   
         await batch.commit();
