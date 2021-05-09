@@ -24,6 +24,9 @@ const func = {
   contact: firebase.app().functions('europe-west2').httpsCallable('contact'),
   botcheck: firebase.app().functions('europe-west2').httpsCallable('validateRecaptcha'),
   generatePayment: firebase.app().functions('europe-west2').httpsCallable('generatePayment'),
+  startAccountMerge: firebase.app().functions('europe-west2').httpsCallable('startAccountMerge'),
+  completeAccountMerge: firebase.app().functions('europe-west2').httpsCallable('completeAccountMerge'),
+  cancelAccountMerge: firebase.app().functions('europe-west2').httpsCallable('cancelAccountMerge'),
 };
 
 const db = firebase.firestore();

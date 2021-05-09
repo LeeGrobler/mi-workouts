@@ -1,5 +1,6 @@
+import Vue from 'vue';
 import _ from 'lodash';
-const { auth, analytics } = require('@/plugins/firebase');
+const { auth, func, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => ({
   user: null,
@@ -45,22 +46,20 @@ const actions = {
         ];
 
         if([errors[0]].includes(err1.code)) {
-          const exercises = await dispatch('exercise/fetchUserExercises', auth().currentUser.uid, { root: true });
-          const routines = await dispatch('routine/fetchUserRoutines', auth().currentUser.uid, { root: true });
-
+          await Vue.prototype.$recaptchaLoaded(); // queue account merge
+          let token = await Vue.prototype.$recaptcha('start_account_merge');
+          const { data: res } = await func.startAccountMerge(token);
+  
           try {
-            exercises.forEach(v => dispatch('exercise/deleteExercise', v.id, { root: true }));
-            routines.forEach(v => dispatch('routine/deleteRoutine', v.id, { root: true }));
-            const { user } = await auth().signInWithCredential(err1.credential);
-            dispatch('initAuthWatch');
-            exercises.forEach(v => dispatch('exercise/upsertExercise', { ..._.pick(v, ['name', 'sets', 'reps', 'unitType', 'amount', 'unit', 'link', 'notes']), user: user.uid }, { root: true }));
-            routines.forEach(v => dispatch('routine/upsertRoutine', { ..._.pick(v, ['name', 'notes', 'user', 'favorite', 'order']), exercises: [], user: user.uid }, { root: true }));
-            return resolve({ user: !!user });
+            const { user } = await auth().signInWithCredential(err1.credential); // sign user in
+            token = await Vue.prototype.$recaptcha('complete_account_merge'); // complete account merge
+            func.completeAccountMerge({ request: res.request, token });
+            return resolve({ user: !!user }); // done
           } catch (err2) {
             console.log('auth/credential-already-in-use:', err2);
-            exercises.forEach(v => dispatch('exercise/upsertExercise', { number: v.number, user: v.user }, { root: true }));
-            routines.forEach(v => dispatch('routine/upsertRoutine', { number: v.number, user: v.user }, { root: true }));
-            return reject(err1);
+            const token = await Vue.prototype.$recaptcha('cancel_account_merge'); // cancel account merge
+            func.cancelAccountMerge({ request: res.request, token });
+            return reject(err1); // done
           }
         }
 

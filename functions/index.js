@@ -2,8 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const _ = require('lodash');
 const moment = require('moment');
-const axios = require('axios');
-const { verifyCaptcha, createContact, createPayment, getSupportAddresses, compileHtml, sendEmail, generatePaymentSignature, ipLookup, completePayment } = require('./service');
+const { verifyCaptcha, createContact, createPayment, getSupportAddresses, compileHtml, sendEmail, generatePaymentSignature, completePayment, completeAccountMerge } = require('./service');
 
 admin.initializeApp({ credential: admin.credential.cert(require('./certs/cert.json')) });
 
@@ -52,6 +51,47 @@ exports.validateRecaptcha = functions.region('europe-west2').https.onCall(async 
   }
 });
 
+exports.startAccountMerge = functions.region('europe-west2').https.onCall(async (data, { auth }) => {
+  try {
+    await verifyCaptcha(data);
+    if(!auth.uid) return { status: 'failed', message: 'unauthenticated' };
+
+    const request = await admin.firestore().collection('merge_requests').add({
+      fromId: auth.uid,
+      date_created: admin.firestore.Timestamp.fromDate(new moment().toDate()),
+    });
+
+    return { status: 'success', request: request.id };
+  } catch (err) {
+    console.log('startAccountMerge err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
+
+exports.completeAccountMerge = functions.region('europe-west2').https.onCall(async (data, { auth }) => {
+  try {
+    await verifyCaptcha(data.token);
+    if(!auth.uid) return { status: 'failed', message: 'unauthenticated' };
+    await completeAccountMerge(data.request, auth.uid);
+    return { status: 'success' };
+  } catch (err) {
+    console.log('completeAccountMerge err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
+
+exports.cancelAccountMerge = functions.region('europe-west2').https.onCall(async (data, { auth }) => {
+  try {
+    await verifyCaptcha(data.token);
+    if(!auth.uid) return { status: 'failed', message: 'unauthenticated' };
+    await admin.firestore().collection('merge_requests').doc(data.request).delete();
+    return { status: 'success' };
+  } catch (err) {
+    console.log('cancelAccountMerge err:', err);
+    return { status: 'failed', message: err.message };
+  }
+});
+
 exports.generatePayment = functions.region('europe-west2').https.onCall(async (data, { auth }) => {
   try {
     await verifyCaptcha(data.token);
@@ -67,7 +107,7 @@ exports.generatePayment = functions.region('europe-west2').https.onCall(async (d
       response: { m_payment_id: payment.id, hash }
     };
   } catch (err) {
-    functions.logger.error('generatePayment err:', err);
+    console.log('generatePayment err:', err);
     return { status: 'failed', message: err.message };
   }
 });
@@ -81,7 +121,7 @@ exports.processPayment = functions.region('europe-west2').https.onRequest(async 
     const ret = await completePayment(req);
     return res.status(ret.code).json({ status: ret.status, message: ret.message });
   } catch (err) {
-    functions.logger.error('processPayment err:', err);
+    console.log('processPayment err:', err);
     return res.status(500).json({ status: 'failed', message: `An error occurred: "${err.message}"` });
   }
 });
@@ -100,7 +140,7 @@ exports.dailyTasks = functions
 .timeZone('Africa/Johannesburg')
 .onRun(async () => {
   try {
-    functions.logger.log(`account deletion started: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+    console.log(`account deletion started: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
 
     const { users } = await admin.auth().listUsers();
     const accounts = users.reduce((s, v) => {
@@ -112,13 +152,13 @@ exports.dailyTasks = functions
       return s;
     }, []);
 
-    functions.logger.log('deleting accounts:', accounts.map(v => v.uid));
+    console.log('deleting accounts:', accounts.map(v => v.uid));
     await admin.auth().deleteUsers(accounts);
 
-    functions.logger.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
+    console.log(`account deletion completed: ${new moment().format('DD/MM/YYYY HH:mm:ss')}`);
     return { status: 'success' };
   } catch (err) {
-    functions.logger.error('dailyTasks err:', err);
+    console.log('dailyTasks err:', err);
     return { status: 'failed', message: err.message };
   }
 });

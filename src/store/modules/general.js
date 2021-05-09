@@ -1,4 +1,4 @@
-const fb = require('@/plugins/firebase');
+const { func } = require('@/plugins/firebase');
 
 const defaultState = () => ({
   online: navigator.onLine,
@@ -21,7 +21,7 @@ const actions = {
   contact({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await fb.func.contact(payload);
+        const res = await func.contact(payload);
         return resolve(res);
       } catch (err) {
         return reject(err);
@@ -35,7 +35,7 @@ const actions = {
         const getScore = getters.getRecaptchaScore;
         
         if(!getScore) {
-          const { data } = await fb.func.botcheck(token);
+          const { data } = await func.botcheck(token);
           if(data.success) {
             console.log('setting score:', data.score);
             commit('setRecaptchaScore', data.score);
@@ -57,7 +57,7 @@ const actions = {
   generatePayment({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await fb.func.generatePayment(payload);
+        const { data } = await func.generatePayment(payload);
         if(data.status === 'success') return resolve(data);
         return reject(data);
       } catch (err) {
