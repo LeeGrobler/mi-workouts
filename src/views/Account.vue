@@ -1,6 +1,5 @@
 <template>
   <div class="page-root">
-
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
@@ -10,22 +9,19 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <promo />
   </div>
 </template>
 
 <script>
   import PageActions from '@/mixins/page-actions';
   import DangerZone from '@/components/Account/DangerZone';
-  import Promo from '@/components/Layout/Promo';
 
   export default {
     name: 'AccountPage',
 
     mixins: [PageActions],
 
-    components: { Promo, DangerZone },
+    components: { DangerZone },
 
     mounted() {
       this.$route.meta.bg = '8';

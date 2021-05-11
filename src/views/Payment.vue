@@ -1,7 +1,5 @@
 <template>
   <div class="page-root">
-    <login-now-btn />
-
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
@@ -20,7 +18,6 @@
       </v-row>
     </v-container>
 
-    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -28,9 +25,7 @@
 <script>
   const { Payments } = require('@/plugins/firebase');
   import PageActions from '@/mixins/page-actions';
-  import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import Heading from '@/components/Layout/Heading';
-  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -38,7 +33,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, Heading, Promo, ConnectivityBar },
+    components: { Heading, ConnectivityBar },
 
     data: () => ({ status: null }),
 

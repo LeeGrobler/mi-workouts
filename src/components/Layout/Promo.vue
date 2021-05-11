@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade" mode="out-in">
-    <div v-if="promo" class="promo-container">
+    <div v-if="footer && promo" class="promo-container" :class="`${position}-bottom`" :style="styles">
 
       <a :href="promo.link" target="_blank">
         <img :src="promo.image" alt="Promotion" />
@@ -19,17 +19,32 @@
     }),
 
     mounted() {
-      console.log('promos:', this.promos);
-
       if(!this.promos) this.$watch('promos', (n, o) => {
-        if(Array.isArray(n) && n > 0) this.setPromo();
+        if(Array.isArray(n) && n > 0 && !this.promo) this.setPromo();
       });
 
       if(!this.promo) this.setPromo();
     },
     
     computed: {
-      ...mapGetters({ promos: 'general/getPromos' }),
+      ...mapGetters({
+        online: 'general/getOnline',
+        footer: 'ui/getFooterPos',
+        promos: 'general/getPromos',
+      }),
+
+      position() {
+        return this.footer.top < window.innerHeight ? 'absolute' : 'fixed';
+      },
+    
+      styles() {
+        const fromBottom = this.$route.meta.workoutsBar ? 48 : 0;
+        if(this.position === 'fixed') {
+          return { 'bottom': `${this.online ? 0 + fromBottom : 24 + fromBottom}px` };
+        } else {
+          return { 'bottom': `${this.online ? this.footer.height + fromBottom : this.footer.height + 24 + fromBottom}px` };
+        }
+      },
     },
 
     methods: {
@@ -55,9 +70,14 @@
     padding: 5px;
     line-height: 0;
 
+    @media only screen and (min-width: 1264px) {
+      &.fixed-bottom img { margin-left: 80px; }
+    }
+
     img {
       width: 100%;
       height: 100%;
+      max-width: 424px;
     }
   }
 </style>

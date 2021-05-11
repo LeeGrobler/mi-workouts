@@ -1,7 +1,5 @@
 <template>
-  <div class="page-root" :class="{ 'bar-padding': !online }">
-    <login-now-btn />
-
+  <div class="page-root">
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
@@ -14,7 +12,6 @@
       </v-row>
     </v-container>
 
-    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -22,9 +19,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
-  import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import ContactForm from '@/components/Contact/ContactForm';
-  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -32,7 +27,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ContactForm, Promo, ConnectivityBar },
+    components: { ContactForm, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '1';

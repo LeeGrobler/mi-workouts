@@ -7,10 +7,12 @@
     <v-main v-else :class="{ 'no-pointer': $tours['tutorial'].isRunning }">
       <app-drawer :fixed="$route.path.indexOf('legal/') > -1" :scrollDownALittle="scrollDownALittle" />
 
-      <transition name="slide-fade" mode="out-in">
-        <router-view />
-      </transition>
+      <transition-group name="slide-fade" mode="out-in">
+        <login-now-btn v-if="$route.meta.loginBtn" key="login-now-btn" />
+        <router-view key="router-view" :style="{ 'padding-bottom': bottomPadding }" />
+      </transition-group>
 
+      <promo v-if="$route.meta.showPromo" />
       <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />
     </v-main>
@@ -27,6 +29,8 @@
   import Tour from '@/components/Layout/Tour';
   import Loader from '@/components/Layout/Loader';
   import AppDrawer from '@/components/Layout/AppDrawer';
+  import LoginNowBtn from '@/components/Layout/LoginNowBtn';
+  import Promo from '@/components/Layout/Promo';
   import WorkoutBar from '@/components/Layout/WorkoutBar';
   import AppFooter from '@/components/Layout/AppFooter';
   import Alert from '@/components/Layout/Alert';
@@ -36,7 +40,7 @@
 
     mixins: [redirect],
 
-    components: { Dialogue, Tour, Loader, AppDrawer, WorkoutBar, AppFooter, Alert },
+    components: { Dialogue, Tour, Loader, AppDrawer, LoginNowBtn, Promo, WorkoutBar, AppFooter, Alert },
 
     async mounted() {
       this.fetchPromos();
@@ -55,6 +59,16 @@
         exercises: 'exercise/getExercises',
         routines: 'routine/getRoutines',
       }),
+
+      bottomPadding() {
+        let padding = 0;
+
+        if(!this.online) padding += 24;
+        if(this.$route.meta.showPromo) padding += 45;
+        if(this.$route.meta.workoutsBar) padding += 48;
+
+        return `${padding}px`;
+      },
     },
 
     methods: {
