@@ -46,20 +46,25 @@ const actions = {
         ];
 
         if([errors[0]].includes(err1.code)) {
-          await Vue.prototype.$recaptchaLoaded(); // queue account merge
-          let token = await Vue.prototype.$recaptcha('start_account_merge');
-          const { data: res } = await func.startAccountMerge(token);
-  
           try {
-            const { user } = await auth().signInWithCredential(err1.credential); // sign user in
-            token = await Vue.prototype.$recaptcha('complete_account_merge'); // complete account merge
-            func.completeAccountMerge({ request: res.request, token });
-            return resolve({ user: !!user }); // done
+            await Vue.prototype.$recaptchaLoaded(); // queue account merge
+            let token = await Vue.prototype.$recaptcha('start_account_merge');
+            const { data: res } = await func.startAccountMerge(token);
+    
+            try {
+              const { user } = await auth().signInWithCredential(err1.credential); // sign user in
+              token = await Vue.prototype.$recaptcha('complete_account_merge'); // complete account merge
+              func.completeAccountMerge({ request: res.request, token });
+              return resolve({ user: !!user }); // done
+            } catch (err3) {
+              console.log('auth/credential-already-in-use 3:', err3);
+              const token = await Vue.prototype.$recaptcha('cancel_account_merge'); // cancel account merge
+              func.cancelAccountMerge({ request: res.request, token });
+              return reject(err1); // done
+            }
           } catch (err2) {
-            console.log('auth/credential-already-in-use:', err2);
-            const token = await Vue.prototype.$recaptcha('cancel_account_merge'); // cancel account merge
-            func.cancelAccountMerge({ request: res.request, token });
-            return reject(err1); // done
+            console.log('auth/credential-already-in-use 2:', err2);
+            return reject(err2);
           }
         }
 

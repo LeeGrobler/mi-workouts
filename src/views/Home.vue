@@ -36,11 +36,6 @@
   import Routines from '@/components/Routine/List';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
-  // // TODO: remove this
-  // import { Affiliates } from '@/plugins/firebase';
-  // import ads from '@/config/ads.json';
-  // // TODO: remove this
-
   export default {
     name: 'HomePage',
 
@@ -49,12 +44,6 @@
     components: { Heading, Routines, ConnectivityBar },
 
     mounted() {
-      // // TODO: remove this
-      // ads.forEach(v => {
-      //   Affiliates.add(v);
-      // });
-      // // TODO: remove this      
-
       this.$route.meta.bg = '3';
 
       this.$watch('routines', n => {
