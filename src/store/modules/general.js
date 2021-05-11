@@ -1,10 +1,11 @@
 import Vue from 'vue';
 
-const { func, analytics } = require('@/plugins/firebase');
+const { Affiliates, func, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => ({
   online: navigator.onLine,
   recaptchaScore: null,
+  promos: null,
 });
 
 const state = defaultState();
@@ -12,11 +13,13 @@ const state = defaultState();
 const getters = {
   getOnline: state => state.online,
   getRecaptchaScore: state => state.recaptchaScore,
+  getPromos: state => state.promos,
 };
 
 const mutations = {
   setOnline: (state, payload) => state.online = payload,
   setRecaptchaScore: (state, payload) => state.recaptchaScore = payload,
+  setPromos: (state, payload) => state.promos = payload,
 };
 
 const actions = {
@@ -110,17 +113,21 @@ const actions = {
     });
   },
 
-  // generatePayment({}, payload) {
-  //   return new Promise(async (resolve, reject) => {
-  //     try {
-  //       const { data } = await func.generatePayment(payload);
-  //       if(data.status === 'success') return resolve(data);
-  //       return reject(data);
-  //     } catch (err) {
-  //       return reject(err);
-  //     }
-  //   });
-  // }
+  fetchPromos({ commit }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await Affiliates.onSnapshot(
+          snaps => commit('setPromos', snaps.docs.map(v => ({ id: v.id, ...v.data(), }))),
+          err => console.log('fetchPromos.onSnapshot err:', err)
+        );
+
+        return resolve();
+      } catch (err) {
+        console.log('fetchPromos err:', err);
+        return reject(err);
+      }
+    });
+  }
 };
 
 export default {

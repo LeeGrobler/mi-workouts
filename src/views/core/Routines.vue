@@ -4,6 +4,7 @@
 
     <index :upserting="upserting" />
     
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -13,6 +14,7 @@
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import Index from '@/components/Routine/Index';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -20,7 +22,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, Index, ConnectivityBar },
+    components: { LoginNowBtn, Index, Promo, ConnectivityBar },
 
     props: {
       upserting: { type: Boolean, required: false, default: false },

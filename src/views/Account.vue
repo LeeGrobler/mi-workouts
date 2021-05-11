@@ -11,19 +11,21 @@
       </v-row>
     </v-container>
 
+    <promo />
   </div>
 </template>
 
 <script>
   import PageActions from '@/mixins/page-actions';
   import DangerZone from '@/components/Account/DangerZone';
+  import Promo from '@/components/Layout/Promo';
 
   export default {
     name: 'AccountPage',
 
     mixins: [PageActions],
 
-    components: { DangerZone },
+    components: { Promo, DangerZone },
 
     mounted() {
       this.$route.meta.bg = '8';

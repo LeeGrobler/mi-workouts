@@ -39,6 +39,8 @@
     components: { Dialogue, Tour, Loader, AppDrawer, WorkoutBar, AppFooter, Alert },
 
     async mounted() {
+      this.fetchPromos();
+
       this.monitorConnection();
       await this.checkFbResult();
       this.initAuthWatch();
@@ -57,6 +59,7 @@
 
     methods: {
       ...mapActions({
+        fetchPromos: 'general/fetchPromos',
         initAuthWatch: 'user/initAuthWatch',
         checkFbRedirectResult: 'user/checkFbRedirectResult',
         monitorConnection: 'general/monitorConnection',

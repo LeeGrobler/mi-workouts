@@ -27,6 +27,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -37,16 +38,28 @@
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import Heading from '@/components/Layout/Heading';
   import Routines from '@/components/Routine/List';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
+
+  // // TODO: remove this
+  // import { Affiliates } from '@/plugins/firebase';
+  // import ads from '@/config/ads.json';
+  // // TODO: remove this
 
   export default {
     name: 'HomePage',
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, Heading, Routines, ConnectivityBar },
+    components: { LoginNowBtn, Heading, Routines, Promo, ConnectivityBar },
 
     mounted() {
+      // // TODO: remove this
+      // ads.forEach(v => {
+      //   Affiliates.add(v);
+      // });
+      // // TODO: remove this      
+
       this.$route.meta.bg = '3';
 
       this.$watch('routines', n => {

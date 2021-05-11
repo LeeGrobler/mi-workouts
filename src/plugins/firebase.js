@@ -34,5 +34,6 @@ db.enablePersistence();
 const Payments = db.collection('payments');
 const Exercises = db.collection('exercises');
 const Routines = db.collection('routines');
+const Affiliates = db.collection('affiliates');
 
-export { firebase, analytics, auth, func, db, Exercises, Routines, Payments };
+export { firebase, analytics, auth, func, db, Exercises, Routines, Payments, Affiliates };

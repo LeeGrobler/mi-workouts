@@ -20,6 +20,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -29,6 +30,7 @@
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import Heading from '@/components/Layout/Heading';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -36,7 +38,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, Heading, ConnectivityBar },
+    components: { LoginNowBtn, Heading, Promo, ConnectivityBar },
 
     data: () => ({ status: null }),
 

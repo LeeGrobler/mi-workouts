@@ -11,6 +11,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -19,6 +20,7 @@
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
   import LoginForm from '@/components/SignIn/LoginForm';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -26,7 +28,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginForm, ConnectivityBar },
+    components: { LoginForm, Promo, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '7';

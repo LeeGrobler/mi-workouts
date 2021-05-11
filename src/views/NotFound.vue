@@ -14,6 +14,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -21,6 +22,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -28,7 +30,7 @@
 
     mixins: [PageActions],
 
-    components: { ConnectivityBar },
+    components: { Promo, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '404';

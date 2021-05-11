@@ -14,6 +14,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -23,6 +24,7 @@
   import PageActions from '@/mixins/page-actions';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import ContactForm from '@/components/Contact/ContactForm';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -30,7 +32,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ContactForm, ConnectivityBar },
+    components: { LoginNowBtn, ContactForm, Promo, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '1';

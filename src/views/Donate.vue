@@ -12,6 +12,7 @@
       </v-row>
     </v-container>
 
+    <promo />
     <connectivity-bar />
   </div>
 </template>
@@ -19,6 +20,7 @@
 <script>
   import PageActions from '@/mixins/page-actions';
   import DonateForm from '@/components/Donate/DonateForm';
+  import Promo from '@/components/Layout/Promo';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
   export default {
@@ -26,7 +28,7 @@
 
     mixins: [PageActions],
 
-    components: { DonateForm, ConnectivityBar },
+    components: { DonateForm, Promo, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '6';
