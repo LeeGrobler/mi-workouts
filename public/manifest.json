@@ -8,6 +8,20 @@
   "description": "A to the point app that keeps track of your workout plans.",
   "orientation": "portrait",
   "lang": "en",
+  "categories": ["fitness", "health", "productivity", "sports", "planner", "workout", "gym", "program"],
+  "shortcuts": [{
+    "name": "MiWorkouts | Exercises",
+    "short_name": "Exercises",
+    "description": "View and manage your exercises",
+    "url": "/exercises?utm_source=homescreen",
+    "icons": [{ "src": "./img/icons/android-chrome-192x192.png", "sizes": "192x192" }]
+  }, {
+    "name": "MiWorkouts | Routines",
+    "short_name": "Routines",
+    "description": "View and manage your routines",
+    "url": "/routines?utm_source=homescreen",
+    "icons": [{ "src": "./img/icons/android-chrome-192x192.png", "sizes": "192x192" }]
+  }],
   "icons": [{
     "src": "./img/icons/android-chrome-192x192.png",
     "sizes": "192x192",
@@ -68,6 +82,28 @@
     "type": "image/png"
   }, {
     "src": "./img/icons/safari-pinned-tab.svg",
+    "sizes": "24x24",
     "type": "image/svg"
+  }],
+  "screenshots" : [{
+    "src": "./img/screenshots/ss-1.jpg",
+    "sizes": "800x1460",
+    "type": "image/jpg"
+  }, {
+    "src": "./img/screenshots/ss-2.jpg",
+    "sizes": "800x1460",
+    "type": "image/jpg"
+  }, {
+    "src": "./img/screenshots/ss-3.jpg",
+    "sizes": "800x1460",
+    "type": "image/jpg"
+  }, {
+    "src": "./img/screenshots/ss-4.jpg",
+    "sizes": "800x1460",
+    "type": "image/jpg"
+  }, {
+    "src": "./img/screenshots/ss-5.jpg",
+    "sizes": "800x1460",
+    "type": "image/jpg"
   }]
 }
