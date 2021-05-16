@@ -10,26 +10,22 @@
       <p class="white--text mb-2">Please select an amount to donate</p>
 
       <v-radio-group v-model="form.amount" dark row class="my-0">
-        <v-radio v-for="v in [20, 50, 100]" :key="v" :label="`R ${formatCurrency(v)}`" :value="v" class="my-1" />
+        <v-radio v-for="v in [25, 50, 100]" :key="v" :label="`R ${formatCurrency(v)}`" :value="v" class="my-1" />
         <v-radio label="Other" value="Other" class="my-1" />
       </v-radio-group>
 
-      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model.trim="formattedOther" dense @focus="setOtherCursor" solo
-        ref="otherTxt"
+      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model.trim="formattedOther" solo @focus="setOtherCursor" ref="otherTxt"
+        dense
       />
 
-      <!-- Pay Now button - don't remove this yet -->
-      <!-- <v-btn v-if="!isNaN(paymentAmount)" :loading="loading" :disabled="!valid || loading" type="button" :href="`https://www.payfast.co.za/eng/process?cmd=_paynow&amp;receiver=11190328&amp;item_name=donation&amp;item_description=miworkouts+donation&amp;amount=${paymentAmount}&amp;return_url=https%3A%2F%2Fmi-workouts.com%2Fpayment-complete&amp;cancel_url=https%3A%2F%2Fmi-workouts.com%2Fpayment-complete`">
-        Pay Now
-      </v-btn> -->
-
-      <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button">Proceed</v-btn>
+      <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">Proceed</v-btn>
+      <v-btn :disabled="loading" @click="cancel" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
     </v-form>
   </transition>
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   
   export default {
     name: 'PayfastBtn',
@@ -45,7 +41,7 @@
           v => !isNaN(v.split(',').join('')) || 'Invalid Amount.'
         ]
       },
-      started: true,
+      started: false,
       valid: false,
       form: {
         amount: 50,
@@ -54,24 +50,23 @@
     }),
 
     computed: {
-      ...mapGetters({ user: 'user/getUser' }),
-
       formattedOther: {
         get() { return this.formatCurrency(this.form.other); },
         set(v) { this.form.other = v; },
       },
-
-      paymentAmount() {
-        return this.form.amount === 'Other' ? Number(this.form.other) : this.form.amount;        
-      },
     },
 
     methods: {
-      ...mapActions({ generatePayment: 'general/generatePayment' }),
+      ...mapActions({ submitPayfastDonation: 'general/submitPayfastDonation' }),
 
       start() {
         this.$emit('hideOthers');
         this.started = true;
+      },
+
+      cancel() {
+        this.$emit('showOthers');
+        this.started = false;
       },
 
       setOtherCursor() {
@@ -89,49 +84,8 @@
         
         try {
           if(isNaN(amount)) return this.alert({ color: 'warning', timeout: 10000, text: 'Invalid amount' });
-
           this.$emit('setLoading', 'payfast');
-
-          const paymentData = {
-            merchant_id: process.env.VUE_APP_PAYFAST_MERCHANT_ID,
-            merchant_key: process.env.VUE_APP_PAYFAST_MERCHANT_KEY,
-            return_url: `${process.env.VUE_APP_BASE_URL}/payment-complete`,
-            cancel_url: `${process.env.VUE_APP_BASE_URL}`,
-            notify_url: process.env.VUE_APP_PAYFAST_PROCESS_PAYMENT_URL,
-
-            name_first: this.user?.displayName?.split(' ')[0] || null,
-            name_last: this.user?.displayName?.split(' ')[1] || null,
-            email_address: this.user?.email || null,
-
-            m_payment_id: null,
-            amount: amount.toString(),
-            item_name: 'MiWorkouts Donation',
-          }
-
-          const token = await this.$recaptcha('generate_payment');
-          const payment = await this.generatePayment({ ...paymentData, token });
-
-          paymentData.m_payment_id = payment.response?.m_payment_id;
-          paymentData.signature = payment.response?.hash;
-          paymentData.return_url += `?id=${payment.response?.m_payment_id}`;
-
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = `${process.env.VUE_APP_PAYFAST_URL}/eng/process`;
-
-          Object.keys(paymentData).forEach(v => {
-            const input = document.createElement('input');
-            input.name = v;
-            input.value = paymentData[v];
-            input.type = 'hidden';
-
-            form.appendChild(input);
-          });
-
-          document.body.appendChild(form);
-          form.submit();
-          document.body.removeChild(form);
-
+          await this.submitPayfastDonation({ amount });
           this.$emit('setLoading', null);
         } catch (err) {
           this.$emit('setLoading', null);

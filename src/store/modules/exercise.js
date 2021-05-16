@@ -61,9 +61,7 @@ const actions = {
               loading: false,
             }));
             commit('setExercises', exercises.sort((a, b) => a.name > b.name ? 1 : -1));
-          }, err => {
-            console.log('fetchExercises.onSnapshot err:', err);
-          });
+          }, err => console.log('fetchExercises.onSnapshot err:', err));
 
           commit('addSnaps', { exercise: exerciseSnapshot });
           return resolve();

@@ -1,11 +1,9 @@
 <template>
-  <div class="comp-root text-center">
+  <div class="comp-root">
     <slot name="headline"></slot>
 
-    <v-divider dark class="mt-5 mb-8" />
-
     <!--  as you accumulate payment methods, add them to hidden[] (all execpt the one calling hideOthers()), then you have to v-if each method and hide them if they're in hidden[] -->
-    <payfast v-if="!hidden.includes('payfast')" :loading="loading === 'payfast'" @setLoading="loading = arguments[0]" @hideOthers="hidden = []" />
+    <payfast v-if="!hidden.includes('payfast')" :loading="loading === 'payfast'" @setLoading="loading = arguments[0]" @hideOthers="hidden = []" @showOthers="hidden = []" class="mt-16" />
   </div>
 </template>
 

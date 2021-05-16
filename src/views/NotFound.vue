@@ -1,5 +1,5 @@
 <template>
-  <div class="page-root white--text" :class="{ 'bar-padding': !online }">
+  <div class="page-root white--text">
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">

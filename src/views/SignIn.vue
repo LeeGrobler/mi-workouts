@@ -1,11 +1,11 @@
 <template>
-  <div class="page-root" :class="{ 'bar-padding': !online }">
+  <div class="page-root">
     
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
           <login-form>
-            <p slot="headline" class="white--text text-h6 font-weight-regular ma-0">Access your workouts from any device.</p>
+            <p slot="headline" class="white--text text-h6 font-weight-regular ma-0 text-center">Access your workouts from any device.</p>
           </login-form>
         </v-col>
       </v-row>

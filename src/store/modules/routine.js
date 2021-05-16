@@ -62,9 +62,7 @@ const actions = {
               expanded: false,
             }));
             commit('setRoutines', routines.sort((a, b) => a.order > b.order ? 1 : -1));
-          }, err => {
-            console.log('fetchRoutines.onSnapshot err:', err);
-          });
+          }, err => console.log('fetchRoutines.onSnapshot err:', err));
 
           commit('addSnaps', { routine: routineSnapshot });
           return resolve();

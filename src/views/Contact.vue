@@ -1,12 +1,12 @@
 <template>
-  <div class="page-root" :class="{ 'bar-padding': !online }">
-    <login-now-btn />
-
+  <div class="page-root">
     <v-container>
       <v-row>
         <v-col cols="12" xs="12" md="6" offset-md="3" lg="4" offset-lg="4">
           <contact-form>
-            <p class="white--text">Have any comments, critiques or suggestions? Here's where you can let us know about it.</p>
+            <p slot="headline" class="white--text text-h6 font-weight-regular ma-0 text-center">
+              Have any comments, critiques or suggestions? Here's where you can let us know about it.
+            </p>
           </contact-form>
         </v-col>
       </v-row>
@@ -19,7 +19,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import PageActions from '@/mixins/page-actions';
-  import LoginNowBtn from '@/components/Layout/LoginNowBtn';
   import ContactForm from '@/components/Contact/ContactForm';
   import ConnectivityBar from '@/components/Layout/ConnectivityBar';
 
@@ -28,7 +27,7 @@
 
     mixins: [PageActions],
 
-    components: { LoginNowBtn, ContactForm, ConnectivityBar },
+    components: { ContactForm, ConnectivityBar },
 
     mounted() {
       this.$route.meta.bg = '1';

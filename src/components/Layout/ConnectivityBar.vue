@@ -1,4 +1,8 @@
 <template>
+  <!--
+    when you move this to App.vue, it throws some `getBoundingClientRect` error when toggling online/offline, so i'm leaving it here for now
+    but if you ever feel up to the challange, please get it working in App.vue so we can try to remove these "global" components from the pages
+  -->
   <transition name="slide-fade" mode="out-in">
     <v-system-bar v-if="footer && !online" :class="`${position}-bottom`" :style="{ 'bottom': position === 'fixed' ? 0 : `${footer.height}px` }" class="full-width" ref="comp-root" dark
       color="warning"

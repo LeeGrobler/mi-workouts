@@ -28,7 +28,7 @@ module.exports = {
         if(!data.success) return reject({ message: 'Recaptcha response not valid' });
         return resolve(data);
       } catch(err) {
-        functions.logger.error('verifyCaptcha err:', err);
+        console.log('verifyCaptcha err:', err);
         return reject({ message: err.response ? err.response.data : err.message });
       }
     });
@@ -46,7 +46,7 @@ module.exports = {
 
         return resolve(res);
       } catch (err) {
-        functions.logger.error('createContact err:', err);
+        console.log('createContact err:', err);
         return reject(err);
       }
     });
@@ -66,7 +66,7 @@ module.exports = {
 
         return resolve(res);
       } catch (err) {
-        functions.logger.error('createPayment err:', err);
+        console.log('createPayment err:', err);
         return reject(err);
       }
     });
@@ -93,7 +93,7 @@ module.exports = {
           hash: md5(output).toString()
         });
       } catch (err) {
-        functions.logger.error('generatePaymentSignature err:', err);
+        console.log('generatePaymentSignature err:', err);
         return reject(err);
       }
     });
@@ -143,7 +143,7 @@ module.exports = {
         const pfResult = await axios
         .post(`${functions.config().payfast.url}/eng/query/validate`, sig.output)
         .then(res => res.data).catch(err => {
-          functions.logger.error('pfResult err:', err);
+          console.log('pfResult err:', err);
           return 'error';
         });
 
@@ -152,11 +152,28 @@ module.exports = {
           return resolve({ code: 400, status: 'failed', message: 'confirmation unobtainable' });
         }
 
+        // if payment successful, add it to user_profile.donations
+        const status = req.body.payment_status.toLowerCase();
+        if(status === 'complete') {
+          try {
+            await admin.firestore().collection('user_profiles').doc(payment.data().user).set({
+              donations: admin.firestore.FieldValue.arrayUnion({
+                payment: payment.id,
+                amount: payment.data().amount,
+                payment_date: admin.firestore.Timestamp.fromDate(new moment().toDate()),
+                expiry_date: admin.firestore.Timestamp.fromDate(new moment().add(1, 'M').toDate()),
+              })
+            }, { merge: true });
+          } catch(err) {
+            console.log('getProfile err:', err);
+          }
+        }
+
         // payment complete - update and return
-        await module.exports.updatePayment(payment, req.body.payment_status.toLowerCase(), req.body);
+        await module.exports.updatePayment(payment, status, req.body);
         return resolve({ code: 200, status: 'success' });
       } catch (err) {
-        functions.logger.error('completePayment err:', err);
+        console.log('completePayment err:', err);
         return reject(err);
       }
     });
@@ -176,7 +193,7 @@ module.exports = {
 
         return resolve();
       } catch(err) {
-        functions.logger.error('updatePayment err:', err);
+        console.log('updatePayment err:', err);
         return reject(err);
       }
     });
@@ -190,7 +207,7 @@ module.exports = {
           return resolve(addr.map(v => v.address))
         });
       } catch(err) {
-        functions.logger.error('ipLookup err:', err);
+        console.log('ipLookup err:', err);
         return reject(err);
       }
     });
@@ -202,7 +219,7 @@ module.exports = {
         const res = await admin.firestore().collection('support_contacts').where("active", "==", true).get();
         return resolve([...new Set([functions.config().app.support_email, ...res.docs.map(v => v.data().email)])]);
       } catch(err) {
-        functions.logger.error('getSupportAddresses err:', err);
+        console.log('getSupportAddresses err:', err);
         return reject(err);
       }
     });
@@ -222,7 +239,7 @@ module.exports = {
           return resolve({ subject, html });
         } else return reject({ message: 'Email template not found.' });
       } catch (err) {
-        functions.logger.error('compileHtml err:', err);
+        console.log('compileHtml err:', err);
         return reject({ message: err.message });
       }
     });
@@ -236,4 +253,42 @@ module.exports = {
       });
     });
   },
+
+  completeAccountMerge: async (req, user) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const requestRef = admin.firestore().collection('merge_requests').doc(req);
+        const request = await requestRef.get();
+        if(!request.exists) return reject({ message: 'request not found' });
+  
+        const batch = admin.firestore().batch();
+        const collectionsToMerge = ['payments', 'contacts', 'routines', 'exercises']; // Add any future user data collections to be merged to this array
+        const collectionsToDelete = ['user_profiles']; // Add any future user data collections to be delete this array
+  
+        for(let v1 of collectionsToMerge) {
+          const ref = admin.firestore().collection(v1);
+          const documents = await ref.where('user', '==', request.data().fromId).get();
+          documents.forEach(v => {
+            const update = { user, date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate()) };
+            if(!v.data().date_updated) delete update.date_updated;
+            batch.update(ref.doc(v.id), update);
+          });
+        }
+
+        for(let v1 of collectionsToDelete) {
+          const ref = admin.firestore().collection(v1);
+          const documents = await ref.where('user', '==', request.data().fromId).get();
+          documents.forEach(v => batch.delete(ref.doc(v.id)));
+        }
+        
+        await batch.commit();
+        await admin.auth().deleteUser(request.data().fromId);
+        requestRef.delete();
+        return resolve();
+      } catch (err) {
+        console.log('completeAccountMerge err:', err);
+        return reject({ message: err.message });
+      }
+    });
+  },  
 }
