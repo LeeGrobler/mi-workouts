@@ -152,8 +152,25 @@ module.exports = {
           return resolve({ code: 400, status: 'failed', message: 'confirmation unobtainable' });
         }
 
+        // if payment successful, add it to user_profile.donations
+        const status = req.body.payment_status.toLowerCase();
+        if(status === 'complete') {
+          try {
+            await admin.firestore().collection('user_profiles').doc(payment.data().user).set({
+              donations: admin.firestore.FieldValue.arrayUnion({
+                payment: payment.id,
+                amount: payment.data().amount,
+                payment_date: admin.firestore.Timestamp.fromDate(new moment().toDate()),
+                expiry_date: admin.firestore.Timestamp.fromDate(new moment().add(1, 'M').toDate()),
+              })
+            }, { merge: true });
+          } catch(err) {
+            console.log('getProfile err:', err);
+          }
+        }
+
         // payment complete - update and return
-        await module.exports.updatePayment(payment, req.body.payment_status.toLowerCase(), req.body);
+        await module.exports.updatePayment(payment, status, req.body);
         return resolve({ code: 200, status: 'success' });
       } catch (err) {
         console.log('completePayment err:', err);
@@ -245,22 +262,25 @@ module.exports = {
         if(!request.exists) return reject({ message: 'request not found' });
   
         const batch = admin.firestore().batch();
-        const collections = ['payments', 'contacts', 'routines', 'exercises']; // Add any future user data collections to this array
+        const collectionsToMerge = ['payments', 'contacts', 'routines', 'exercises']; // Add any future user data collections to be merged to this array
+        const collectionsToDelete = ['user_profiles']; // Add any future user data collections to be delete this array
   
-        for(let i = 0; i < collections.length; i++) {
-          const ref = admin.firestore().collection(collections[i]);
-          const collection = await ref.where('user', '==', request.data().fromId).get();
-          collection.forEach(v => {
-            const update = {
-              user,
-              date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate())
-            };
-
+        for(let v1 of collectionsToMerge) {
+          const ref = admin.firestore().collection(v1);
+          const documents = await ref.where('user', '==', request.data().fromId).get();
+          documents.forEach(v => {
+            const update = { user, date_updated: admin.firestore.Timestamp.fromDate(new moment().toDate()) };
             if(!v.data().date_updated) delete update.date_updated;
             batch.update(ref.doc(v.id), update);
           });
         }
-  
+
+        for(let v1 of collectionsToDelete) {
+          const ref = admin.firestore().collection(v1);
+          const documents = await ref.where('user', '==', request.data().fromId).get();
+          documents.forEach(v => batch.delete(ref.doc(v.id)));
+        }
+        
         await batch.commit();
         await admin.auth().deleteUser(request.data().fromId);
         requestRef.delete();

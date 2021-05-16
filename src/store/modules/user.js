@@ -1,9 +1,10 @@
 import Vue from 'vue';
-import _ from 'lodash';
-const { auth, func, analytics } = require('@/plugins/firebase');
+import moment from 'moment';
+const { auth, func, analytics, UserProfiles } = require('@/plugins/firebase');
 
 const defaultState = () => ({
   user: null,
+  profile: null,
   snaps: {},
 });
 
@@ -11,11 +12,17 @@ const state = defaultState();
 
 const getters = {
   getUser: state => state.user,
+  getProfile: state => state.profile,
   getSnaps: state => state.snaps,
+  getShowPromos: state => {
+    if(state.profile?.hide_ads) return false;
+    return state.profile.donations.reduce((s, v) => v.expiry_date.toDate() >= new moment() ? s + v.amount : s + 0, 0) < 25;
+  },
 };
 
 const mutations = {
   setUser: (state, payload) => state.user = payload,
+  setUserProfile: (state, payload) => state.profile = payload,
   setSnaps: (state, payload) => state.snaps = payload,
   addSnaps: (state, payload) => state.snaps = {
     ...state.snaps,
@@ -128,6 +135,7 @@ const actions = {
             });
 
             analytics.setUserProperties({ user_id: user.uid });
+            dispatch('fetchProfile');
             dispatch('exercise/fetchExercises', null, { root: true });
             dispatch('routine/fetchRoutines', null, { root: true });
           }
@@ -152,6 +160,7 @@ const actions = {
         await dispatch('unsubscribeFromSnapshots');
         await dispatch('exercise/unsubscribeFromSnapshots', null, { root: true });
         await dispatch('routine/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('general/unsubscribeFromSnapshots', null, { root: true });
         await auth().signOut();
         commit('setUser', null);
 
@@ -204,7 +213,8 @@ const actions = {
   loginAnon({}) { // anonymous login
     return new Promise(async (resolve, reject) => {
       try {
-        await auth().signInAnonymously();
+        const { user } = await auth().signInAnonymously();
+        UserProfiles.doc(user?.uid).set({ donations: [] });
         analytics.logEvent('sign_in', { provider: 'anonymous' });
         return resolve();
       } catch (err) {
@@ -263,11 +273,12 @@ const actions = {
       try {
         analytics.logEvent('delete_account');
 
-        await dispatch('exercise/batchDeleteAllExercises', null, { root: true })
-        await dispatch('routine/batchDeleteAllRoutines', null, { root: true })
-        await dispatch('unsubscribeFromSnapshots');
         await dispatch('exercise/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('exercise/batchDeleteAllExercises', null, { root: true });
         await dispatch('routine/unsubscribeFromSnapshots', null, { root: true });
+        await dispatch('routine/batchDeleteAllRoutines', null, { root: true });
+        await dispatch('unsubscribeFromSnapshots');
+        await dispatch('deleteProfile');
         await auth().currentUser.delete();
 
         commit('setUser', null);
@@ -275,6 +286,39 @@ const actions = {
       } catch (err) {
         // TODO: if(err.code === 'auth/requires-recent-login') -> handle it the same as in checkFbRedirectResult's second catch handler where you ask the user to reauth and then auto delete it when he gets back to the app
         console.log('deleteAccount err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  fetchProfile({ getters, commit }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if(getters.getSnaps.profile) dispatch('unsubscribeFromSnapshot', 'profile');
+
+        // this piece of shit throws `FirebaseError: Missing or insufficient permissions.` when just creating the profile, every time after that it seems to work fine.
+        // if you wanna take a stab at fixing it though, please do.
+        const profileSnapshot = await UserProfiles.doc(getters.getUser.uid).onSnapshot(
+          doc => commit('setUserProfile', { id: doc.id, ...doc.data() }),
+          err => console.log('fetchUserProfile.onSnapshot err:', err)
+        );
+
+        commit('addSnaps', { profile: profileSnapshot });
+        return resolve();
+      } catch (err) {
+        console.log('fetchProfile err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  deleteProfile({ getters }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await UserProfiles.doc(getters.getProfile.id).delete();
+        return resolve();
+      } catch (err) {
+        console.log('deleteProfile err:', err);
         return reject(err);
       }
     });

@@ -154,18 +154,30 @@ exports.dailyTasks = functions
       return s;
     }, []);
 
-    console.log('deleting accounts:', accounts.map(v => v.uid));
+    console.log('deleting accounts:', accounts);
     await admin.auth().deleteUsers(accounts);
 
-    // delete straggler merge request and expire payments
-
-    const requestRef = admin.firestore().collection('merge_requests');
-    const requests = await requestRef.where('date_created', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).get();
-
-    const paymentRef = admin.firestore().collection('payments');
-    const payments = await paymentRef.where('date_updated', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).where('status', '==', 'created').get();
+    // delete straggler merge_requests, payments, exercises, routines and user_profiles
 
     const batch = admin.firestore().batch();
+    const requestRef = admin.firestore().collection('merge_requests');
+    const paymentRef = admin.firestore().collection('payments');
+    const exerciseRef = admin.firestore().collection('exercises');
+    const routineRef = admin.firestore().collection('routines');
+    const profileRef = admin.firestore().collection('user_profiles');
+
+    for(let v1 of accounts) {
+      const exercises = await exerciseRef.where('user', '==', v1).get();
+      const routines = await routineRef.where('user', '==', v1).get();
+      const profiles = await profileRef.where('user', '==', v1).get();
+      exercises.forEach(v2 => batch.delete(exerciseRef.doc(v2.id)));
+      routines.forEach(v2 => batch.delete(routineRef.doc(v2.id)));
+      profiles.forEach(v2 => batch.delete(profileRef.doc(v2.id)));
+    }
+
+    const requests = await requestRef.where('date_created', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).get();
+    const payments = await paymentRef.where('date_updated', '<', admin.firestore.Timestamp.fromDate(new moment().subtract(1, 'hours').toDate())).where('status', '==', 'created').get();
+
     requests.forEach(v => batch.delete(requestRef.doc(v.id)));
     payments.forEach(v => batch.update(paymentRef.doc(v.id), {
       status: 'expired',

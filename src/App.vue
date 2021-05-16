@@ -12,7 +12,7 @@
         <router-view key="router-view" :style="{ 'padding-bottom': bottomPadding }" />
       </transition-group>
 
-      <promo v-if="$route.meta.showPromo" />
+      <promo v-if="$route.meta.showPromo && showPromos" />
       <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />
     </v-main>
@@ -58,6 +58,7 @@
         online: 'general/getOnline',
         exercises: 'exercise/getExercises',
         routines: 'routine/getRoutines',
+        showPromos: 'user/getShowPromos',
       }),
 
       bottomPadding() {

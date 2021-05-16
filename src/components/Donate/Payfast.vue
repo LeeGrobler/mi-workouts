@@ -10,12 +10,12 @@
       <p class="white--text mb-2">Please select an amount to donate</p>
 
       <v-radio-group v-model="form.amount" dark row class="my-0">
-        <v-radio v-for="v in [20, 50, 100]" :key="v" :label="`R ${formatCurrency(v)}`" :value="v" class="my-1" />
+        <v-radio v-for="v in [25, 50, 100]" :key="v" :label="`R ${formatCurrency(v)}`" :value="v" class="my-1" />
         <v-radio label="Other" value="Other" class="my-1" />
       </v-radio-group>
 
-      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model.trim="formattedOther" dense solo
-        @focus="setOtherCursor" ref="otherTxt"
+      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model.trim="formattedOther" solo @focus="setOtherCursor" ref="otherTxt"
+        dense
       />
 
       <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">Proceed</v-btn>

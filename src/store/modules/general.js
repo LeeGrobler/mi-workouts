@@ -3,6 +3,7 @@ import Vue from 'vue';
 const { Affiliates, func, analytics } = require('@/plugins/firebase');
 
 const defaultState = () => ({
+  snaps: {},
   online: navigator.onLine,
   recaptchaScore: null,
   promos: null,
@@ -14,12 +15,15 @@ const getters = {
   getOnline: state => state.online,
   getRecaptchaScore: state => state.recaptchaScore,
   getPromos: state => state.promos,
+  getSnaps: state => state.snaps,
 };
 
 const mutations = {
   setOnline: (state, payload) => state.online = payload,
   setRecaptchaScore: (state, payload) => state.recaptchaScore = payload,
   setPromos: (state, payload) => state.promos = payload,
+  setSnaps: (state, payload) => state.snaps = payload,
+  addSnaps: (state, payload) => state.snaps = { ...state.snaps, ...payload },
 };
 
 const actions = {
@@ -116,18 +120,54 @@ const actions = {
   fetchPromos({ commit }) {
     return new Promise(async (resolve, reject) => {
       try {
-        await Affiliates.onSnapshot(
+        if(getters.getSnaps.promo) dispatch('unsubscribeFromSnapshot', 'promo');
+
+        const promoSnapshot = await Affiliates.onSnapshot(
           snaps => commit('setPromos', snaps.docs.map(v => ({ id: v.id, ...v.data(), }))),
           err => console.log('fetchPromos.onSnapshot err:', err)
         );
 
+        commit('addSnaps', { promo: promoSnapshot });
         return resolve();
       } catch (err) {
         console.log('fetchPromos err:', err);
         return reject(err);
       }
     });
-  }
+  },
+
+  unsubscribeFromSnapshots({ getters, commit }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const snaps = getters.getSnaps;
+        Object.keys(snaps).forEach(v => snaps[v]());
+
+        commit('setSnaps', {});
+        return resolve();
+      } catch (err) {
+        console.log('unsubscribeFromSnapshots err:', err);
+        return reject(err);
+      }
+    });
+  },
+
+  unsubscribeFromSnapshot({ getters, commit }, payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if(getters.getSnaps[payload]) {
+          getters.getSnaps[payload]();
+          const snaps = {};
+          Object.keys(getters.getSnaps).forEach(v => {
+            if(v !== payload) snaps[v] = getters.getSnaps[v];
+          });
+          commit('addSnaps', snaps);
+        }
+        return resolve();
+      } catch (err) {
+        return reject(err);
+      }
+    });
+  },
 };
 
 export default {
