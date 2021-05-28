@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mi_workouts.twa",
+      "sha256_cert_fingerprints": [
+        "20:01:98:E5:D0:1A:87:5D:58:48:19:D5:55:20:55:93:16:8B:61:82:24:77:15:2A:8C:3A:87:25:DA:23:42:D0"
+      ]
+    }
+  }
+]
