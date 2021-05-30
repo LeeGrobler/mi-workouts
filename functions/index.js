@@ -29,7 +29,7 @@ exports.contact = functions.region('europe-west2').https.onCall(async ({ name, e
 
       // sends emails to support
       const adminEmail = await compileHtml('contact_admin', { name, ref, email, message, appName: functions.config().app.name });
-      await Promise.all(supportAddresses.map(v => sendEmail({ from: 'noreply@codename-interns.com', to: v, subject: adminEmail.subject, html: adminEmail.html })));
+      await Promise.all(supportAddresses.map(v => sendEmail({ from: 'noreply@mi-workouts.com', to: v, subject: adminEmail.subject, html: adminEmail.html })));
 
       // sends email to client
       const clientEmail = await compileHtml('contact_client', { name, ref, appName: functions.config().app.name });
