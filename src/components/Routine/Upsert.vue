@@ -10,8 +10,8 @@
 
     <v-row> <!-- Exercises -->
       <v-col cols="12" class="py-0">
-        <v-select :disabled="loading" label="Exercises" v-model="form.exercises" solo dense multiple chips small-chips append-outer-icon="mdi-plus" :items="getExercises" item-value="id"
-          @click:append-outer="createExercise" item-text="name"
+        <v-select :disabled="loading" label="Exercises" v-model="form.exercises" solo dense multiple chips small-chips :append-outer-icon="action === 'create' ? 'mdi-plus' : ''"
+          :items="getExercises" item-value="id" @click:append-outer="createExercise" item-text="name"
         />
       </v-col>
     </v-row>
@@ -23,7 +23,7 @@
     </v-row>
 
     <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">{{ action === 'edit' ? 'Update' : 'Create' }}</v-btn>
-    <v-btn :disabled="loading" to="/routines" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
+    <v-btn :disabled="loading" @click="$router.back()" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
   </v-form>
 </template>
 
@@ -48,7 +48,7 @@
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
-          callback: () => this.$router.push('/routines'),
+          callback: () => this.$router.back(),
           text: 'Cancel'
         }]
       };
@@ -82,7 +82,6 @@
       ...mapActions({
         upsertRoutine: 'routine/upsertRoutine',
         storeProgress: 'routine/storeProgress',
-        setReturnTo: 'exercise/setReturnTo',
       }),
 
       defaultForm() {
@@ -95,7 +94,6 @@
 
       createExercise() {
         this.storeProgress(this.form);
-        this.setReturnTo('/routines/create');
         return this.$router.push('/exercises/create');
       },
       
@@ -118,7 +116,11 @@
           this.$refs.form.resetValidation();
           this.alert({ color: 'success', timeout: 10000, text: `${this.form.name} successfully ${this.action === 'edit' ? 'updated' : 'added'}` });
           this.form = this.defaultForm();
-          this.$router.push('/routines');
+
+          // if you're coming from /exercises/edit|create, return to /routines, else go back()
+          if(new RegExp(/\/exercises\/[a-z]+/g).test(this.$router.from)) {
+            this.$router.push(`/routines`);
+          } else this.$router.back();
         } catch (err) {
           console.log('routine submit err:', err);
           this.alert({ color: 'error', timeout: 10000, text: err.message });

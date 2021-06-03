@@ -34,7 +34,7 @@
       startDelete() {
         this.dialogue({
           color: 'error',
-          title: `Delete Exercise`,
+          title: `Delete Account`,
           text: `
             <p>Although we are very sad to see you go, we hope you achieve your fitness goals in whichever way feels most comfortable to you.</p>
             <p>This will remove your user account from our systems and delete all the data you created including all your Exercises and Routines.</p>

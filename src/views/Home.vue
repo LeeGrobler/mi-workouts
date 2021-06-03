@@ -15,9 +15,9 @@
               Create Your First Routine
             </v-btn>
 
-            <template v-else>
-              <heading key="rtListHeading" v-if="routines && routines.length > 0" text="Routines" role="section" />
-              <routines key="rtList" class="mt-3" />
+            <template v-if="showRoutines">
+              <heading key="rtListHeading" text="Routines" role="section" />
+              <routines key="rtList" class="mt-3" :favesOnly="faveRoutines.length > 0" />
             </template>
     
           </transition-group>
@@ -65,6 +65,17 @@
       },
       showRoutineBtn() {
         return this.routines?.length === 0 && this.exercises?.length > 0;
+      },
+
+      faveRoutines() {
+        return this.routines?.filter(v => v.favorite) || [];
+      },
+      hasFaveRoutines() {
+        return this.faveRoutines.length > 0;
+      },
+
+      showRoutines() {
+        return this.hasFaveRoutines || (this.routines?.length > 0 && this.faveRoutines?.length === 0);
       },
     },
   }

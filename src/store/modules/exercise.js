@@ -4,7 +4,6 @@ const defaultState = () => {
   return {
     snaps: {},
     exercises: null,
-    returnTo: null,
   };
 };
 
@@ -13,7 +12,6 @@ const state = defaultState();
 const getters = {
   getSnaps: state => state.snaps,
   getExercises: state => state.exercises,
-  getReturnTo: state => state.returnTo,
 };
 
 const mutations = {
@@ -23,14 +21,9 @@ const mutations = {
     ...payload
   },
   setExercises: (state, payload) => state.exercises = payload,
-  setReturnTo: (state, payload) => state.returnTo = payload,
 };
 
 const actions = {
-  setReturnTo({ commit }, payload) {
-    commit('setReturnTo', payload);
-  },
-
   fetchUserExercises({}, payload) {
     return new Promise(async (resolve, reject) => {
       try {
