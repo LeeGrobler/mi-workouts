@@ -49,7 +49,7 @@
     <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary" class="v-step-2">
       {{ action === 'edit' ? 'Update' : 'Create' }}
     </v-btn>
-    <v-btn :disabled="loading" :to="returnTo || '/exercises'" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
+    <v-btn :disabled="loading" @click="$router.back()" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
   </v-form>
 </template>
 
@@ -76,9 +76,7 @@
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
-          callback: () => {
-            return this.$router.push(this.returnTo || '/exercises');
-          },
+          callback: () => this.$router.back(),
           text: 'Cancel'
         }],
       };
@@ -97,10 +95,7 @@
     },
 
     computed: {
-      ...mapGetters({
-        returnTo: 'exercise/getReturnTo',
-        exercises: 'exercise/getExercises',
-      }),
+      ...mapGetters({ exercises: 'exercise/getExercises' }),
 
       unitTypeItems() {
         return this.units.find(v => v.category === this.form.unitType).items;
@@ -136,7 +131,11 @@
           this.$refs.form.resetValidation();
           this.alert({ color: 'success', timeout: 10000, text: `${this.form.name} successfully ${this.action === 'edit' ? 'updated' : 'added'}` });
           this.form = this.defaultForm();
-          this.$router.push(this.returnTo ? `${this.returnTo}/${exercise}` : '/exercises');
+
+          // if you're coming from /routines/edit|create, return to /routines/edit|create/exercise_id, else go back()
+          if(exercise && new RegExp(/\/routines\/[a-z]+/g).test(this.$router.from)) {
+            this.$router.push(`${this.$router.from}/${exercise}`);
+          } else this.$router.back();
         } catch (err) {
           console.log('exercise submit err:', err);
           this.alert({ color: 'error', timeout: 10000, text: err.message });

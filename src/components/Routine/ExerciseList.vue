@@ -75,11 +75,9 @@
       ...mapActions({
         setEdit: 'exercise/setEdit',
         delete: 'exercise/deleteExercise',
-        setReturnTo: 'exercise/setReturnTo',
       }),
 
       edit(id) {
-        this.setReturnTo('/routines');
         return this.$router.push(`/exercises/edit/${id}`);
       },
 

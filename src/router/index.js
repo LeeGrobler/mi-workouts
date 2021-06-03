@@ -38,7 +38,7 @@ Vue.use(VueRouter);
 
 const routes = [
   // drawer
-  { path: '/',          name: 'Home',      icon: 'mdi-home',             component: Home,      meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', showPromo: true, loginBtn: true } },
+  { path: '/',          name: 'Home',      icon: 'mdi-home',             component: Home,      meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', showPromo: true, loginBtn: true, workoutsBar: true } },
   { path: '/exercises', name: 'Exercises', icon: 'mdi-dumbbell',         component: Exercises, meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', showPromo: true, loginBtn: true, workoutsBar: true } },
   { path: '/routines',  name: 'Routines',  icon: 'mdi-arm-flex-outline', component: Routines,  meta: { auth: 'Y', anon: 'E', online: 'E', navbar: 'T', showPromo: true, loginBtn: true, workoutsBar: true } },
   { path: '/sign-in',   name: 'Sign In',   icon: 'mdi-login-variant',    component: SignIn,    meta: { auth: 'E', anon: 'Y', online: 'Y', navbar: 'T', showPromo: true } },
@@ -64,12 +64,52 @@ const router = new VueRouter({
   routes
 });
 
+router.from = null;
+
 router.beforeEach(async (to, from, next) => {
   if(to.name === 'Logout') return store.dispatch('user/logout');
 
   analytics.logEvent('page_view', { type: 'internal' });
 
+  router.from = from.path;
+
   return next();
 });
 
 export default router;
+
+// // router.navigator = [];
+
+// // router.navigator = {
+// //   history: [],
+// //   back: () => {
+// //     console.log('router:', router);
+// //     router.back();
+
+// //     // console.log('router:', router);
+// //     // // if(router.history[0] === )
+// //     // router.push(router.navigator.history[0]);
+// //     // router.navigator.history.shift();
+// //   }
+// // };
+
+// router.beforeEach(async (to, from, next) => {
+//   if(to.name === 'Logout') return store.dispatch('user/logout');
+
+//   analytics.logEvent('page_view', { type: 'internal' });
+
+//   // if(new RegExp(/\/[a-z]+\/:action\/:id\?/g).test(to.matched[0].path)) to.meta.from = from.path;
+
+//   // router.navigator.history.unshift(from.path);
+//   // if(router.navigator.history.length > 3) router.navigator.history.pop();
+//   // console.log('history:', router.navigator.history);
+
+//   return next();
+// });
+
+// // router.afterEach(async (to, from, next) => {
+// //   router.navigator.history.unshift(to.path);
+// //   if(router.navigator.history.length > 3) router.navigator.history.pop();
+// // });
+
+// export default router;
