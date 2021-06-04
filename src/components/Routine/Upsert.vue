@@ -4,7 +4,7 @@
 
     <v-row> <!-- Name -->
       <v-col cols="12" class="py-0">
-        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model.trim="form.name" required solo dense />
+        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model="form.name" required solo dense />
       </v-col>
     </v-row>
 
@@ -18,7 +18,7 @@
 
     <v-row> <!-- Notes -->
       <v-col cols="12" class="py-0">
-        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model.trim="form.notes" solo dense rows="2" no-resize />
+        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model="form.notes" solo dense rows="2" no-resize />
       </v-col>
     </v-row>
 
@@ -112,7 +112,7 @@
             }
           }
 
-          await this.upsertRoutine(this.form);
+          await this.upsertRoutine(this.trimObject(this.form));
           this.$refs.form.resetValidation();
           this.alert({ color: 'success', timeout: 10000, text: `${this.form.name} successfully ${this.action === 'edit' ? 'updated' : 'added'}` });
           this.form = this.defaultForm();

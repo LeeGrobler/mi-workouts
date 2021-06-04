@@ -4,17 +4,17 @@
 
     <v-row>
       <v-col cols="12" class="py-0"> <!-- Name -->
-        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model.trim="form.name" required solo dense />
+        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model="form.name" required solo dense />
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="6" class="py-0 pr-1"> <!-- Sets -->
-        <v-text-field :disabled="loading" label="Sets" v-model.trim="form.sets" solo dense />
+        <v-text-field :disabled="loading" label="Sets" v-model="form.sets" solo dense />
       </v-col>
 
       <v-col cols="6" class="py-0 pl-1"> <!-- Reps -->
-        <v-text-field :disabled="loading" label="Reps" v-model.trim="form.reps" solo dense />
+        <v-text-field :disabled="loading" label="Reps" v-model="form.reps" solo dense />
       </v-col>
     </v-row>
 
@@ -24,7 +24,7 @@
       </v-col>
 
       <v-col cols="4" class="py-0 px-1"> <!-- Amount -->
-        <v-text-field :disabled="loading" label="Amount" v-model.trim="form.amount" solo dense />
+        <v-text-field :disabled="loading" label="Amount" v-model="form.amount" solo dense />
       </v-col>
 
       <v-col cols="4" class="py-0 pl-1"> <!-- Unit -->
@@ -36,13 +36,13 @@
 
     <v-row>
       <v-col cols="12" class="py-0"> <!-- Tutorial Link -->
-        <v-text-field :disabled="loading" label="Tutorial Link" v-model.trim="form.link" solo dense />
+        <v-text-field :disabled="loading" label="Tutorial Link" v-model="form.link" solo dense />
       </v-col>
     </v-row>
 
     <v-row>
       <v-col cols="12" class="py-0"> <!-- Description / Notes -->
-        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model.trim="form.notes" solo dense rows="2" no-resize />
+        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model="form.notes" solo dense rows="2" no-resize />
       </v-col>
     </v-row>
 
@@ -126,7 +126,7 @@
           this.form.unit = typeof this.form.unit === 'object' ? this.form.unit.symbol : this.form.unit;
 
           this.loading = true;
-          const exercise = await this.upsertExercise(this.form);
+          const exercise = await this.upsertExercise(this.trimObject(this.form));
 
           this.$refs.form.resetValidation();
           this.alert({ color: 'success', timeout: 10000, text: `${this.form.name} successfully ${this.action === 'edit' ? 'updated' : 'added'}` });
