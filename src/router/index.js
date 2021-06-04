@@ -77,39 +77,3 @@ router.beforeEach(async (to, from, next) => {
 });
 
 export default router;
-
-// // router.navigator = [];
-
-// // router.navigator = {
-// //   history: [],
-// //   back: () => {
-// //     console.log('router:', router);
-// //     router.back();
-
-// //     // console.log('router:', router);
-// //     // // if(router.history[0] === )
-// //     // router.push(router.navigator.history[0]);
-// //     // router.navigator.history.shift();
-// //   }
-// // };
-
-// router.beforeEach(async (to, from, next) => {
-//   if(to.name === 'Logout') return store.dispatch('user/logout');
-
-//   analytics.logEvent('page_view', { type: 'internal' });
-
-//   // if(new RegExp(/\/[a-z]+\/:action\/:id\?/g).test(to.matched[0].path)) to.meta.from = from.path;
-
-//   // router.navigator.history.unshift(from.path);
-//   // if(router.navigator.history.length > 3) router.navigator.history.pop();
-//   // console.log('history:', router.navigator.history);
-
-//   return next();
-// });
-
-// // router.afterEach(async (to, from, next) => {
-// //   router.navigator.history.unshift(to.path);
-// //   if(router.navigator.history.length > 3) router.navigator.history.pop();
-// // });
-
-// export default router;
