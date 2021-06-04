@@ -20,7 +20,7 @@
 
     <v-row>
       <v-col cols="4" class="py-0 pr-1"> <!-- Type -->
-        <v-select :disabled="loading" label="Type" v-model="form.unitType" solo dense :items="units" item-text="category" item-value="category" />
+        <v-select :disabled="loading" label="Type" v-model="form.unitType" solo dense :items="units" item-text="category" item-value="category" @change="changeUnit" />
       </v-col>
 
       <v-col cols="4" class="py-0 px-1"> <!-- Amount -->
@@ -73,6 +73,7 @@
         loading: false,
         action: this.$route.params.action,
         form: this.defaultForm(),
+        ogUnit: null, // only used when editing
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
@@ -86,8 +87,10 @@
       if(this.action === 'edit') {
         if(Array.isArray(this.exercises)) {
           this.form = _.cloneDeep(this.exercises.find(v => v.id === this.$route.params.id));
+          this.setOgUnit();
         } else this.$watch('exercises', function(n) {
           this.form = _.cloneDeep(n.find(v => v.id === this.$route.params.id));
+          this.setOgUnit();
         });
       }
 
@@ -112,10 +115,22 @@
           reps: '',
           unitType: units[0].category,
           amount: '',
-          unit: units[0].items[0],
+          unit: units[0].items[0].symbol,
           link: '',
           notes: '',
         };
+      },
+
+      setOgUnit() {
+        this.ogUnit = {
+          unit: this.form.unit,
+          unitType: this.form.unitType,
+        };
+      },
+
+      changeUnit() {
+        if(this.form.unitType === this.ogUnit?.unitType) this.form.unit = this.ogUnit.unit;
+        else this.form.unit = this.units.find(v => v.category === this.form.unitType).items[0].symbol;
       },
       
       async submit() {
