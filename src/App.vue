@@ -17,7 +17,7 @@
       <app-footer />
     </v-main>
 
-    <alert />
+    <alert :class="{ 'alert-bottom': !!$route.meta.workoutsBar }" />
   </v-app>
 </template>
 
@@ -96,6 +96,13 @@
   };
 </script>
 
+<style lang="scss">
+  .grecaptcha-badge {
+    z-index: 1;
+    bottom: 55px !important;
+  }
+</style>
+
 <style lang="scss" scoped>
   @import "@/assets/scss/global.scss";
 
@@ -105,4 +112,5 @@
   }
 
   .no-pointer { pointer-events: none; }
+  .alert-bottom { margin-bottom: 45px; }
 </style>
