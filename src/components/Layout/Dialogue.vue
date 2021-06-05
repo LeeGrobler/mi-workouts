@@ -9,7 +9,7 @@
       <v-card-text class="px-3" :class="{ 'pt-5' : !!getDialogue.color }" v-html="getDialogue.text"></v-card-text>
 
       <v-card-text v-if="!!getDialogue.confirmation" class="px-3">
-        <v-text-field :rules="validators.required" v-model.trim="userSubmission" :label="getConfirmationLabel" outlined
+        <v-text-field :rules="validators.required" v-model="userSubmission" :label="getConfirmationLabel" outlined
           dense
         />
       </v-card-text>
@@ -67,7 +67,7 @@
 
       refinedActions() {
         const target = this.getDialogue.confirmation?.target;
-        const sub = this.userSubmission.toLowerCase();
+        const sub = this.userSubmission.trim().toLowerCase();
         const text = this.getDialogue.confirmation?.text?.toLowerCase();
 
         return this.getDialogue.actions?.map((v, i) => ({

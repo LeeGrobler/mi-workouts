@@ -1,7 +1,7 @@
 <template>
   <v-list two-line class="py-0 v-step-3" color="transparent">
 
-    <v-text-field v-if="showFilter" label="Filter" v-model.trim="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="my-3" />
+    <v-text-field v-if="showFilter" label="Filter" v-model="filter" prepend-inner-icon="mdi-magnify" solo dense hide-details clearable class="my-3" />
 
     <transition-group name="list">
       <v-list-group v-for="ex in filteredExercises" :key="ex.id">

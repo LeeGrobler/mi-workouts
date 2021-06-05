@@ -38,8 +38,8 @@
 
         <div v-if="special" class="px-4 pb-4 text-center">
           <v-btn color="secondary" block :to="special.path">
-            <v-icon left>{{ special.icon }}</v-icon>
-            {{ special.name }}
+            <v-icon :left="!mini">{{ special.icon }}</v-icon>
+            <template v-if="!mini">{{ special.name }}</template>
           </v-btn>
         </div>
       </template>

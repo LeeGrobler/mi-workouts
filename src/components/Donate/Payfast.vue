@@ -14,7 +14,7 @@
         <v-radio label="Other" value="Other" class="my-1" />
       </v-radio-group>
 
-      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model.trim="formattedOther" solo @focus="setOtherCursor" ref="otherTxt"
+      <v-text-field v-if="form.amount === 'Other'" :rules="validators.amount" :disabled="loading" label="Amount" v-model="formattedOther" solo @focus="setOtherCursor" ref="otherTxt"
         dense
       />
 

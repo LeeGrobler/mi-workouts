@@ -4,7 +4,7 @@
 
     <v-row> <!-- Name -->
       <v-col cols="12" class="py-0">
-        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model.trim="form.name" required solo dense />
+        <v-text-field :rules="validators.routine" :disabled="loading" label="Name" v-model="form.name" required solo dense />
       </v-col>
     </v-row>
 
@@ -18,18 +18,17 @@
 
     <v-row> <!-- Notes -->
       <v-col cols="12" class="py-0">
-        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model.trim="form.notes" solo dense rows="2" no-resize />
+        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model="form.notes" solo dense rows="2" no-resize />
       </v-col>
     </v-row>
 
     <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">{{ action === 'edit' ? 'Update' : 'Create' }}</v-btn>
-    <v-btn :disabled="loading" @click="$router.back()" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
+    <v-btn :disabled="loading" @click="$router.from ? $router.back() : $router.push('/routines')" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
   </v-form>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-  import validators from '@/config/validators';
   import Heading from '@/components/Layout/Heading';
 
   export default {
@@ -40,15 +39,23 @@
     data() {
       return {
         _,
-        validators,
         valid: false,
         loading: false,
         action: this.$route.params.action,
         form: this.defaultForm(),
+        validators: {
+          routine: [
+            v => !!v || 'Please enter a Name',
+            v1 => {
+              const rt = this.routines?.find(v2 => v2.name === _.startCase(v1));
+              return (!rt && this.action === 'create') || ((!rt || rt.id === this.form.id) && this.action === 'edit') || `${_.startCase(v1)} already exists`;
+            }
+          ]
+        },
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
-          callback: () => this.$router.back(),
+          callback: () => this.$router.from ? this.$router.back() : this.$router.push('/routines'),
           text: 'Cancel'
         }]
       };
@@ -112,7 +119,7 @@
             }
           }
 
-          await this.upsertRoutine(this.form);
+          await this.upsertRoutine(this.trimObject(this.form));
           this.$refs.form.resetValidation();
           this.alert({ color: 'success', timeout: 10000, text: `${this.form.name} successfully ${this.action === 'edit' ? 'updated' : 'added'}` });
           this.form = this.defaultForm();
@@ -120,7 +127,8 @@
           // if you're coming from /exercises/edit|create, return to /routines, else go back()
           if(new RegExp(/\/exercises\/[a-z]+/g).test(this.$router.from)) {
             this.$router.push(`/routines`);
-          } else this.$router.back();
+          } else if(this.$router.from) this.$router.back(); // if there's a previous url, go back (i.e. you didn't open a new tab and come straight here)
+          else this.$router.push('/routines'); // otherwise go back to routines
         } catch (err) {
           console.log('routine submit err:', err);
           this.alert({ color: 'error', timeout: 10000, text: err.message });

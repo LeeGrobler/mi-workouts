@@ -19,5 +19,12 @@ export default Vue.mixin({
     dialogue(cfg) {
       this.revealDialogue(cfg);
     },
+
+    trimObject(obj) {
+      return Object.keys(obj).reduce((s, v) => {
+        s[v] = typeof obj[v] === 'string' ? obj[v].trim() : obj[v];
+        return s;
+      }, {});
+    },
   },
 });

@@ -80,11 +80,6 @@ const actions = {
   upsertRoutine({ getters, rootGetters }, payload) {
     return new Promise((resolve, reject) => {
       try {
-        const routine = getters.getRoutines?.find(v => v.name === payload.name);
-        if((routine && !payload.id) || (routine && payload.id && payload.id !== routine.id)) {
-          return reject({ message: `${payload.name} already exists` });
-        }
-
         const user = payload.user || rootGetters['user/getUser']?.uid;
         analytics.logEvent(`${payload.id ? 'update' : 'create'}_routine`);
         const ref = Routines.doc(payload?.id);

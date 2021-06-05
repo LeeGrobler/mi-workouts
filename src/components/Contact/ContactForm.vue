@@ -1,9 +1,9 @@
 <template>
   <v-form ref="form" v-model="valid">
     <slot name="headline"></slot>
-    <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model.trim="form.name" required :solo="dark" :flat="dark" :outlined="!dark" dense class="mt-16" />
-    <v-text-field :rules="validators.email" :disabled="loading" label="Email" v-model.trim="form.email" required :solo="dark" :flat="dark" :outlined="!dark" dense />
-    <v-textarea :rules="validators.required('Message')" :disabled="loading" label="Message" v-model.trim="form.message" required :solo="dark" :flat="dark" :outlined="!dark" no-resize
+    <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model="form.name" required :solo="dark" :flat="dark" :outlined="!dark" dense class="mt-16" />
+    <v-text-field :rules="validators.email" :disabled="loading" label="Email" v-model="form.email" required :solo="dark" :flat="dark" :outlined="!dark" dense />
+    <v-textarea :rules="validators.required('Message')" :disabled="loading" label="Message" v-model="form.message" required :solo="dark" :flat="dark" :outlined="!dark" no-resize
       rows="3"
     />
     <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">Send</v-btn>
@@ -40,7 +40,7 @@
 
         try {
           const token = await this.$recaptcha('contact_submit');
-          const { data: { status, message } } = await this.contact({ ...this.form, token });
+          const { data: { status, message } } = await this.contact({ ...this.trimObject(this.form), token });
           this.alert({ color: status === 'success' ? 'success' : 'warning', timeout: 10000, text: message });
           this.form = { name: '', email: '', message: '' };
           this.$refs.form.resetValidation();
