@@ -6,8 +6,8 @@
 
     <v-tooltip v-for="(btn, i) in buttons" :key="i" bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" class="btn ml-2" @click="btn.callback" fab :small="role === 'page'" :x-small="role === 'section'"
-          outlined
+        <v-btn v-bind="attrs" v-on="on" :loading="btn.loading" :disabled="btn.diabled" :small="role === 'page'" :x-small="role !== 'page'" :class="{ 'ml-2': role !== 'subtitle' }" fab
+          outlined @click="!!btn.callback && btn.callback()" class="btn"
         ><v-icon color="white">{{ btn.icon }}</v-icon></v-btn>
       </template>
       <span>{{ btn.text }}</span>
@@ -34,6 +34,11 @@
           case 'section': 
             return {
               fontSize: 'text-h5',
+              opacity: 'role-section'
+            }
+          case 'subtitle': 
+            return {
+              fontSize: 'text-h6',
               opacity: 'role-subtitle'
             }
         }
@@ -54,9 +59,11 @@
     white-space: nowrap;
     color: #fff;
 
+    h1 { font-weight: 400; }
+
     &.role-subtitle {
       .bar { background-color: #fff; }
-      .btn { border: 2px solid #fff; }
+      .btn { border: none; }
     }
 
     .bar {

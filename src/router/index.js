@@ -71,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
 
   analytics.logEvent('page_view', { type: 'internal' });
 
-  router.from = from.path;
+  router.from = from.name ? from.path : null;
 
   return next();
 });

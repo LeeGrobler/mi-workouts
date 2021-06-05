@@ -8,48 +8,27 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="6" class="py-0 pr-1"> <!-- Sets -->
-        <v-text-field :disabled="loading" label="Sets" v-model="form.sets" solo dense />
-      </v-col>
+    <form-row :loading="loading" :clearOnClose="action !== 'edit'" label="Sets & Reps" :fields="[
+      { element: 'text-field', key: 'sets', label: 'Sets', target: form.sets },
+      { element: 'text-field', key: 'reps', label: 'Reps', target: form.reps },
+    ]" @update="form[arguments[0]] = arguments[1]" />
 
-      <v-col cols="6" class="py-0 pl-1"> <!-- Reps -->
-        <v-text-field :disabled="loading" label="Reps" v-model="form.reps" solo dense />
-      </v-col>
-    </v-row>
+    <form-row :loading="loading" :clearOnClose="action !== 'edit'" label="Type & Amount" :fields="[
+      { element: 'select', key: 'unitType', label: 'Type', target: form.unitType, items: units, itemText: 'category', itemValue: 'category', change: changeUnit },
+      { element: 'text-field', key: 'amount', label: 'Amount', target: form.amount },
+      { element: 'select', key: 'unit', label: $data._.startCase(form.unitType), target: form.unit, items: unitTypeItems, itemText: 'name', itemValue: 'symbol' },
+    ]" @update="form[arguments[0]] = arguments[1]" />
 
-    <v-row>
-      <v-col cols="4" class="py-0 pr-1"> <!-- Type -->
-        <v-select :disabled="loading" label="Type" v-model="form.unitType" solo dense :items="units" item-text="category" item-value="category" @change="changeUnit" />
-      </v-col>
+    <form-row :loading="loading" :clearOnClose="action !== 'edit'" label="Tutorial Link" :fields="[
+      { element: 'text-field', key: 'link', label: 'Tutorial Link', target: form.link },
+    ]" @update="form[arguments[0]] = arguments[1]" />
 
-      <v-col cols="4" class="py-0 px-1"> <!-- Amount -->
-        <v-text-field :disabled="loading" label="Amount" v-model="form.amount" solo dense />
-      </v-col>
+    <form-row :loading="loading" :clearOnClose="action !== 'edit'" label="Notes" :fields="[
+      { element: 'text-area', key: 'notes', label: 'Description / Notes', target: form.notes },
+    ]" @update="form[arguments[0]] = arguments[1]" />
 
-      <v-col cols="4" class="py-0 pl-1"> <!-- Unit -->
-        <v-select :disabled="loading" :label="$data._.startCase(form.unitType)" v-model="form.unit" solo item-value="symbol" :items="unitTypeItems" dense
-          item-text="name"
-        />
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" class="py-0"> <!-- Tutorial Link -->
-        <v-text-field :disabled="loading" label="Tutorial Link" v-model="form.link" solo dense />
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" class="py-0"> <!-- Description / Notes -->
-        <v-textarea :disabled="loading" placeholder="Description / Notes" v-model="form.notes" solo dense rows="2" no-resize />
-      </v-col>
-    </v-row>
-
-    <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary" class="v-step-2">
-      {{ action === 'edit' ? 'Update' : 'Create' }}
-    </v-btn>
-    <v-btn :disabled="loading" @click="$router.back()" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
+    <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary" class="mt-3 v-step-2">{{ action === 'edit' ? 'Update' : 'Create' }}</v-btn>
+    <v-btn :disabled="loading" @click="$router.from ? $router.back() : $router.push('/exercises')" type="button" color="grey lighten-1" class="mt-3 ml-2">Cancel</v-btn>
   </v-form>
 </template>
 
@@ -57,11 +36,12 @@
   import { mapGetters, mapActions } from 'vuex';
   import units from '@/config/units';
   import Heading from '@/components/Layout/Heading';
+  import FormRow from '@/components/Exercise/FormRow';
 
   export default {
     name: 'ExerciseUpsert',
 
-    components: { Heading },
+    components: { Heading, FormRow },
 
     data() {
       return {
@@ -84,7 +64,7 @@
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
-          callback: () => this.$router.back(),
+          callback: () => this.$router.from ? this.$router.back() : this.$router.push('/exercises'),
           text: 'Cancel'
         }],
       };
@@ -108,7 +88,7 @@
       ...mapGetters({ exercises: 'exercise/getExercises' }),
 
       unitTypeItems() {
-        return this.units.find(v => v.category === this.form.unitType).items;
+        return this.units.find(v => v.category === this.form.unitType)?.items;
       },
     },
 
@@ -122,7 +102,7 @@
           reps: '',
           unitType: units[0].category,
           amount: '',
-          unit: units[0].items[0].symbol,
+          unit: units[0]?.items[0].symbol,
           link: '',
           notes: '',
         };
@@ -137,7 +117,7 @@
 
       changeUnit() {
         if(this.form.unitType === this.ogUnit?.unitType) this.form.unit = this.ogUnit.unit;
-        else this.form.unit = this.units.find(v => v.category === this.form.unitType).items[0].symbol;
+        else this.form.unit = this.units.find(v => v.category === this.form.unitType)?.items[0].symbol;
       },
       
       async submit() {
@@ -157,7 +137,8 @@
           // if you're coming from /routines/edit|create, return to /routines/edit|create/exercise_id, else go back()
           if(exercise && new RegExp(/\/routines\/[a-z]+/g).test(this.$router.from)) {
             this.$router.push(`${this.$router.from}/${exercise}`);
-          } else this.$router.back();
+          } else if(this.$router.from) this.$router.back(); // if there's a previous url, go back (i.e. you didn't open a new tab and come straight here)
+          else this.$router.push('/exercises'); // otherwise go back to exercises
         } catch (err) {
           console.log('exercise submit err:', err);
           this.alert({ color: 'error', timeout: 10000, text: err.message });

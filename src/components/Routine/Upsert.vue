@@ -23,7 +23,7 @@
     </v-row>
 
     <v-btn :loading="loading" :disabled="!valid || loading" @click="submit" type="button" color="primary">{{ action === 'edit' ? 'Update' : 'Create' }}</v-btn>
-    <v-btn :disabled="loading" @click="$router.back()" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
+    <v-btn :disabled="loading" @click="$router.from ? $router.back() : $router.push('/routines')" type="button" color="grey lighten-1" class="ml-2">Cancel</v-btn>
   </v-form>
 </template>
 
@@ -55,7 +55,7 @@
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,
-          callback: () => this.$router.back(),
+          callback: () => this.$router.from ? this.$router.back() : this.$router.push('/routines'),
           text: 'Cancel'
         }]
       };
@@ -127,7 +127,8 @@
           // if you're coming from /exercises/edit|create, return to /routines, else go back()
           if(new RegExp(/\/exercises\/[a-z]+/g).test(this.$router.from)) {
             this.$router.push(`/routines`);
-          } else this.$router.back();
+          } else if(this.$router.from) this.$router.back(); // if there's a previous url, go back (i.e. you didn't open a new tab and come straight here)
+          else this.$router.push('/routines'); // otherwise go back to routines
         } catch (err) {
           console.log('routine submit err:', err);
           this.alert({ color: 'error', timeout: 10000, text: err.message });
