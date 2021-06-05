@@ -4,7 +4,7 @@
 
     <v-row>
       <v-col cols="12" class="py-0"> <!-- Name -->
-        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model="form.name" required solo dense />
+        <v-text-field :rules="validators.exercise" :disabled="loading" label="Name" v-model="form.name" required solo dense />
       </v-col>
     </v-row>
 
@@ -55,7 +55,6 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-  import validators from '@/config/validators';
   import units from '@/config/units';
   import Heading from '@/components/Layout/Heading';
 
@@ -67,13 +66,21 @@
     data() {
       return {
         _,
-        validators,
         units,
         valid: false,
         loading: false,
         action: this.$route.params.action,
         form: this.defaultForm(),
         ogUnit: null, // only used when editing
+        validators: {
+          exercise: [
+            v => !!v || 'Please enter a Name',
+            v1 => {
+              const ex = this.exercises?.find(v2 => v2.name === _.startCase(v1));
+              return (!ex && this.action === 'create') || ((!ex || ex.id === this.form.id) && this.action === 'edit') || `${_.startCase(v1)} already exists`;
+            }
+          ]
+        },
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,

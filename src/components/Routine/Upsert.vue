@@ -4,7 +4,7 @@
 
     <v-row> <!-- Name -->
       <v-col cols="12" class="py-0">
-        <v-text-field :rules="validators.required('Name')" :disabled="loading" label="Name" v-model="form.name" required solo dense />
+        <v-text-field :rules="validators.routine" :disabled="loading" label="Name" v-model="form.name" required solo dense />
       </v-col>
     </v-row>
 
@@ -29,7 +29,6 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-  import validators from '@/config/validators';
   import Heading from '@/components/Layout/Heading';
 
   export default {
@@ -40,11 +39,19 @@
     data() {
       return {
         _,
-        validators,
         valid: false,
         loading: false,
         action: this.$route.params.action,
         form: this.defaultForm(),
+        validators: {
+          routine: [
+            v => !!v || 'Please enter a Name',
+            v1 => {
+              const rt = this.routines?.find(v2 => v2.name === _.startCase(v1));
+              return (!rt && this.action === 'create') || ((!rt || rt.id === this.form.id) && this.action === 'edit') || `${_.startCase(v1)} already exists`;
+            }
+          ]
+        },
         headingBtns: [{
           icon: 'mdi-close',
           disabled: this.loading,

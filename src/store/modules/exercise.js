@@ -72,11 +72,6 @@ const actions = {
   upsertExercise({ getters, rootGetters }, payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const exercise = getters.getExercises?.find(v => v.name === payload.name);
-        if((exercise && !payload.id) || (exercise && payload.id && payload.id !== exercise.id)) {
-          return reject({ message: `${payload.name} already exists` });
-        }
-
         const user = payload.user || rootGetters['user/getUser']?.uid;
         analytics.logEvent(`${!payload.id ? 'create' : 'update'}_exercise`);
         const ref = Exercises.doc(payload?.id);
