@@ -5,10 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "func-serve-uat": "node ./functions/devops.js --cmd=serve --env=uat",
-    "func-serve-prod": "node ./functions/devops.js --cmd=serve --env=prod",
-    "func-deploy-uat": "node ./functions/devops.js --cmd=deploy --env=uat",
-    "func-deploy-prod": "node ./functions/devops.js --cmd=deploy --env=prod"
+    "rename-uat": "node ./functions/devops.js --env=uat",
+    "rename-prod": "node ./functions/devops.js --env=prod"
   },
   "dependencies": {
     "@bugsnag/js": "^7.9.2",
