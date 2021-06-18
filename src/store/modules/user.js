@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import moment from 'moment';
 const { auth, func, analytics, UserProfiles } = require('@/plugins/firebase');
 
 const defaultState = () => ({
@@ -14,10 +13,10 @@ const getters = {
   getUser: state => state.user,
   getProfile: state => state.profile,
   getSnaps: state => state.snaps,
-  getShowPromos: state => {
-    if(state.profile?.hide_ads) return false;
-    return state.profile.donations.reduce((s, v) => v.expiry_date.toDate() >= new moment() ? s + v.amount : s + 0, 0) < 25;
-  },
+  // getShowPromos: state => {
+  //   if(state.profile?.hide_ads) return false;
+  //   return state.profile.donations.reduce((s, v) => v.expiry_date.toDate() >= new moment() ? s + v.amount : s + 0, 0) < 25;
+  // },
 };
 
 const mutations = {

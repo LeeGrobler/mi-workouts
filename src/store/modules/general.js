@@ -6,7 +6,7 @@ const defaultState = () => ({
   snaps: {},
   online: navigator.onLine,
   recaptchaScore: null,
-  promos: null,
+  // promos: null,
 });
 
 const state = defaultState();
@@ -14,14 +14,14 @@ const state = defaultState();
 const getters = {
   getOnline: state => state.online,
   getRecaptchaScore: state => state.recaptchaScore,
-  getPromos: state => state.promos,
+  // getPromos: state => state.promos,
   getSnaps: state => state.snaps,
 };
 
 const mutations = {
   setOnline: (state, payload) => state.online = payload,
   setRecaptchaScore: (state, payload) => state.recaptchaScore = payload,
-  setPromos: (state, payload) => state.promos = payload,
+  // setPromos: (state, payload) => state.promos = payload,
   setSnaps: (state, payload) => state.snaps = payload,
   addSnaps: (state, payload) => state.snaps = { ...state.snaps, ...payload },
 };
@@ -117,24 +117,24 @@ const actions = {
     });
   },
 
-  fetchPromos({ commit }) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if(getters.getSnaps.promo) dispatch('unsubscribeFromSnapshot', 'promo');
+  // fetchPromos({ commit }) {
+  //   return new Promise(async (resolve, reject) => {
+  //     try {
+  //       if(getters.getSnaps.promo) dispatch('unsubscribeFromSnapshot', 'promo');
 
-        const promoSnapshot = await Affiliates.onSnapshot(
-          snaps => commit('setPromos', snaps.docs.map(v => ({ id: v.id, ...v.data(), }))),
-          err => console.log('fetchPromos.onSnapshot err:', err)
-        );
+  //       const promoSnapshot = await Affiliates.onSnapshot(
+  //         snaps => commit('setPromos', snaps.docs.map(v => ({ id: v.id, ...v.data(), }))),
+  //         err => console.log('fetchPromos.onSnapshot err:', err)
+  //       );
 
-        commit('addSnaps', { promo: promoSnapshot });
-        return resolve();
-      } catch (err) {
-        console.log('fetchPromos err:', err);
-        return reject(err);
-      }
-    });
-  },
+  //       commit('addSnaps', { promo: promoSnapshot });
+  //       return resolve();
+  //     } catch (err) {
+  //       console.log('fetchPromos err:', err);
+  //       return reject(err);
+  //     }
+  //   });
+  // },
 
   unsubscribeFromSnapshots({ getters, commit }) {
     return new Promise(async (resolve, reject) => {

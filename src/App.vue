@@ -12,7 +12,7 @@
         <router-view key="router-view" :style="{ 'padding-bottom': bottomPadding }" />
       </transition-group>
 
-      <promo v-if="$route.meta.showPromo && showPromos" />
+      <!-- <promo v-if="$route.meta.showPromo && showPromos" /> -->
       <workout-bar v-if="$route.meta.workoutsBar" />
       <app-footer />
     </v-main>
@@ -30,7 +30,7 @@
   import Loader from '@/components/Layout/Loader';
   import AppDrawer from '@/components/Layout/AppDrawer';
   import LoginNowBtn from '@/components/Layout/LoginNowBtn';
-  import Promo from '@/components/Layout/Promo';
+  // import Promo from '@/components/Layout/Promo';
   import WorkoutBar from '@/components/Layout/WorkoutBar';
   import AppFooter from '@/components/Layout/AppFooter';
   import Alert from '@/components/Layout/Alert';
@@ -40,10 +40,10 @@
 
     mixins: [redirect],
 
-    components: { Dialogue, Tour, Loader, AppDrawer, LoginNowBtn, Promo, WorkoutBar, AppFooter, Alert },
+    components: { Dialogue, Tour, Loader, AppDrawer, LoginNowBtn, WorkoutBar, AppFooter, Alert },
 
     async mounted() {
-      this.fetchPromos();
+      // this.fetchPromos();
 
       this.monitorConnection();
       await this.checkFbResult();
@@ -58,7 +58,7 @@
         online: 'general/getOnline',
         exercises: 'exercise/getExercises',
         routines: 'routine/getRoutines',
-        showPromos: 'user/getShowPromos',
+        // showPromos: 'user/getShowPromos',
       }),
 
       bottomPadding() {
@@ -74,7 +74,7 @@
 
     methods: {
       ...mapActions({
-        fetchPromos: 'general/fetchPromos',
+        // fetchPromos: 'general/fetchPromos',
         initAuthWatch: 'user/initAuthWatch',
         checkFbRedirectResult: 'user/checkFbRedirectResult',
         monitorConnection: 'general/monitorConnection',
@@ -97,10 +97,10 @@
 </script>
 
 <style lang="scss">
-  .grecaptcha-badge {
-    z-index: 1;
-    bottom: 55px !important;
-  }
+  // .grecaptcha-badge {
+  //   z-index: 1;
+  //   bottom: 55px !important;
+  // }
 </style>
 
 <style lang="scss" scoped>
