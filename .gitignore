@@ -29,3 +29,4 @@ ui-debug.log
 *.sw?
 
 /functions/keys/**
+.runtimeconfig**
