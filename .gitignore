@@ -28,3 +28,4 @@ ui-debug.log
 *.sln
 *.sw?
 
+/functions/certs/**
