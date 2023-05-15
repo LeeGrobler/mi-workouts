@@ -4,7 +4,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const { verifyCaptcha, createContact, createPayment, getSupportAddresses, compileHtml, sendEmail, generatePaymentSignature, completePayment, completeAccountMerge } = require('./service');
 
-admin.initializeApp({ credential: admin.credential.cert(require('./certs/cert.json')) });
+admin.initializeApp({ credential: admin.credential.cert(require('./keys/cert.json')) });
 
 /*
   WORKING WITH ENVS:
